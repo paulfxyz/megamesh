@@ -42,9 +42,9 @@ code,kbd,pre{font-family:var(--f-mono)}
 .brand .logo svg{width:100%;height:100%;overflow:visible}
 .brand .ring{position:absolute;inset:-6px;border:1.5px solid var(--accent);border-radius:50%;opacity:0;pointer-events:none}
 .brand.ping .ring{animation:ring .9s var(--ease)}.brand.ping .ring.r2{animation-delay:.15s}
-.brand:hover .ring{animation:ring 1.5s var(--ease) infinite}.brand:hover .ring.r2{animation-delay:.75s}
-@keyframes ring{0%{opacity:.9;transform:scale(.5)}100%{opacity:0;transform:scale(2.6)}}
-/* wordmark: Bricolage Grotesque 800; letters lift one by one on hover, the .sh leans in; click squashes */
+@keyframes ring{0%{opacity:.9;transform:scale(.5)}100%{opacity:0;transform:scale(3.4)}}
+.brand .fx{position:absolute;left:50%;top:50%;width:260px;height:260px;margin:-130px 0 0 -130px;pointer-events:none;z-index:2}
+/* wordmark: Bricolage Grotesque 800; letters lift one by one on hover, the .sh leans in; click pops */
 .brand .word{font-family:'Bricolage Grotesque',Geist,sans-serif;font-weight:800;letter-spacing:-.035em;font-size:1.5rem;display:inline-flex;align-items:baseline;font-variation-settings:'opsz' 40,'wdth' 100;transition:font-variation-settings .5s var(--ease)}
 .brand .word .ch{display:inline-block;transition:transform .5s var(--ease),color .4s;transition-delay:calc(var(--i) * 28ms)}
 .brand:hover .word .ch{transform:translateY(-3px)}
@@ -387,40 +387,28 @@ html:not([lang=en]) .manif{letter-spacing:-.01em}
 .brand .logo .mR{animation-delay:.12s}
 .brand .logo .mV{stroke-dasharray:52;stroke-dashoffset:52;animation:lg-draw .7s var(--ease) .35s forwards}
 .brand .logo .node{fill:currentColor;transform-box:fill-box;transform-origin:center;animation:lg-pop .55s var(--ease) .8s both}
-.brand .logo .pk{fill:var(--accent2);opacity:0;offset-path:path('M14 14 V34 C14 44 21 51.5 32 56 C43 51.5 50 44 50 34 V14');offset-rotate:0deg;offset-distance:0%}
 @keyframes lg-draw{to{stroke-dashoffset:0}}
 @keyframes lg-pop{from{transform:scale(.2);opacity:0}65%{transform:scale(1.25);opacity:1}to{transform:scale(1);opacity:1}}
 /* once drawn, stay drawn (so hover/leave never re-triggers the intro) */
 .brand.drawn .logo .m{animation:none;stroke-dasharray:none;stroke-dashoffset:0}
 .brand.drawn .logo .node{animation:none;opacity:1}
-/* hover: the shield breathes and tilts, the V beats like a heart, the node pulses, a packet runs the perimeter, rings ping */
-.brand:hover .logo svg{animation:lg-tilt 1.8s ease-in-out infinite}
+/* hover: the shield grows and shrinks (no tilt, no wave), the node pulses in counter-phase, the stroke shimmers; particles sparkle around it (canvas .fx) */
+.brand:hover .logo svg{animation:lg-pulse 1.1s cubic-bezier(.45,0,.55,1) infinite}
 .brand:hover .logo .mL,.brand:hover .logo .mR,.brand:hover .logo .mV,.brand.ping .logo .m{stroke-dashoffset:0!important}
-.brand:hover .logo .mL{animation:lg-breathe 1.2s ease-in-out infinite,lg-shimmer 1.2s ease-in-out infinite}
-.brand:hover .logo .mR{animation:lg-breathe 1.2s ease-in-out infinite reverse,lg-shimmer 1.2s ease-in-out .3s infinite}
-.brand:hover .logo .mV{animation:lg-beat 1.2s ease-in-out infinite}
-.brand:hover .logo .node{animation:lg-node 1.2s ease-in-out infinite}
-.brand:hover .logo .pk{opacity:1;animation:lg-run 1.3s linear infinite}
-@keyframes lg-tilt{0%,100%{transform:rotate(0) scale(1)}30%{transform:rotate(-5deg) scale(1.07)}70%{transform:rotate(5deg) scale(1.07)}}
-@keyframes lg-breathe{0%,100%{transform:translateX(0)}50%{transform:translateX(-1.6px) scaleY(1.04)}}
+.brand:hover .logo .m{animation:lg-shimmer 1.1s ease-in-out infinite}
+.brand:hover .logo .node{animation:lg-node 1.1s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes lg-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.22)}}
 @keyframes lg-shimmer{0%,100%{stroke:var(--accent)}50%{stroke:#7aa2ff}}
-@keyframes lg-beat{0%,100%{transform:translateY(0)}40%{transform:translateY(2.4px) scaleY(1.12)}60%{transform:translateY(1px)}}
-@keyframes lg-node{0%,100%{transform:scale(1)}40%{transform:scale(1.7)}}
-@keyframes lg-run{to{offset-distance:100%}}
-/* click: anticipation → the legs fly apart with a blur, the V drops, the node shoots up → elastic return; the word jolts */
-.brand.ping .logo svg{animation:lg-pop2 .95s cubic-bezier(.22,1.5,.36,1) both}
-.brand.ping .logo .mL{animation:lg-boomL .95s cubic-bezier(.3,1.3,.4,1) both}
-.brand.ping .logo .mR{animation:lg-boomR .95s cubic-bezier(.3,1.3,.4,1) both}
-.brand.ping .logo .mV{animation:lg-boomV .95s cubic-bezier(.3,1.3,.4,1) both}
-.brand.ping .logo .node{animation:lg-boomN .95s cubic-bezier(.3,1.3,.4,1) both}
-.brand.ping .logo .pk{opacity:1;animation:lg-run .95s cubic-bezier(.2,.8,.2,1) both}
-.brand.ping .word{animation:lg-jolt .95s cubic-bezier(.22,1.4,.36,1) both}
-@keyframes lg-pop2{0%{transform:scale(1)}12%{transform:scale(.72) rotate(3deg)}34%{transform:scale(1.5) rotate(-6deg)}60%{transform:scale(.9) rotate(3deg)}80%{transform:scale(1.08)}100%{transform:scale(1)}}
-@keyframes lg-boomL{0%{transform:none}12%{transform:translate(2px,2px) scale(.85)}34%{transform:translate(-13px,-7px) rotate(-24deg);stroke:var(--accent2);filter:blur(.6px)}58%{transform:translate(2px,1px) rotate(4deg);stroke:var(--accent);filter:blur(0)}78%{transform:translate(-1px,0)}100%{transform:none}}
-@keyframes lg-boomR{0%{transform:none}12%{transform:translate(-2px,2px) scale(.85)}34%{transform:translate(13px,-7px) rotate(24deg);stroke:var(--accent2);filter:blur(.6px)}58%{transform:translate(-2px,1px) rotate(-4deg);stroke:var(--accent);filter:blur(0)}78%{transform:translate(1px,0)}100%{transform:none}}
-@keyframes lg-boomV{0%{transform:none}12%{transform:translateY(-2px) scaleY(.8)}34%{transform:translateY(12px) scaleY(1.35);stroke:#7aa2ff;filter:blur(.5px)}58%{transform:translateY(-2px);stroke:var(--accent);filter:blur(0)}78%{transform:translateY(1px)}100%{transform:none}}
-@keyframes lg-boomN{0%{transform:none}12%{transform:scale(.6)}34%{transform:translateY(-16px) scale(1.9)}58%{transform:translateY(2px) scale(.8)}78%{transform:translateY(-1px) scale(1.1)}100%{transform:none}}
-@keyframes lg-jolt{0%,100%{transform:none}12%{transform:translateX(-2px) scale(.96)}34%{transform:translateX(8px) skewX(-7deg) scale(1.07)}58%{transform:translateX(-3px) skewX(3deg)}80%{transform:translateX(1px)}}
-.brand.ping .sh{animation:lg-kick .95s cubic-bezier(.22,1.4,.36,1) both}
-@keyframes lg-kick{0%,100%{transform:none}34%{transform:skewX(-14deg) translate(6px,-3px);color:var(--accent)}60%{transform:skewX(2deg)}}
-@media (prefers-reduced-motion:reduce){.brand .logo *,.brand:hover .logo svg,.brand.ping .logo svg,.brand.ping .word,.brand.ping .sh,.brand:hover .ring{animation:none!important;stroke-dashoffset:0!important;opacity:1}.brand .logo .pk{opacity:0!important}}
+@keyframes lg-node{0%,100%{transform:scale(1.6)}50%{transform:scale(.8)}}
+/* click: hard shrink, then a big pop with a firework burst (canvas) and a shockwave ring; the word pops with it */
+.brand.ping .logo svg{animation:lg-bang .9s cubic-bezier(.22,1.5,.36,1) both}
+.brand.ping .logo .m{animation:lg-flash .9s ease-out both}
+.brand.ping .logo .node{animation:lg-bangN .9s cubic-bezier(.22,1.5,.36,1) both}
+.brand.ping .word{animation:lg-wpop .9s cubic-bezier(.22,1.5,.36,1) both}
+.brand.ping .sh{animation:lg-flashT .9s ease-out both}
+@keyframes lg-bang{0%{transform:scale(1)}14%{transform:scale(.45)}40%{transform:scale(1.85)}62%{transform:scale(.9)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes lg-bangN{0%{transform:scale(1)}14%{transform:scale(2.6)}40%{transform:scale(.3)}70%{transform:scale(1.4)}100%{transform:scale(1)}}
+@keyframes lg-flash{0%{stroke:var(--accent)}14%{stroke:var(--accent2)}40%{stroke:#9ec5ff;filter:drop-shadow(0 0 6px #7aa2ff)}100%{stroke:var(--accent);filter:none}}
+@keyframes lg-flashT{0%,100%{color:var(--faint)}30%,60%{color:var(--accent)}}
+@keyframes lg-wpop{0%,100%{transform:scale(1)}14%{transform:scale(.94)}40%{transform:scale(1.09)}62%{transform:scale(.98)}}
+@media (prefers-reduced-motion:reduce){.brand .logo *,.brand:hover .logo svg,.brand.ping .logo svg,.brand.ping .word,.brand.ping .sh,.brand.ping .ring{animation:none!important;stroke-dashoffset:0!important;opacity:1}.brand .fx{display:none}}
