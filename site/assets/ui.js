@@ -88,7 +88,7 @@
       script: [
         ['c', '# One file. Read it first.'], ['p', '$ ', 'curl -fsSLO https://megamesh.sh/megamesh.sh'], ['p', '$ ', 'less megamesh.sh'],
         ['p', '$ ', 'MEGAMESH_DOMAIN=vpn.example.com MEGAMESH_EMAIL=you@example.com bash megamesh.sh'],
-        ['o', '▶ megamesh 1.5.2 on CentOS Stream 9 (1 vCPU, 1 GB)'], ['ok', '✔ swap active · ✔ system updated · ✔ docker from signed repo'],
+        ['o', '▶ megamesh 1.5.3 on CentOS Stream 9 (1 vCPU, 1 GB)'], ['ok', '✔ swap active · ✔ system updated · ✔ docker from signed repo'],
         ['ok', '✔ firewalld: public DROP, 22/tcp 51820/udp 443/tcp'], ['ok', '✔ sshd hardened · ✔ fail2ban sshd jail · ✔ sysctl'],
         ['ok', '✔ wg-easy up, admin account created before 443 opened'], ['ok', '✔ caddy up — waiting for DNS to issue the certificate'],
         ['o', '  credentials: /root/megamesh-admin-credentials'], ['o', '  next: A record vpn.example.com → 203.0.113.10, then https://vpn.example.com/'],

@@ -7,7 +7,7 @@
 **Your server, your exit.**
 
 <a href="https://megamesh.sh"><img src="https://img.shields.io/badge/megamesh.sh-site_%2B_deployer-2c56f5?style=for-the-badge" alt="megamesh.sh"></a>
-<img src="https://img.shields.io/badge/version-1.5.2-060a12?style=for-the-badge" alt="version 1.5.2">
+<img src="https://img.shields.io/badge/version-1.5.3-060a12?style=for-the-badge" alt="version 1.5.3">
 <img src="https://img.shields.io/badge/WireGuard-wg--easy_v15-2c56f5?style=for-the-badge&logo=wireguard&logoColor=white" alt="WireGuard · wg-easy v15">
 <img src="https://img.shields.io/badge/firewall-DROP_%C2%B7_3_ports-060a12?style=for-the-badge" alt="firewall DROP, 3 ports">
 <img src="https://img.shields.io/badge/updates-topgrade_weekly_%2B_rollback-0e6a72?style=for-the-badge" alt="topgrade weekly + rollback">
@@ -241,12 +241,12 @@ docs/
 
 - **Not a privacy service.** Your VPS provider sees your traffic exit their network; this hides you from the café Wi-Fi and your ISP, not from a subpoena.
 - **Not multi-tenant.** One admin, your devices. wg-easy supports many peers, but the hardening assumes a single trusted operator.
-- **Not tested everywhere.** Two distributions (CentOS Stream 9, Ubuntu 24.04), two providers, one VPS size. The deployer's full run — root-password change, install, resume after a closed tab, hand-over, credential shredding — was exercised on the Ubuntu box. Rocky/Alma, Debian 12 and non-default ports are reasoned, not run. Issues and PRs with a logbook of what you hit are the most useful contribution.
+- **Not tested everywhere.** Two distributions (CentOS Stream 9, Ubuntu 24.04), two providers, one VPS size. The deployer's full run — root-password change, install, resume after a closed tab, hand-over, credential shredding, and a second run that moved the box to a new domain — was exercised on the Ubuntu box (`vpn.paulfleury.eu`). Rocky/Alma, Debian 12 and non-default ports are reasoned, not run. Issues and PRs with a logbook of what you hit are the most useful contribution.
 - **Not a replacement for reading.** `megamesh.sh` is ~500 lines of plain bash with comments. Read it before you run it as root on a machine you care about, and before you hand its URL to a web form.
 
 ## Status, naming, roadmap
 
-v1.5.2 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
+v1.5.3 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
 
 - **Naming**: "Megamesh" as a word, in prose; `megamesh` or `megamesh.sh` in lower case when talking about the code, the command or the site.
 - **Logo**: a single M whose two legs curve into the point of a shield, with one node where the strokes meet — [`docs/logo.svg`](docs/logo.svg) white on its blue tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`. Palette: mist `#f2f4f6`, ink `#060a12`, blue `#2c56f5`, teal `#0e6a72`; Geist for text, Geist Mono wherever the page talks to machines.

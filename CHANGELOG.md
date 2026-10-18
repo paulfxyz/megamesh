@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.3 — 2026-10-18
+
+- **Re-run with a new domain or port fixes wg-easy's stored endpoint.** wg-easy v15 keeps the host/port that client configs point at in its database (set once by `INIT_HOST`/`INIT_PORT`); a re-run with a different `MEGAMESH_DOMAIN` used to rewrite the Caddyfile and hostname but leave client configs on the old name. The installer now compares and updates it in place (brief wg-easy restart), and says so. Found by moving the Ubuntu test box from one domain to `vpn.paulfleury.eu`; verified by generating a client afterwards.
+- Final message on a re-run says the admin account already exists instead of pointing at the wizard.
+- Verified on the Ubuntu box: Let's Encrypt certificate obtained within a minute of the record existing, admin login over HTTPS, client config `Endpoint = vpn.paulfleury.eu:51820`.
+
 ## 1.5.2 — 2026-10-18
 
 - **Ubuntu 24.04 verified.** A blank 1 vCPU / 1 GB Ubuntu 24.04.5 VPS was installed end to end through the web deployer: root password rotated first, swap, apt upgrade, kernel modules, firewalld DROP with three ports, SSH hardening with the given key, fail2ban (first ban within minutes), wg-easy + Caddy up, admin account created unattended, topgrade timer, verification green, `MEGAMESH_EXIT=0`. The installer no longer warns on Ubuntu 24.04; Debian 12 keeps the best-effort notice.

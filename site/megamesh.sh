@@ -61,7 +61,7 @@ PREV_SSH_PORT=""; PREV_WG_PORT=""
 if [[ -f /etc/megamesh.conf ]]; then
   PREV_SSH_PORT=$(awk -F= '$1=="MEGAMESH_SSH_PORT"{print $2}' /etc/megamesh.conf); PREV_WG_PORT=$(awk -F= '$1=="MEGAMESH_WG_PORT"{print $2}' /etc/megamesh.conf)
 fi
-MEGAMESH_VERSION="1.5.2"
+MEGAMESH_VERSION="1.5.3"
 SELF_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 if [[ ! -f "${SELF_DIR}/scripts/status.sh" ]]; then
   # standalone download: fetch the matching release so helpers and configs are available
@@ -419,6 +419,18 @@ else
   ( cd "$MEGAMESH_DIR" && docker compose up -d --remove-orphans )
   docker exec caddy caddy reload --config /etc/caddy/Caddyfile >/dev/null 2>&1 || true   # pick up a changed Caddyfile on re-runs
   wait_healthy || warn "wg-easy not healthy yet — check: docker logs wg-easy"
+  # wg-easy keeps the endpoint host/port that clients connect to in its own database (set once by INIT_HOST/INIT_PORT).
+  # A re-run with a new domain or port must fix it there, or every new client config points at the old name.
+  wg_db="$(docker volume inspect "${proj}_etc_wireguard" --format '{{.Mountpoint}}' 2>/dev/null)/wg-easy.db"
+  if [[ -f "$wg_db" ]]; then
+    cur_ep=$(python3 -c 'import sqlite3,sys; c=sqlite3.connect(sys.argv[1]); r=c.execute("select host,port from user_configs_table where id=\"wg0\"").fetchone(); print(f"{r[0]}:{r[1]}" if r else "")' "$wg_db" 2>/dev/null || true)
+    if [[ -n "$cur_ep" && "$cur_ep" != "${MEGAMESH_DOMAIN}:${MEGAMESH_WG_PORT}" ]]; then
+      docker stop wg-easy >/dev/null
+      python3 -c 'import sqlite3,sys; c=sqlite3.connect(sys.argv[1]); c.execute("update user_configs_table set host=?, port=?, updated_at=current_timestamp where id=\"wg0\"", (sys.argv[2], int(sys.argv[3]))); c.commit()' "$wg_db" "$MEGAMESH_DOMAIN" "$MEGAMESH_WG_PORT"
+      docker start wg-easy >/dev/null; wait_healthy || warn "wg-easy not healthy yet — check: docker logs wg-easy"
+      ok "wg-easy client endpoint updated: ${cur_ep} → ${MEGAMESH_DOMAIN}:${MEGAMESH_WG_PORT} (clients created before this must re-download their config)"
+    fi
+  fi
 fi
 ok "Containers up"
 
@@ -504,7 +516,7 @@ cat <<EOF
   1. DNS:  create an A record   ${MEGAMESH_DOMAIN} → $(curl -s -4 --max-time 5 https://ifconfig.me || echo '<this server IP>')
            (Caddy is already polling Let's Encrypt and will get a certificate on its own.)
   2. rDNS: set the PTR of this IP to ${MEGAMESH_DOMAIN} in your provider's panel.
-  3. Log in at https://${MEGAMESH_DOMAIN}/ $( [[ -f $cred_file ]] && echo "— credentials: cat ${cred_file}" || echo "(wizard: Host = ${MEGAMESH_DOMAIN}, Port = ${MEGAMESH_WG_PORT})" )
+  3. Log in at https://${MEGAMESH_DOMAIN}/ $( if [[ -f $cred_file ]]; then echo "— credentials: cat ${cred_file}"; elif [[ $first_start == 0 ]]; then echo "— the admin account already exists; use the credentials you saved"; else echo "(wizard: Host = ${MEGAMESH_DOMAIN}, Port = ${MEGAMESH_WG_PORT})"; fi )
      Enable two-factor authentication under your account, add a device, scan the QR code.
   4. Later: megamesh-status for a health check; megamesh-lockdown enable https://your-site to make the UI
            VPN-only (outsiders get redirected); megamesh-upgrade --dry-run to preview the weekly upgrade.
