@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.8 — 2026-10-19
+
+- **Debian 12 verified end to end** on the same blank VPS, reinstalled: five minutes from `apt upgrade` to a healthy wg-easy behind Caddy with a Let's Encrypt certificate, admin login checked in a browser, clean verification (the new health wait produced no false warnings). Four distributions are now verified: CentOS Stream 9, Rocky 9.5, Ubuntu 24.04, Debian 12.
+- The "best-effort" warning now fires only for releases that have not been run (AlmaLinux and anything outside the four above) instead of for every non-Ubuntu Debian-family system.
+- Site: `https://megamesh.sh/megamesh.sh` is a 302 to this repository's `main` copy, so the hosted installer can no longer lag a release; `.sh` and `.html` are served `no-cache`.
+
 ## 1.5.7 — 2026-10-19
 
 - **Rocky Linux 9.5 verified end to end** on a blank 1 vCPU / 700 MB VPS (`vpn.paulfleury.eu`, reinstalled): swap, dnf update, Docker CE, firewalld, SSH hardening, fail2ban, wg-easy admin created unattended, Let's Encrypt certificate over TLS-ALPN with port 80 closed, admin login checked in a browser. Alma 9 shares the code path.
