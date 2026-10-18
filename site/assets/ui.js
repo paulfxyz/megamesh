@@ -90,6 +90,8 @@
   // split the wordmark into letters for the staggered hover
   const word = brand && brand.querySelector('.word');
   if (word) { const first = word.firstChild; if (first && first.nodeType === 3) { const frag = document.createDocumentFragment(); [...first.textContent].forEach((c, i) => { const sp = document.createElement('span'); sp.className = 'ch'; sp.style.setProperty('--i', i); sp.textContent = c; frag.appendChild(sp); }); first.replaceWith(frag); } }
+  brand && brand.addEventListener('animationend', (e) => { if (e.animationName === 'lg-pop') brand.classList.add('drawn'); if (e.animationName === 'lg-pop2') brand.classList.remove('ping'); });
+  brand && setTimeout(() => brand.classList.add('drawn'), 2000);
   brand && brand.addEventListener('click', (e) => {
     brand.classList.remove('ping'); void brand.offsetWidth; brand.classList.add('ping');
     if (location.pathname === '/' || location.pathname === '/index.html') { e.preventDefault(); scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); }
