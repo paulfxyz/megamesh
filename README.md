@@ -261,7 +261,7 @@ docs/
 v1.5.5 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
 
 - **Naming**: "Megamesh" as a word, in prose; `megamesh` or `megamesh.sh` in lower case when talking about the code, the command or the site.
-- **Logo**: a single M whose two legs curve into the point of a shield, with one node where the strokes meet — [`docs/logo.svg`](docs/logo.svg) white on its blue tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`. Palette: mist `#f2f4f6`, ink `#060a12`, blue `#2c56f5`, teal `#0e6a72`; Geist for text, Geist Mono wherever the page talks to machines.
+- **Logo**: a single M whose two legs curve into the point of a shield, with one node where the strokes meet — [`docs/logo.svg`](docs/logo.svg) white on its blue tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`. Wordmark: **Bricolage Grotesque 800**, `megamesh` with a smaller italic `.sh` — the letters lift one by one on hover, the `.sh` leans into the blue, a click squashes it. Palette: mist `#f2f4f6`, ink `#060a12`, blue `#2c56f5`, teal `#0e6a72`; Geist for text, Geist Mono wherever the page talks to machines.
 - **Planned**: native-speaker review of the translations, a Debian 12 and a Rocky 9 run, SSH-via-VPN with a confirm-or-rollback window.
 - **Not planned**: OpenVPN, multi-user auth, turning this into a product.
 

@@ -1,5 +1,5 @@
 /* megamesh.sh — light, airy, precise. Geist + Geist Mono, one blue. */
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,800&display=swap');
 
 :root{
   --f-sans:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;--f-mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -48,7 +48,16 @@ code,kbd,pre{font-family:var(--f-mono)}
 .brand .ring{position:absolute;inset:-6px;border:1.5px solid var(--accent);border-radius:50%;opacity:0;pointer-events:none}
 .brand.ping .ring{animation:ring .9s var(--ease)}.brand.ping .ring.r2{animation-delay:.15s}
 @keyframes ring{0%{opacity:.9;transform:scale(.5)}100%{opacity:0;transform:scale(2.6)}}
-.brand .sh{color:var(--faint);font-weight:400}
+/* wordmark: Bricolage Grotesque 800; letters lift one by one on hover, the .sh leans in; click squashes */
+.brand .word{font-family:'Bricolage Grotesque',Geist,sans-serif;font-weight:800;letter-spacing:-.035em;font-size:1.5rem;display:inline-flex;align-items:baseline;font-variation-settings:'opsz' 40,'wdth' 100;transition:font-variation-settings .5s var(--ease)}
+.brand .word .ch{display:inline-block;transition:transform .5s var(--ease),color .4s;transition-delay:calc(var(--i) * 28ms)}
+.brand:hover .word .ch{transform:translateY(-3px)}
+.brand:hover .word{font-variation-settings:'opsz' 40,'wdth' 92}
+.brand .sh{color:var(--faint);font-weight:700;font-size:.74em;font-style:italic;display:inline-block;margin-left:.06em;transform-origin:left bottom;transition:transform .5s var(--ease),color .4s}
+.brand:hover .sh{transform:skewX(-6deg) translateX(3px);color:var(--accent)}
+.brand.ping .word{animation:squash .55s var(--ease)}
+@keyframes squash{0%{transform:scale(1)}30%{transform:scale(1.08,.9)}60%{transform:scale(.96,1.05)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.brand .word .ch,.brand .sh,.brand .word{transition:none}.brand.ping .word{animation:none}}
 .ib{--h:44px;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;height:var(--h);min-width:var(--h);padding:0 .9rem;border-radius:999px;border:1px solid var(--line);background:color-mix(in oklab,var(--surface) 70%,transparent);color:var(--ink);font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.06em;cursor:pointer;transition:border-color .25s,background .25s,transform .2s}
 .ib:hover{border-color:var(--line2);background:var(--surface2);transform:translateY(-1px)}
 .ib svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}

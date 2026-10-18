@@ -87,6 +87,9 @@
 
   // ── logo ping ────────────────────────────────────────────────────────────
   const brand = $('#brand');
+  // split the wordmark into letters for the staggered hover
+  const word = brand && brand.querySelector('.word');
+  if (word) { const first = word.firstChild; if (first && first.nodeType === 3) { const frag = document.createDocumentFragment(); [...first.textContent].forEach((c, i) => { const sp = document.createElement('span'); sp.className = 'ch'; sp.style.setProperty('--i', i); sp.textContent = c; frag.appendChild(sp); }); first.replaceWith(frag); } }
   brand && brand.addEventListener('click', (e) => {
     brand.classList.remove('ping'); void brand.offsetWidth; brand.classList.add('ping');
     if (location.pathname === '/' || location.pathname === '/index.html') { e.preventDefault(); scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); }
