@@ -1,6 +1,11 @@
 # megamesh.sh
 Options -Indexes
 AddType text/plain .sh
+# the installer is served from GitHub so the copy here can never go stale: curl -fsSLO follows the redirect and keeps the name
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^megamesh\.sh$ https://raw.githubusercontent.com/paulfxyz/megamesh/main/megamesh.sh [R=302,L]
+</IfModule>
 AddType image/svg+xml .svg
 AddType image/webp .webp
 AddDefaultCharset utf-8
@@ -11,7 +16,7 @@ AddDefaultCharset utf-8
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
   Header set X-Frame-Options "DENY"
-  <FilesMatch "\.html$">
+  <FilesMatch "\.(html|sh)$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
   <FilesMatch "\.(webp|svg|css|js)$">

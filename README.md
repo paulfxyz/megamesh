@@ -209,7 +209,7 @@ site/api/lib/            ← autoload.php; phpseclib 4 + constant_time_encoding 
 site/assets/             ← style.css (tokens, both themes, RTL/CJK tuning), ui.js (theme, i18n, languages, terminal, GitHub stats, reveals), og.png
 site/assets/i18n/        ← en.json (master, generated) + 49 reviewed machine translations
 site/tools/              ← i18n_extract.py, i18n_translate.py (OpenRouter)
-site/megamesh.sh         ← the installer, served as text/plain at https://megamesh.sh/megamesh.sh
+site/megamesh.sh         ← a copy of the installer; https://megamesh.sh/megamesh.sh redirects to this repository's main branch so it cannot go stale
 site/.htaccess           ← content types, dotfile denial, security headers; api/lib/ is unreachable from the web
 ```
 
