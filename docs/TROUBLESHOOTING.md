@@ -38,7 +38,7 @@ Certificate not obtained yet (see Caddy above), or you reached the box via the r
 
 ### `/setup` is gone, I never created an account
 
-Someone else got there first, or you did and forgot. If you did not create it, treat the box as compromised: check `docker exec wg-easy wg show` for peers you do not know, then reset. First check `/root/megamesh-admin-credentials` — with `install.sh` ≥ 1.1.0 the account is created unattended before 443 is reachable, so on a fresh install the wizard never shows. If you must reset: stop Caddy first (`docker compose stop caddy`) so the wizard is not public, remove **only** the wg-easy volume (`docker compose rm -sf wg-easy && docker volume rm <project>_etc_wireguard` — the project is the directory name, `wireguard_…` on the reference server, `megamesh_…` by default), then re-run `install.sh`, which re-creates the account unattended. `down -v` would also delete Caddy's certificate and ACME account.
+Someone else got there first, or you did and forgot. If you did not create it, treat the box as compromised: check `docker exec wg-easy wg show` for peers you do not know, then reset. First check `/root/megamesh-admin-credentials` — with `megamesh.sh` ≥ 1.1.0 the account is created unattended before 443 is reachable, so on a fresh install the wizard never shows. If you must reset: stop Caddy first (`docker compose stop caddy`) so the wizard is not public, remove **only** the wg-easy volume (`docker compose rm -sf wg-easy && docker volume rm <project>_etc_wireguard` — the project is the directory name, `wireguard_…` on the reference server, `megamesh_…` by default), then re-run `megamesh.sh`, which re-creates the account unattended. `down -v` would also delete Caddy's certificate and ACME account.
 
 ### I changed the Caddyfile and Caddy says "config is unchanged"
 
@@ -46,7 +46,7 @@ The Caddyfile is a single-file bind mount. `sed -i`, `mv` and most editors write
 
 ### `megamesh-lockdown enable` refuses: userland-proxy
 
-VPN-only mode needs Docker's `"userland-proxy": false` so tunnel traffic reaches Caddy as `10.42.42.42`. Re-run `install.sh` (it merges the setting into `daemon.json`), or add it by hand, `systemctl restart docker`, `docker compose up -d --force-recreate`.
+VPN-only mode needs Docker's `"userland-proxy": false` so tunnel traffic reaches Caddy as `10.42.42.42`. Re-run `megamesh.sh` (it merges the setting into `daemon.json`), or add it by hand, `systemctl restart docker`, `docker compose up -d --force-recreate`.
 
 ### Connected to the VPN but no internet
 
@@ -57,7 +57,7 @@ VPN-only mode needs Docker's `"userland-proxy": false` so tunnel traffic reaches
 
 ### I locked myself out of SSH
 
-Provider rescue console / KVM. Mount the disk, remove `/etc/ssh/sshd_config.d/00-megamesh-hardening.conf` or add your key to `/root/.ssh/authorized_keys`, reboot. This is why `install.sh` will not disable passwords until a key is present.
+Provider rescue console / KVM. Mount the disk, remove `/etc/ssh/sshd_config.d/00-megamesh-hardening.conf` or add your key to `/root/.ssh/authorized_keys`, reboot. This is why `megamesh.sh` will not disable passwords until a key is present.
 
 ### Verifying open ports from outside
 
@@ -65,7 +65,7 @@ Do it from a machine on a normal network: `nmap -sS -sU -p 22,80,443,51820,51821
 
 ### `megamesh-upgrade` says "NOT healthy after upgrade — rolling back"
 
-A pulled image broke something. The wrapper re-tagged the previous image IDs and recreated the containers, so the VPN should be back; `journalctl -u megamesh-upgrade` has the topgrade output and the health status after rollback. `docker logs wg-easy` / `docker logs caddy` tell you why the new image failed. The next weekly run will pull again; to skip a known-bad version, pin the image to a digest: `WG_EASY_IMAGE=ghcr.io/wg-easy/wg-easy@sha256:… bash install.sh`.
+A pulled image broke something. The wrapper re-tagged the previous image IDs and recreated the containers, so the VPN should be back; `journalctl -u megamesh-upgrade` has the topgrade output and the health status after rollback. `docker logs wg-easy` / `docker logs caddy` tell you why the new image failed. The next weekly run will pull again; to skip a known-bad version, pin the image to a digest: `WG_EASY_IMAGE=ghcr.io/wg-easy/wg-easy@sha256:… bash megamesh.sh`.
 
 ### topgrade: "Containers: FAILED" but the images are up to date
 
@@ -73,11 +73,11 @@ topgrade stops its containers step at the first pull error, so one unpullable lo
 
 ### The server rebooted on a Monday morning
 
-That is `megamesh-upgrade` after a kernel update, with `MEGAMESH_AUTO_REBOOT=1` (default). `journalctl -u megamesh-upgrade -b -1` shows the "reboot required" line from the previous boot. Set `MEGAMESH_AUTO_REBOOT=0` in `/etc/megamesh.conf` (or re-run `install.sh` with it) to be told instead of rebooted; move the window with `MEGAMESH_UPGRADE_SCHEDULE`.
+That is `megamesh-upgrade` after a kernel update, with `MEGAMESH_AUTO_REBOOT=1` (default). `journalctl -u megamesh-upgrade -b -1` shows the "reboot required" line from the previous boot. Set `MEGAMESH_AUTO_REBOOT=0` in `/etc/megamesh.conf` (or re-run `megamesh.sh` with it) to be told instead of rebooted; move the window with `MEGAMESH_UPGRADE_SCHEDULE`.
 
 ### Upgrading from the `proxy` days (≤ 1.1.0)
 
-File names changed in 1.2.0. After re-running `install.sh` from the new checkout, remove the old ones so there is one source of truth:
+File names changed in 1.2.0. After re-running `megamesh.sh` from the new checkout, remove the old ones so there is one source of truth:
 
 ```sh
 rm -f /etc/ssh/sshd_config.d/00-proxy-hardening.conf /etc/sysctl.d/99-proxy-hardening.conf \

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deploy Megamesh — megamesh.sh</title>
+<meta name="description" content="Give the deployer your VPS IP, root password, domain and email. It installs Megamesh and hands over with your admin credentials.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="megamesh.sh home">
+      <svg viewBox="4 6 56 56" aria-hidden="true"><path fill="#E5000A" fill-rule="evenodd" d="M8 10 H18.5 L32 26.5 L45.5 10 H56 V36 C56 47 46 55 32 59 C18 55 8 47 8 36 Z M20 30 L32 44 L44 30 V37.5 C44 44 38 48.5 32 51 C26 48.5 20 44 20 37.5 Z"/></svg>
+      megamesh<span class="dot">.sh</span>
+    </a>
+    <div class="nav-links"><a href="/#ways">Three ways in</a><a href="/#inside">What you get</a><a href="https://github.com/paulfxyz/megamesh" rel="noopener">GitHub</a></div>
+    <a class="btn btn-ghost" href="/">← Back</a>
+  </div>
+</nav>
+
+<main class="app">
+  <div class="kicker">Door 03 · the deployer</div>
+  <h1>Deploy Megamesh on your VPS.</h1>
+  <p class="lead">Four things, then wait. The deployer logs into your server over SSH, installs Megamesh exactly as the <a href="https://github.com/paulfxyz/megamesh/blob/main/megamesh.sh" rel="noopener" style="color:var(--text);border-bottom:1px solid var(--text-4)">public script</a> would, and comes back with your admin login. Nothing you type is stored anywhere — it lives in your browser tab and in the request that carries it.</p>
+
+  <div class="steps" aria-hidden="true">
+    <div id="s1" class="on">1 · Server</div><div id="s2">2 · Check</div><div id="s3">3 · Install</div><div id="s4">4 · Hand over</div>
+  </div>
+
+  <!-- step 1: form -->
+  <section class="panel" id="p-form" style="padding:1.8rem;border-top:1px solid var(--border)">
+    <h2>Your server</h2>
+    <p class="hint">A fresh VPS with <b>CentOS Stream 9</b> (verified) — Rocky/Alma 9, Debian 12 or Ubuntu 22.04+ may work but are not yet tested. 1 vCPU and 1 GB of RAM are enough. You need root over SSH with a password, and a domain whose DNS you can edit.</p>
+    <form id="f" autocomplete="off" novalidate>
+      <div class="row">
+        <div><label for="ip">Server IP</label><input id="ip" name="ip" inputmode="decimal" placeholder="203.0.113.10" required></div>
+        <div><label for="port">SSH port <small>usually 22</small></label><input id="port" name="port" inputmode="numeric" value="22"></div>
+      </div>
+      <label for="pw">Root password <small>from your provider's email or panel</small></label>
+      <input id="pw" name="pw" type="password" required autocomplete="off">
+      <div class="row">
+        <div><label for="domain">Domain for the VPN <small>e.g. vpn.yourname.com</small></label><input id="domain" name="domain" placeholder="vpn.example.com" required></div>
+        <div><label for="email">Your email <small>certificate notices only</small></label><input id="email" name="email" type="email" placeholder="you@example.com" required></div>
+      </div>
+      <label for="pubkey">Your SSH public key <small>optional — strongly recommended if you have one</small></label>
+      <textarea id="pubkey" name="pubkey" placeholder="ssh-ed25519 AAAA… you@laptop" spellcheck="false"></textarea>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+      <div class="notice"><b>Read before you click.</b> Your root password is sent over HTTPS to megamesh.sh, used to log into your server for the duration of the install, and discarded. Each status refresh logs in again with it. We keep no copy and no logs of it. If you would rather not, the <a href="/#ways" style="border-bottom:1px solid var(--text-4)">script</a> gives the same result without us in the middle.</div>
+      <div class="actions">
+        <button class="btn btn-red" type="submit" id="go">Check the server →</button>
+        <span id="f-err" class="err" role="alert"></span>
+      </div>
+    </form>
+  </section>
+
+  <!-- step 2: check result -->
+  <section class="panel" id="p-check" hidden>
+    <h2>Server check</h2>
+    <p class="hint">Logged in. Here is what the deployer found.</p>
+    <div class="cred" id="check-out"></div>
+    <div id="check-note" class="notice" hidden></div>
+    <div class="actions">
+      <button class="btn btn-red" id="start">Install Megamesh →</button>
+      <button class="btn btn-ghost" id="back1">← Edit details</button>
+      <span id="check-err" class="err" role="alert"></span>
+    </div>
+  </section>
+
+  <!-- step 3: progress -->
+  <section class="panel" id="p-run" hidden>
+    <h2><span class="spin" id="spin"></span><span id="run-title">Installing…</span></h2>
+    <p class="hint" id="run-hint">Package updates on a 1 vCPU box take a while — 10 to 30 minutes is normal. You can leave this tab open; the install continues on your server even if you close it.</p>
+    <div class="log" id="log" aria-live="polite"></div>
+    <div class="actions">
+      <span id="run-err" class="err" role="alert"></span>
+    </div>
+  </section>
+
+  <!-- step 4: handover -->
+  <section class="panel" id="p-done" hidden>
+    <h2>Done. Your VPN is installed.</h2>
+    <p class="hint">Three things left, all on your side. Save the credentials first — they are shown once.</p>
+    <div class="cred" id="cred"></div>
+    <ol class="todo">
+      <li><div><b>Point your domain at the server.</b> At your DNS provider (Namecheap, Cloudflare, OVH…), create an <b>A record</b>: host <code id="h-host">@</code>, value <code id="h-ip"></code>. Remove any parking or redirect record on the same name. Caddy on your server is already waiting and will fetch a certificate by itself once the record resolves — usually within minutes.</div></li>
+      <li><div><b>Log in.</b> Open <a id="h-url" href="#" rel="noopener" style="color:var(--ice)"></a> (type the <code>https://</code>), sign in with the credentials above, then enable <b>two-factor authentication</b> under your account. Add a device, scan the QR code, connect.</div></li>
+      <li><div><b>Have a techie friend finish the hardening</b> — twenty minutes with the <a href="https://github.com/paulfxyz/megamesh/blob/main/docs/HARDENING.md" rel="noopener" style="border-bottom:1px solid var(--text-4)">hardening notes</a>: install an SSH key and turn passwords off, optionally make the admin page VPN-only. Everything else (firewall, fail2ban, automatic updates, weekly health-checked upgrades) is already running.</div></li>
+    </ol>
+    <div class="notice" id="done-note"><b>Credentials on the server.</b> A copy sits in <code>/root/megamesh-admin-credentials</code> on your VPS, readable by root only. Once you have saved it in a password manager, remove it:</div>
+    <div class="actions">
+      <button class="btn btn-gold" id="forget">I saved them — delete the copy on the server</button>
+      <span id="done-msg" class="okmsg" role="status"></span>
+      <span id="done-err" class="err" role="alert"></span>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>megamesh.sh — a megastack.sh build · MIT</span><span><a href="https://github.com/paulfxyz/megamesh" rel="noopener">Source</a> · <a href="/">Home</a></span></div></footer>
+<script src="/deploy/deploy.js" defer></script>
+</body>
+</html>

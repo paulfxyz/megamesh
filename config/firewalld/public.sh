@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # megamesh — the exact firewalld policy behind the "three doors", as standalone commands.
-# Idempotent. Adjust SSH_PORT / WG_PORT if you changed them in install.sh.
+# Idempotent. Adjust SSH_PORT / WG_PORT if you changed them in megamesh.sh.
 set -euo pipefail
 SSH_PORT="${SSH_PORT:-22}"; WG_PORT="${WG_PORT:-51820}"
 fw() { # "already there" is fine, anything else is fatal

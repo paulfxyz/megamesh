@@ -2,7 +2,7 @@
 
 The threat model is simple: one person, one box, a public IP that gets scanned around the clock. The reference server had logged **76,073 failed SSH logins** in the 25 days before this project touched it, with fail2ban running and doing nothing (no jails). That is the baseline you start from on any VPS.
 
-## Phase 1 — applied by `install.sh`
+## Phase 1 — applied by `megamesh.sh`
 
 ### Network: three doors, everything else DROP
 
@@ -20,7 +20,7 @@ public zone (firewalld, nftables backend) — bound to the default-route interfa
 
 No tcp/80. Caddy gets certificates with TLS-ALPN-01 on 443; you must type `https://`. The ICMP allow-list keeps ping working and, more importantly, keeps path-MTU discovery working — WireGuard adds 60–80 bytes of overhead and a box that drops "fragmentation needed" produces mysterious stalls.
 
-`install.sh` checks that the interface carrying the default route is actually in the `public` zone (and moves it there if not), treats any `firewall-cmd` result other than success/already-there as fatal, and opens the SSH port **before** sshd is restarted, so a custom `MEGAMESH_SSH_PORT` cannot strand you.
+`megamesh.sh` checks that the interface carrying the default route is actually in the `public` zone (and moves it there if not), treats any `firewall-cmd` result other than success/already-there as fatal, and opens the SSH port **before** sshd is restarted, so a custom `MEGAMESH_SSH_PORT` cannot strand you.
 
 `firewall-cmd --list-all --zone=public` is the authoritative view; `nft list chain inet firewalld filter_IN_public_allow` shows the compiled rules. Verify from a real outside vantage point (`nmap -sS -sU -p 22,80,443,51820,51821 <ip>`), never from a sandbox behind an egress proxy.
 
@@ -28,17 +28,17 @@ No tcp/80. Caddy gets certificates with TLS-ALPN-01 on 443; you must type `https
 
 Docker integrates with firewalld through a `docker-forwarding` policy: *any* published port is reachable from *any* zone. That is why the compose file publishes only `${MEGAMESH_WG_PORT}/udp` and `443/tcp`. The wg-easy UI (`51821`) is reachable solely on the internal bridge `10.42.42.0/24`, where Caddy proxies to it. Never add `51821:51821` back "for debugging".
 
-`install.sh` **merges** `/etc/docker/daemon.json` (always backing it up) rather than overwriting it. It removes `"iptables": false` if present (the reference image shipped with it: Docker publishes nothing and prints no warning), and sets log rotation, `live-restore`, `no-new-privileges` and `"userland-proxy": false`. The last one matters for VPN-only mode (below) and also removes the `docker-proxy` processes; the ports stay bound by dockerd.
+`megamesh.sh` **merges** `/etc/docker/daemon.json` (always backing it up) rather than overwriting it. It removes `"iptables": false` if present (the reference image shipped with it: Docker publishes nothing and prints no warning), and sets log rotation, `live-restore`, `no-new-privileges` and `"userland-proxy": false`. The last one matters for VPN-only mode (below) and also removes the `docker-proxy` processes; the ports stay bound by dockerd.
 
 ### Containers
 
 wg-easy runs with **`NET_ADMIN` only**. It needs that to create `wg0` and its NAT rules; it does not need `SYS_MODULE` because the host loads and persists every required module (`/etc/modules-load.d/megamesh.conf`). The `/lib/modules` mount is gone for the same reason. Verified on the reference server: `wg0` comes up and peers keep working after the change. `mem_limit` on both containers (256 m / 128 m) so a leak cannot take the host down. Caddy strips the `Server` header and sends HSTS (apex-safe, no `includeSubDomains`), `nosniff`, `DENY` framing, `no-referrer`.
 
-Images are pinned to major tags (`wg-easy:15`, `caddy:2-alpine`). For strict reproducibility set `WG_EASY_IMAGE`/`CADDY_IMAGE` to `image@sha256:…` digests; re-running `install.sh` then never pulls something you did not choose.
+Images are pinned to major tags (`wg-easy:15`, `caddy:2-alpine`). For strict reproducibility set `WG_EASY_IMAGE`/`CADDY_IMAGE` to `image@sha256:…` digests; re-running `megamesh.sh` then never pulls something you did not choose.
 
 ### The admin account exists before 443 is reachable
 
-wg-easy's first-run wizard is unauthenticated and first-come-first-served. `install.sh` therefore uses wg-easy's unattended setup by default: `INIT_USERNAME`/`INIT_PASSWORD`/`INIT_HOST`/`INIT_PORT` are passed on the first start only, through a root-only `wg-easy.env`. The first start brings up **wg-easy alone**; only after it is healthy *and* its UI answers with `/login` (proof the account exists) are the `INIT_*` lines removed, the container recreated, and Caddy started. If that proof never arrives the installer stops with Caddy never started — nothing is public, and the credentials file is kept for the re-run. The generated 32-character password is written to `/root/megamesh-admin-credentials` (0600) for you to move into a password manager and shred. `MEGAMESH_UNATTENDED=0` brings the wizard back if you prefer it — then finish it immediately.
+wg-easy's first-run wizard is unauthenticated and first-come-first-served. `megamesh.sh` therefore uses wg-easy's unattended setup by default: `INIT_USERNAME`/`INIT_PASSWORD`/`INIT_HOST`/`INIT_PORT` are passed on the first start only, through a root-only `wg-easy.env`. The first start brings up **wg-easy alone**; only after it is healthy *and* its UI answers with `/login` (proof the account exists) are the `INIT_*` lines removed, the container recreated, and Caddy started. If that proof never arrives the installer stops with Caddy never started — nothing is public, and the credentials file is kept for the re-run. The generated 32-character password is written to `/root/megamesh-admin-credentials` (0600) for you to move into a password manager and shred. `MEGAMESH_UNATTENDED=0` brings the wizard back if you prefer it — then finish it immediately.
 
 After the first login: enable **two-factor authentication** (wg-easy ≥ 15.4, under your account page). That is the single most valuable thing you can do for an admin UI on the public internet.
 
@@ -60,7 +60,7 @@ Two layers. `dnf-automatic` (or `unattended-upgrades`) runs daily. On CentOS Str
 
 Weekly, `megamesh-upgrade` (systemd timer, `MEGAMESH_UPGRADE_SCHEDULE`, default Monday 04:30 server time with 20 minutes of jitter) wraps [topgrade](https://github.com/topgrade-rs/topgrade) restricted to the `system` and `containers` steps — the daily layer never touches the containers, this one does. The wrapper is where the safety lives: it records the image ID each container is running, lets topgrade upgrade packages and pull every local image, runs `docker compose up -d`, then gives the stack two minutes to prove itself (wg-easy `healthy`, `wg0` present, Caddy answering on 443 through the loopback). Success prunes the old images; failure re-tags the previous image IDs onto the tags and recreates the containers, so the VPN runs on the images that worked, and the run exits non-zero for `journalctl -u megamesh-upgrade`. A reboot happens only if the distro says the kernel or libc needs it (`dnf needs-restarting -r`, `/var/run/reboot-required`) and `MEGAMESH_AUTO_REBOOT=1`; it is a one-minute delayed `shutdown -r`, and everything comes back by itself (verified at the very beginning of the logbook).
 
-Why topgrade rather than Watchtower or a cron line: it already knows every distro's package manager, has a non-interactive mode, and does the image pulls itself — one tool, one config (`/etc/megamesh/topgrade.toml`: `allow_root`, `assume_yes`, `no_retry`, `no_self_update`, `only = ["system","containers"]`). Why not let it self-update: the binary is pinned by version and SHA-256 in `install.sh` and only moves when the pin does. Why a wrapper at all: topgrade pulls images but does not recreate containers, cannot judge whether the VPN still works afterwards, and would never roll back.
+Why topgrade rather than Watchtower or a cron line: it already knows every distro's package manager, has a non-interactive mode, and does the image pulls itself — one tool, one config (`/etc/megamesh/topgrade.toml`: `allow_root`, `assume_yes`, `no_retry`, `no_self_update`, `only = ["system","containers"]`). Why not let it self-update: the binary is pinned by version and SHA-256 in `megamesh.sh` and only moves when the pin does. Why a wrapper at all: topgrade pulls images but does not recreate containers, cannot judge whether the VPN still works afterwards, and would never roll back.
 
 Two lessons from the first runs, so nobody repeats them: topgrade aborts the whole `containers` step at the first failed pull (an earlier design tagged backups as `*:megamesh-prev`, topgrade tried to pull them from Docker Hub, and wg-easy was never pulled — backups are now image IDs, no tags); and it refuses to run as root without `allow_root = true`, which on a box with no unprivileged user is the right call. 1 GB swap when RAM < 2 GB, with a `blkid` check so a provider's pre-allocated but never-formatted `/swapfile` gets `mkswap`'d instead of aborting the run. The 1 GB Hostkey plan exposes 699 MB to the guest; `dnf update` was OOM-killed before swap existed.
 
@@ -79,7 +79,7 @@ Where does a VPN client's request come from, as Caddy sees it? The client sends 
 | from inside wg-easy | **off** | **`10.42.42.42`** (wg-easy itself) |
 | from the public internet | off | real public IP |
 
-With the userland proxy on, VPN traffic is indistinguishable from "anything that went through docker-proxy" — the audit models rightly flagged a `10.42.42.0/24` matcher as a footgun. With it off, the hairpin keeps the real source and the matcher can be pinned to one address. That is why `install.sh` sets `"userland-proxy": false` and `megamesh-lockdown enable` refuses to run without it.
+With the userland proxy on, VPN traffic is indistinguishable from "anything that went through docker-proxy" — the audit models rightly flagged a `10.42.42.0/24` matcher as a footgun. With it off, the hairpin keeps the real source and the matcher can be pinned to one address. That is why `megamesh.sh` sets `"userland-proxy": false` and `megamesh-lockdown enable` refuses to run without it.
 
 ### The resulting Caddyfile
 
@@ -107,7 +107,7 @@ megamesh-lockdown enable https://example.com     # refuses if there are no peers
 megamesh-lockdown disable
 ```
 
-`enable` refuses without a peer or with Docker's userland proxy on, validates the generated Caddyfile, writes it **in place** (the Caddyfile is a single-file bind mount — `sed -i` or `mv` would create a new inode the running container never sees, which is how "config is unchanged" bit the author), reloads Caddy, then checks that a request from the tunnel side gets the UI's own `/login` redirect and **not** your outsider redirect — if it does, it rolls back to open mode so you are not locked out. `install.sh` detects an existing VPN-only mode on re-runs and keeps it, without ever writing the open configuration in between. Then test from a device *off* the VPN: `curl -sI https://vpn.example.com/ | grep -i location` should show your redirect. Devices with split tunneling (AllowedIPs not `0.0.0.0/0`) reach the domain over the plain internet and are treated as outsiders — that is the intended meaning of "only on the VPN".
+`enable` refuses without a peer or with Docker's userland proxy on, validates the generated Caddyfile, writes it **in place** (the Caddyfile is a single-file bind mount — `sed -i` or `mv` would create a new inode the running container never sees, which is how "config is unchanged" bit the author), reloads Caddy, then checks that a request from the tunnel side gets the UI's own `/login` redirect and **not** your outsider redirect — if it does, it rolls back to open mode so you are not locked out. `megamesh.sh` detects an existing VPN-only mode on re-runs and keeps it, without ever writing the open configuration in between. Then test from a device *off* the VPN: `curl -sI https://vpn.example.com/ | grep -i location` should show your redirect. Devices with split tunneling (AllowedIPs not `0.0.0.0/0`) reach the domain over the plain internet and are treated as outsiders — that is the intended meaning of "only on the VPN".
 
 The reference server runs in this mode since 2026-10-18: outsiders are sent to `https://paulfleury.com`, the UI is reachable only through the tunnel.
 

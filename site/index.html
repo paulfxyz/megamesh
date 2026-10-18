@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>megamesh.sh — Your own WireGuard VPN, one IP and root away</title>
+<meta name="description" content="Megamesh turns a cheap VPS into a hardened personal WireGuard VPN with a web admin: deny-by-default firewall, key-only SSH, fail2ban, automatic updates, weekly health-checked upgrades. Open source. Three ways in: a script, an AI prompt, or a web deployer.">
+<meta property="og:title" content="megamesh.sh — Your own WireGuard VPN, one IP and root away">
+<meta property="og:description" content="A hardened personal WireGuard VPN on a 1 GB VPS. Script for sysops, prompt for AI agents, web deployer for everyone else. Open source, MIT.">
+<meta property="og:image" content="https://megamesh.sh/hero.png">
+<meta property="og:url" content="https://megamesh.sh/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="megamesh.sh home">
+      <svg viewBox="4 6 56 56" aria-hidden="true"><path fill="#E5000A" fill-rule="evenodd" d="M8 10 H18.5 L32 26.5 L45.5 10 H56 V36 C56 47 46 55 32 59 C18 55 8 47 8 36 Z M20 30 L32 44 L44 30 V37.5 C44 44 38 48.5 32 51 C26 48.5 20 44 20 37.5 Z"/></svg>
+      megamesh<span class="dot">.sh</span>
+    </a>
+    <div class="nav-links">
+      <a href="#ways">Three ways in</a>
+      <a href="#inside">What you get</a>
+      <a href="#honest">Honest notes</a>
+      <a href="#behind">Who's behind it</a>
+      <a href="https://github.com/paulfxyz/megamesh" rel="noopener">GitHub</a>
+    </div>
+    <a class="btn btn-red" href="/deploy/">Deploy mine →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">● open source · self-hosted · one admin</span>
+    <h1>Mega<span class="mesh">mesh</span><span class="dot">.</span>sh</h1>
+    <div class="rule">Your own WireGuard VPN, one IP and root away</div>
+    <h2><span class="r">Your server.</span> Your tunnel. <span class="i">Your exit.</span></h2>
+    <p>Megamesh turns the cheapest VPS you can rent into a hardened personal WireGuard VPN with a web admin for your profiles and QR codes. Deny-by-default firewall, key-only SSH, fail2ban, automatic updates, weekly health-checked upgrades that roll back on their own. Yours, auditable, MIT.</p>
+    <div class="cta">
+      <a class="btn btn-red" href="/deploy/">Deploy it for me →</a>
+      <a class="btn btn-ghost" href="#ways">I'll do it myself ↓</a>
+    </div>
+    <div class="stats" role="list">
+      <div role="listitem"><b>3</b><span>open ports, total</span></div>
+      <div role="listitem"><b>1 GB</b><span>of RAM is plenty</span></div>
+      <div role="listitem"><b>2×3</b><span>frontier-model audits</span></div>
+      <div role="listitem"><b>0</b><span>accounts with us</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="ways">
+  <div class="wrap">
+    <div class="kicker">Three ways in</div>
+    <h2>Same box.<br>Pick your door.</h2>
+    <p class="lead">Every path ends in the same place: a VPS running WireGuard, the <a href="https://github.com/wg-easy/wg-easy" rel="noopener" style="color:var(--text);border-bottom:1px solid var(--text-4)">wg-easy</a> admin behind Caddy and a real certificate, and a firewall that drops everything else. The difference is how much you want to touch.</p>
+    <div class="cards">
+      <article class="card red">
+        <span class="n">01</span>
+        <span class="who">You run servers</span>
+        <h3>The script</h3>
+        <p>One idempotent bash file, every setting an environment variable, nothing interactive. Read it, then run it as root on a fresh VPS. Re-running is safe; it keeps your choices.</p>
+<pre><b>curl -fsSLO https://megamesh.sh/megamesh.sh</b>
+less megamesh.sh          <span style="color:var(--text-4)"># read it first</span>
+MEGAMESH_DOMAIN=vpn.example.com \
+MEGAMESH_EMAIL=you@example.com \
+<b>bash megamesh.sh</b></pre>
+        <div class="foot"><a class="btn btn-ghost" href="https://github.com/paulfxyz/megamesh#quick-start-sysop" rel="noopener">Read the source →</a></div>
+      </article>
+      <article class="card ice">
+        <span class="n">02</span>
+        <span class="who">You have an AI agent</span>
+        <h3>The prompt</h3>
+        <p>Paste one prompt into any agent that can run shell commands over SSH — Perplexity Computer, Claude Code, Codex, your own. It carries the goal, the safety rules, and every trap we hit so the agent starts where we finished.</p>
+        <p>The rules matter: your own key goes in first, passwords are never disabled before a key login has succeeded, secrets are never printed, and the agent asks before touching SSH or the firewall.</p>
+        <div class="foot"><a class="btn btn-ice" href="https://github.com/paulfxyz/megamesh/blob/main/PROMPT.md" rel="noopener">Get the prompt →</a></div>
+      </article>
+      <article class="card gold">
+        <span class="n">03</span>
+        <span class="who">You just want a VPN</span>
+        <h3>The deployer</h3>
+        <p>Rent a VPS (any 1 GB box with CentOS Stream 9 will do), buy or reuse a domain, then give the deployer the IP, the root password, the domain and your email. It installs everything, waits, and hands over: point your domain at the IP, open it, log in with the admin account it created, scan a QR code.</p>
+        <p>Your root password transits through megamesh.sh for the minutes the install runs and is never stored. If that is not acceptable, use door 01 or 02 — same result.</p>
+        <div class="foot"><a class="btn btn-gold" href="/deploy/">Open the deployer →</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="inside">
+  <div class="wrap">
+    <div class="kicker">What you get</div>
+    <h2>Three doors.<br>Everything else is a black hole.</h2>
+    <p class="lead">The public internet reaches exactly three ports. The firewall's default action is <code>DROP</code>, not reject: scanners get silence. Inside, two containers and a handful of host settings — all of them written down, none of them clever.</p>
+    <div class="doors">
+      <div class="door-list">
+        <div class="door ok"><code>tcp/22 ssh</code><span>Key-only once a key exists, no forwarding, 3 tries. fail2ban bans for 24 h, doubling to 30 days.</span></div>
+        <div class="door red"><code>udp/51820 wg</code><span>WireGuard. Silent to anything that is not a valid handshake — to a port scanner it does not exist.</span></div>
+        <div class="door ice"><code>tcp/443 https</code><span>Caddy with a Let's Encrypt certificate, serving the wg-easy admin. Optionally VPN-only: outsiders get redirected to a URL of your choice.</span></div>
+        <div class="door off"><code>everything else</code><span>Dropped. No port 80, no admin port, no Docker ports leaking through — only two are ever published.</span></div>
+        <div class="door off"><code>icmp</code><span>Ping and the path-MTU types only, so the tunnel never stalls on big packets.</span></div>
+      </div>
+      <div class="box">
+        <h3>Inside the box</h3>
+        <ul>
+          <li><b>wg-easy v15</b> — peers, QR codes, stats, 2FA on the admin. Runs with <code>NET_ADMIN</code> only.</li>
+          <li><b>Caddy 2</b> — automatic TLS over 443 (no port 80), HSTS, strict headers.</li>
+          <li><b>firewalld</b> — the three-door policy, bound to the interface that carries your default route.</li>
+          <li><b>fail2ban</b> — the reference server had 76,073 failed SSH logins in 25 days before we touched it.</li>
+          <li><b>topgrade</b> — weekly, pinned and checksum-verified: packages and container images, then a health check; a bad image is rolled back before you notice.</li>
+          <li><b>Swap guard, sysctl hardening, log rotation</b> — the boring parts that keep a 1 GB box alive.</li>
+          <li><b>Unattended admin account</b> — created before port 443 is reachable, so nobody can race you to the setup wizard.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="honest">
+  <div class="wrap">
+    <div class="kicker">Honest notes</div>
+    <h2>What this is not.</h2>
+    <div class="honest">
+      <div><h3>Not a privacy service</h3><p>Your VPS provider sees your traffic leave their network. Megamesh hides you from the café Wi-Fi and your ISP, not from a subpoena.</p></div>
+      <div><h3>Not multi-tenant</h3><p>One admin, your devices. wg-easy supports many peers, but the hardening assumes a single trusted operator.</p></div>
+      <div><h3>Not finished by the deployer</h3><p>Door 03 leaves SSH on a password until someone installs a key, and leaves 2FA and VPN-only mode for you to switch on. Have a techie friend spend twenty minutes with the <a href="https://github.com/paulfxyz/megamesh/blob/main/docs/HARDENING.md" rel="noopener" style="border-bottom:1px solid var(--text-4)">hardening notes</a>; it is already a good box before that.</p></div>
+      <div><h3>Not tested everywhere</h3><p>CentOS Stream 9 on a 1 vCPU / 1 GB VPS is verified end to end. Rocky, Alma, Debian and Ubuntu take their own code paths and have not been run. The repository says exactly what has and has not been exercised.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="behind">
+  <div class="wrap">
+    <div class="kicker">Who's behind it</div>
+    <h2>A megastack.sh build.</h2>
+    <p class="lead">Megamesh is the smallest, friendliest member of the <a href="https://megastack.sh" rel="noopener" style="color:var(--text);border-bottom:1px solid var(--text-4)">megastack.sh</a> family — the open-source security stack that cybersecurity consultancy deploys for clients. This one is the single-person version, published whole: the script, the prompt, the configs, the logbook of the first deployment, and two rounds of audits by three frontier models with every finding and what was done about it.</p>
+    <div class="behind">
+      <div class="mark" aria-hidden="true">PF</div>
+      <div>
+        <strong>Paul Fleury</strong> — founder of megastack.sh. French internet entrepreneur in Lisbon, hacking around on the internet since the late nineties.
+        <p>Megamesh was designed and operated with an AI agent over SSH, then torn apart by three other models before going public. The whole story is in the repository.</p>
+        <div class="links">
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/paulfxyz/" rel="noopener" data-linkedin>LinkedIn →</a>
+          <a class="btn btn-ghost" href="https://github.com/paulfxyz/megamesh" rel="noopener">GitHub →</a>
+          <a class="btn btn-ghost" href="https://megastack.sh" rel="noopener">megastack.sh →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>megamesh.sh — a megastack.sh build · MIT</span>
+    <span><a href="https://github.com/paulfxyz/megamesh" rel="noopener">Source</a> · <a href="https://github.com/paulfxyz/megamesh/blob/main/docs/AUDIT.md" rel="noopener">Audits</a> · <a href="https://github.com/paulfxyz/megamesh/blob/main/egress.json" rel="noopener">egress.json</a> · <a href="mailto:hi@megastack.sh">hi@megastack.sh</a></span>
+  </div>
+</footer>
+</body>
+</html>

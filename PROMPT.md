@@ -2,7 +2,7 @@
 
 Paste this into any AI agent that can run shell commands over SSH (Perplexity Computer, Claude Code, Codex, OpenHands, Devin, aider, your own agent…). Replace the values in the first block. That is all the context it needs; the rest of the prompt is the know-how so the agent does not have to rediscover the traps.
 
-If you want the agent to follow this repository exactly, add one line: *"Clone `https://github.com/paulfxyz/megamesh`, read `install.sh` and `docs/` before acting, then run `install.sh`."* The prompt below also works standalone.
+If you want the agent to follow this repository exactly, add one line: *"Clone `https://github.com/paulfxyz/megamesh`, read `megamesh.sh` and `docs/` before acting, then run `megamesh.sh`."* The prompt below also works standalone.
 
 **Before you paste it:** generate your own SSH key pair on your laptop (`ssh-keygen -t ed25519`) and put the *public* key in the prompt. The agent must never be the only holder of a credential to your server. Give it the initial root password — you will rotate it right after — and have your provider's rescue console bookmarked.
 
@@ -120,7 +120,7 @@ DELIVER
 
 ## Why a prompt and not only a script
 
-`install.sh` is deterministic and fast, but it assumes a known distribution and a known starting state. A real VPS arrives with surprises — a disabled swap file, a Docker daemon that was told not to touch the firewall, a fail2ban with no jails. An agent reading the state and adapting handles those; a script can only guard against the ones it knows. The prompt carries the ones we know, so the agent starts where this project finished rather than where it started.
+`megamesh.sh` is deterministic and fast, but it assumes a known distribution and a known starting state. A real VPS arrives with surprises — a disabled swap file, a Docker daemon that was told not to touch the firewall, a fail2ban with no jails. An agent reading the state and adapting handles those; a script can only guard against the ones it knows. The prompt carries the ones we know, so the agent starts where this project finished rather than where it started.
 
 ## Why the rules about keys and confirmation
 

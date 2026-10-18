@@ -1,10 +1,13 @@
 <div align="center">
 
-<img src="docs/logo.svg" width="128" height="128" alt="megamesh logo">
+<img src="docs/logo.svg" width="128" height="128" alt="Megamesh logo: a red M shaped like a shield">
 
-# megamesh
+# Megamesh
 
-![Version](https://img.shields.io/badge/version-1.3.0-e3120b?style=for-the-badge)
+**Your own WireGuard VPN, hardened by default, on the cheapest VPS you can find.**
+
+![Version](https://img.shields.io/badge/version-1.4.0-e3120b?style=for-the-badge)
+[![Website](https://img.shields.io/badge/megamesh.sh-site_%2B_deployer-E5000A?style=for-the-badge)](https://megamesh.sh)
 ![WireGuard](https://img.shields.io/badge/WireGuard-wg--easy_v15-88171A?style=for-the-badge&logo=wireguard&logoColor=white)
 ![Caddy](https://img.shields.io/badge/TLS-Caddy_2_%2B_Let%27s_Encrypt-1f88c0?style=for-the-badge)
 ![Firewall](https://img.shields.io/badge/default_policy-DROP-critical?style=for-the-badge)
@@ -13,11 +16,13 @@
 ![Audited](https://img.shields.io/badge/audited_by-3_frontier_models-5b4b8a?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-286348?style=for-the-badge)
 
-<img src="docs/hero.svg" width="100%" alt="megamesh: the public internet sees three doors — SSH, WireGuard and HTTPS — everything else is dropped. Behind them, a WireGuard tunnel, wg-easy and Caddy on a 1 GB VPS.">
+<img src="docs/hero.svg" width="100%" alt="Megamesh: the public internet sees three doors — SSH, WireGuard and HTTPS — everything else is dropped. Behind them, a WireGuard tunnel, wg-easy and Caddy on a 1 GB VPS.">
 
-<p><strong>A personal WireGuard VPN with a web admin UI, hardened by default, on the cheapest VPS you can find.</strong></p>
-<p>Two ways in: a script if you are a sysop, a prompt if you have an AI agent. Both start from the same two facts — an IP and a root password.</p>
-<p><a href="#quick-start-sysop">Script</a> · <a href="#quick-start-ai-agent">Prompt</a> · <a href="#what-you-get">What you get</a> · <a href="#vpn-only-mode">VPN-only mode</a> · <a href="#keeping-it-updated">Updates</a> · <a href="#whitelisting-the-author">Whitelist me</a> · <a href="docs/HARDENING.md">Hardening</a> · <a href="docs/AUDIT.md">Audit</a> · <a href="docs/DNS.md">DNS</a> · <a href="docs/TROUBLESHOOTING.md">Troubleshooting</a> · <a href="docs/LOGBOOK.md">Logbook</a></p>
+<p>One VPS, one domain, one admin. WireGuard for the tunnel, a web UI with QR codes for your devices, a certificate that renews itself, a firewall with exactly three doors, and weekly upgrades that roll back if they break anything.</p>
+<p><strong>Three ways in</strong>, all starting from the same two facts — an IP and a root password:<br>
+a <a href="#01--script-if-you-run-servers">script</a> if you run servers · a <a href="#02--prompt-if-you-have-an-ai-agent">prompt</a> if you have an AI agent · a <a href="https://megamesh.sh/deploy/">web deployer</a> if you just want a VPN.</p>
+
+<p><a href="https://megamesh.sh">megamesh.sh</a> · <a href="#what-you-get">What you get</a> · <a href="#vpn-only-mode">VPN-only mode</a> · <a href="#keeping-it-updated">Updates</a> · <a href="#whitelisting-the-author">Whitelist me</a> · <a href="#the-website">The website</a> · <a href="docs/HARDENING.md">Hardening</a> · <a href="docs/AUDIT.md">Audit</a> · <a href="docs/DNS.md">DNS</a> · <a href="docs/TROUBLESHOOTING.md">Troubleshooting</a> · <a href="docs/LOGBOOK.md">Logbook</a></p>
 
 </div>
 
@@ -25,7 +30,62 @@
 
 Commercial VPNs ask you to trust a company you cannot audit, with servers you share with strangers. Rolling your own is cheap and well documented, yet most guides stop at "WireGuard is up" and leave the box with password SSH, a wide-open firewall and no updates — the reference server for this project had logged **76,073 failed SSH logins** in 25 days, with fail2ban "running" and zero jails.
 
-`megamesh` is the opinionated remainder: one VPS, one domain, one admin. WireGuard for the tunnel, [wg-easy](https://github.com/wg-easy/wg-easy) for the profiles and QR codes, [Caddy](https://caddyserver.com) for the certificate, firewalld for a deny-by-default policy with exactly three doors, [topgrade](https://github.com/topgrade-rs/topgrade) on a weekly timer to keep packages *and* container images current with a health check and rollback, and the small set of host hardening you would want anyway. It is written down twice — as a script that does it, and as a prompt that teaches an agent to do it — because the second form survives distributions and providers the first one has never seen. Before going public it was audited twice by three frontier models; the findings that held up were fixed and re-verified on the live server, the rest are listed with reasons ([docs/AUDIT.md](docs/AUDIT.md)).
+Megamesh is the opinionated remainder. WireGuard for the tunnel, [wg-easy](https://github.com/wg-easy/wg-easy) for the profiles and QR codes, [Caddy](https://caddyserver.com) for the certificate, firewalld for a deny-by-default policy with exactly three doors, [topgrade](https://github.com/topgrade-rs/topgrade) on a weekly timer to keep packages *and* container images current with a health check and rollback, and the small set of host hardening you would want anyway.
+
+It is written down three times — as a script that does it, as a prompt that teaches an agent to do it, and as a web page that does it for you — because each form reaches people the others do not. Before going public it was audited twice by three frontier models; the findings that held up were fixed and re-verified on the live server, the rest are listed with reasons ([docs/AUDIT.md](docs/AUDIT.md)).
+
+## Three ways in
+
+| | Who | You bring | What happens | Hardening |
+|---|---|---|---|---|
+| **01** | You run servers | SSH, a domain, ten minutes | You read `megamesh.sh`, run it as root with two env vars | Full: key-only SSH when a key is present, every option under your control |
+| **02** | You have an AI agent | `PROMPT.md`, the server details, a browser tab for DNS | The agent does what the script does, step by step, verifying as it goes, and explains what it did | Full: the prompt carries the rules and the traps |
+| **03** | You just want a VPN | IP, root password, domain, email — into a form at [megamesh.sh/deploy](https://megamesh.sh/deploy/) | The deployer logs in over SSH, runs `megamesh.sh` with defaults, hands you the admin credentials and one DNS record | Nice, not finished: SSH keeps its password so a techie friend can install a key and lock it later |
+
+### 01 — Script, if you run servers
+
+A fresh VPS, root, a domain whose A record you can set. CentOS Stream 9 is verified end to end; Rocky / Alma 9 take the same code path but have not been run; Debian 12 / Ubuntu 22.04+ have a best-effort branch that is not yet verified.
+
+```sh
+curl -fsSLO https://megamesh.sh/megamesh.sh && less megamesh.sh      # read it first — it is one file
+MEGAMESH_DOMAIN=vpn.example.com MEGAMESH_EMAIL=you@example.com bash megamesh.sh
+```
+
+Run standalone, the script fetches its own release tarball (helpers, configs, topgrade units) from GitHub; from a clone it uses the files next to it — `git clone https://github.com/paulfxyz/megamesh && cd megamesh && … bash megamesh.sh` is the same thing with the source in front of you. The installer is named after the domain, which is named after the installer; `install.sh` remains as a shim for links that predate the rename.
+
+Then:
+
+1. Create the DNS A record `vpn.example.com → <server IP>` ([docs/DNS.md](docs/DNS.md)). Caddy is already retrying and will pick up the certificate within minutes.
+2. `cat /root/megamesh-admin-credentials` — the admin account was created during the install, before the UI was reachable. Move the password into your password manager, `shred -u` the file, log in at `https://vpn.example.com/`, and enable two-factor authentication under your account.
+3. Add a device, scan the QR code, connect. `megamesh-status` shows handshakes, firewall, bans, certificate, next upgrade run and mode on one screen.
+
+All settings are environment variables — see the top of [`megamesh.sh`](megamesh.sh): SSH port, WireGuard port, a public key to install, whether to lock passwords (`auto` = only if a key exists), admin username/password or let it generate one, skip the slow system update, install directory, VPN-only mode and its redirect, the upgrade schedule (`MEGAMESH_UPGRADE_SCHEDULE`, systemd `OnCalendar`), whether upgrades may reboot (`MEGAMESH_AUTO_REBOOT`), or `MEGAMESH_TOPGRADE=0` to skip topgrade entirely.
+
+Re-running is safe and keeps your choices: the script has been run seven times on the reference server, the last ones over the live deployment with a connected peer and VPN-only mode on, keeping keys, peers, certificate and mode intact. A re-run that found the UI in VPN-only mode never writes the open configuration in between.
+
+### 02 — Prompt, if you have an AI agent
+
+Open [`PROMPT.md`](PROMPT.md), fill in the server block (IP, root password, OS, domain, email, your public key), paste it into any agent that can run shell commands over SSH. The prompt carries the goal, the rules (change the root password first, never disable passwords before a key login works, never print secrets, verify by reading state) and the traps we hit so the agent does not have to find them again:
+
+- the 1 GB VPS whose first `dnf update` gets OOM-killed because the image's `/swapfile` was never activated
+- the provider image shipping `/etc/docker/daemon.json` with `"iptables": false`, so Docker silently publishes nothing
+- the wg-easy container's legacy `iptables` needing nine kernel modules on the host or `wg0` never comes up
+- fail2ban installed and active with zero jails
+- Docker's `docker-forwarding` firewalld policy letting *any* published port through, which is why only two are published
+- the unauthenticated first-run wizard that whoever opens the URL first gets to complete
+
+The reference deployment was done exactly this way, by [Perplexity Computer](https://www.perplexity.ai/computer) over SSH, with the owner supplying only the server details and a logged-in browser tab for the DNS change. The full account is in [docs/LOGBOOK.md](docs/LOGBOOK.md).
+
+### 03 — Deployer, if you just want a VPN
+
+Open [megamesh.sh/deploy](https://megamesh.sh/deploy/). Four steps on one page:
+
+1. **Details** — the server's public IP, the root password your provider emailed you, the domain you want the VPN to answer on, and an email for certificate notices. Optionally an SSH public key, if you have one.
+2. **Check** — the page logs in once over SSH, confirms it is root on a supported x86_64 distribution, reads RAM, CPUs, whether Docker or a previous Megamesh is already there, and shows you what it found before touching anything.
+3. **Install** — it runs the same `megamesh.sh` everyone else runs, with defaults, detached from the browser; the page polls the install log every few seconds, so a closed tab does not kill the install.
+4. **Handover** — it shows the admin username and password it created, the A record to add (`your domain → your IP`), and a "forget" button that shreds the credentials file on your server and clears the page. You add the record, open `https://your-domain/`, log in, enable 2FA, add your phone. Done.
+
+The honest part, also stated on the page: your root password transits through megamesh.sh for the minutes of the install and is never written anywhere — the endpoint is stateless, no database, no sessions, no logs of credentials, only a per-IP rate-limit counter. The deployer keeps SSH on a password (`MEGAMESH_LOCK_SSH=no`) because it has no key of yours to install; the result is a good VPN, not a finished hardening — ask a techie friend to add a key, turn on `megamesh-lockdown`, and read [docs/HARDENING.md](docs/HARDENING.md) with you. Targets must be a public IPv4 with root password login. The deployer's source is in [`site/`](site/): one PHP file around [phpseclib](https://phpseclib.com), one JS file for the page.
 
 ## What you get
 
@@ -51,39 +111,7 @@ public internet ──▶ tcp/22    SSH, key-only, fail2ban
 | Containers | wg-easy with `NET_ADMIN` only (no `SYS_MODULE`, no `/lib/modules`), Docker userland proxy off | Smaller blast radius; the host loads the kernel modules |
 | First start | wg-easy brought up alone, admin account proven (`/login`), only then Caddy | Fails closed: if setup did not happen, nothing becomes public |
 
-Footprint on the reference server after install: ~400 MB RAM used including both containers, ~4 GB disk.
-
-## Quick start (sysop)
-
-A fresh VPS, root, a domain whose A record you can set. CentOS Stream 9 is verified end to end; Rocky / Alma 9 take the same code path but have not been run; Debian 12 / Ubuntu 22.04+ have a best-effort branch that is not yet verified.
-
-```sh
-git clone https://github.com/paulfxyz/megamesh && cd megamesh
-MEGAMESH_DOMAIN=vpn.example.com MEGAMESH_EMAIL=you@example.com bash install.sh
-```
-
-Then:
-
-1. Create the DNS A record `vpn.example.com → <server IP>` ([docs/DNS.md](docs/DNS.md)). Caddy is already retrying and will pick up the certificate within minutes.
-2. `cat /root/megamesh-admin-credentials` — the admin account was created during the install, before the UI was reachable. Move the password into your password manager, `shred -u` the file, log in at `https://vpn.example.com/`, and enable two-factor authentication under your account.
-3. Add a device, scan the QR code, connect. `megamesh-status` shows handshakes, firewall, bans, certificate, next upgrade run and mode on one screen.
-
-All settings are environment variables — see the top of [`install.sh`](install.sh): SSH port, WireGuard port, a public key to install, whether to lock passwords (`auto` = only if a key exists), admin username/password or let it generate one, skip the slow system update, install directory, VPN-only mode and its redirect, the upgrade schedule (`MEGAMESH_UPGRADE_SCHEDULE`, systemd `OnCalendar`), whether upgrades may reboot (`MEGAMESH_AUTO_REBOOT`), or `MEGAMESH_TOPGRADE=0` to skip topgrade entirely.
-
-Re-running is safe and keeps your choices: the script has been run seven times on the reference server, the last ones over the live deployment with a connected peer and VPN-only mode on, keeping keys, peers, certificate and mode intact. A re-run that found the UI in VPN-only mode never writes the open configuration in between.
-
-## Quick start (AI agent)
-
-Open [`PROMPT.md`](PROMPT.md), fill in the server block (IP, root password, OS, domain, email, your public key), paste it into any agent that can run shell commands over SSH. The prompt carries the goal, the rules (change the root password first, never disable passwords before a key login works, never print secrets, verify by reading state) and the traps we hit so the agent does not have to find them again:
-
-- the 1 GB VPS whose first `dnf update` gets OOM-killed because the image's `/swapfile` was never activated
-- the provider image shipping `/etc/docker/daemon.json` with `"iptables": false`, so Docker silently publishes nothing
-- the wg-easy container's legacy `iptables` needing nine kernel modules on the host or `wg0` never comes up
-- fail2ban installed and active with zero jails
-- Docker's `docker-forwarding` firewalld policy letting *any* published port through, which is why only two are published
-- the unauthenticated first-run wizard that whoever opens the URL first gets to complete
-
-The reference deployment was done exactly this way, by [Perplexity Computer](https://www.perplexity.ai/computer) over SSH, with the owner supplying only the server details and a logged-in browser tab for the DNS change. The full account is in [docs/LOGBOOK.md](docs/LOGBOOK.md).
+Footprint on the reference server after install: ~400 MB RAM used including both containers, ~4 GB disk. Three helpers land in `/usr/local/bin`: `megamesh-status`, `megamesh-lockdown`, `megamesh-upgrade`.
 
 ## VPN-only mode
 
@@ -102,10 +130,10 @@ Restricting SSH to the VPN as well is deliberately not offered yet: the obvious 
 
 ## Keeping it updated
 
-Two layers, both unattended:
+Two layers, both unattended, both installed by default:
 
-- **Daily**: `dnf-automatic` / `unattended-upgrades` apply package updates (all updates on CentOS Stream, which publishes no errata metadata; security-only elsewhere).
-- **Weekly** (Monday 04:30 server time by default, ±20 min jitter): `megamesh-upgrade`, a thin wrapper around [topgrade](https://github.com/topgrade-rs/topgrade) restricted to its `system` and `containers` steps.
+- **Daily** — `dnf-automatic` / `unattended-upgrades` apply package updates (all updates on CentOS Stream, which publishes no errata metadata; security-only elsewhere).
+- **Weekly** — Monday 04:30 server time by default, ±20 min jitter: `megamesh-upgrade`, a thin wrapper around [topgrade](https://github.com/topgrade-rs/topgrade) restricted to its `system` and `containers` steps.
 
 ```sh
 megamesh-upgrade --dry-run        # what topgrade would do, touches nothing
@@ -116,7 +144,7 @@ systemctl list-timers megamesh-upgrade.timer
 
 What a run does: remember the image ID each container runs → `topgrade` (packages, then `docker pull` of every local image) → `docker compose up -d` (recreates only what changed) → wait up to two minutes for wg-easy to be healthy with `wg0` up and Caddy answering on 443 → on success prune the old images, on failure re-tag the previous image IDs and recreate, so the VPN is back on the images that worked → if `dnf needs-restarting -r` (or `/var/run/reboot-required`) says the kernel changed and `MEGAMESH_AUTO_REBOOT=1`, reboot one minute later; containers come back on their own.
 
-Topgrade is installed from its GitHub release as a static binary, **pinned by version and SHA-256** in `install.sh`, with self-update off; it is updated when the pin is bumped here, not by itself. Image tags stay on major versions (`wg-easy:15`, `caddy:2-alpine`), so a weekly pull never jumps a major release. Honest note: the rollback branch has been reviewed and the happy path exercised on the reference server; a real failed upgrade has not yet happened to test it in anger.
+Topgrade is installed from its GitHub release as a static binary, **pinned by version and SHA-256** in `megamesh.sh`, with self-update off; it is updated when the pin is bumped here, not by itself. Its config is `/etc/megamesh/topgrade.toml` ([config/topgrade/topgrade.toml](config/topgrade/topgrade.toml)): only the two steps, non-interactive, `allow_root` for the systemd run. Image tags stay on major versions (`wg-easy:15`, `caddy:2-alpine`), so a weekly pull never jumps a major release. Honest note: the rollback branch has been reviewed and the happy path exercised on the reference server; a real failed upgrade has not yet happened to test it in anger.
 
 ## Whitelisting the author
 
@@ -138,10 +166,27 @@ Read it as a convenience signal, never as the only control:
 - Hosting providers reassign addresses. If I let the VPS lapse, the next customer inherits `151.243.225.214` before I can commit anything. Treat the entry as stale if the PTR stops matching or `egress.json` has not been touched in a year.
 - Only IPv4 traffic *routed through the tunnel* exits here. A device of mine off the VPN is just another address on the café Wi-Fi.
 
+## The website
+
+[megamesh.sh](https://megamesh.sh) is the project's front door: what it is, the three ways in, what is inside the box, the honest limits, and the deployer. It borrows the design language of [megastack.sh](https://megastack.sh) — black, one red, monospace where it talks to machines — because Megamesh is the kind of box that consultancy builds for clients, published.
+
+The site is static HTML plus one PHP endpoint, and it lives in [`site/`](site/) so it can be read, forked or self-hosted:
+
+```
+site/index.html          ← the landing page
+site/deploy/             ← the deployer UI (index.html + deploy.js, no framework)
+site/api/deploy.php      ← the stateless endpoint: check · start · status · handover · forget
+site/api/lib/            ← autoload.php; phpseclib 4 + constant_time_encoding are vendored at deploy time, not committed
+site/megamesh.sh         ← the installer, served as text/plain at https://megamesh.sh/megamesh.sh
+site/.htaccess           ← content types, dotfile denial, security headers; api/lib/ is unreachable from the web
+```
+
+How the deployer works: the browser posts the four fields to `deploy.php`; `check` opens an SSH session with phpseclib, verifies root and the distribution, and returns what it saw. `start` uploads an env file, launches `nohup setsid bash megamesh.sh` on the server with its output in `/root/megamesh-install.log`, and returns immediately. `status` tails that log on every poll and watches for the exit marker; `handover` reads `/root/megamesh-admin-credentials` once and returns it; `forget` shreds `/root/megamesh-admin-credentials` and the env file on the server and clears the page. Credential-bearing actions are rate-limited per client IP (12 per 10 minutes); nothing else is written on the hosting side. It runs on plain shared PHP hosting — no composer, no database, nothing to keep alive. To host your own copy, drop the vendored libraries next to `autoload.php` as described in [`site/api/lib/README.md`](site/api/lib/README.md) and upload `site/`.
+
 ## Repository layout
 
 ```
-install.sh                    ← the installer: idempotent, non-interactive, env-var driven
+megamesh.sh                   ← the installer: idempotent, non-interactive, env-var driven (install.sh is a shim)
 PROMPT.md                     ← the agent prompt, with the known traps and the credential rules
 egress.json                   ← the author's public egress address, machine-readable
 scripts/status.sh             ← one-screen health check (installed as megamesh-status)
@@ -160,32 +205,40 @@ config/                       ← the files running on the reference server (Cad
   sysctl/99-megamesh-hardening.conf
   modules-load/megamesh.conf
   docker/daemon.json
+site/                         ← megamesh.sh: landing page and the web deployer (see "The website")
 docs/
   HARDENING.md                ← what is in place and why; VPN-only mode and how it was measured; upgrade policy
   AUDIT.md                    ← the three-model audit: findings, fixes, what was declined
-  audit/                      ← the three raw reports
+  audit/                      ← the raw reports, both rounds
   DNS.md                      ← A record, PTR (incl. Hostkey), and why not to self-host ns1/ns2
   TROUBLESHOOTING.md          ← symptom → cause → fix
   LOGBOOK.md                  ← the reference deployment, hour by hour
+  logo.svg · logo-mark.svg    ← the shield M, with and without the tile
+  hero.svg                    ← the three-doors diagram above
 ```
 
 ## What this is not
 
 - **Not a privacy service.** Your VPS provider sees your traffic exit their network; this hides you from the café Wi-Fi and your ISP, not from a subpoena.
 - **Not multi-tenant.** One admin, your devices. wg-easy supports many peers, but the hardening assumes a single trusted operator.
-- **Not tested everywhere.** One distribution, one provider, one VPS size are verified. The Debian/Ubuntu branch, non-default ports and the fresh-install unattended path are reasoned and partially exercised, not run end to end. Issues and PRs with a logbook of what you hit are the most useful contribution.
-- **Not a replacement for reading.** `install.sh` is ~480 lines of plain bash with comments. Read it before you run it as root on a machine you care about.
+- **Not tested everywhere.** One distribution, one provider, one VPS size are verified. The Debian/Ubuntu branch, non-default ports, the fresh-install unattended path and the web deployer's full run are reasoned and partially exercised, not yet run end to end on a blank machine. Issues and PRs with a logbook of what you hit are the most useful contribution.
+- **Not a replacement for reading.** `megamesh.sh` is ~500 lines of plain bash with comments. Read it before you run it as root on a machine you care about, and before you hand its URL to a web form.
 
-## Status and roadmap
+## Status, naming, roadmap
 
-v1.3.0 is the state of the reference server on 2026-10-18 after two audit rounds and the topgrade integration ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy. Planned: a fresh-VPS run of the unattended path, verifying the Debian/Ubuntu branch on a second provider, SSH-via-VPN with a confirm-or-rollback window. Not planned: supporting OpenVPN, multi-user auth, or turning this into a product.
+v1.4.0 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration and the launch of [megamesh.sh](https://megamesh.sh) ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
+
+- **Naming**: "Megamesh" as a word, in prose; `megamesh` or `megamesh.sh` in lower case when talking about the code, the command or the site.
+- **Logo**: a single M drawn as a shield — [`docs/logo.svg`](docs/logo.svg) on its tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`.
+- **Planned**: a fresh-VPS run of the unattended path and of the deployer, verifying the Debian/Ubuntu branch on a second provider, SSH-via-VPN with a confirm-or-rollback window.
+- **Not planned**: OpenVPN, multi-user auth, turning this into a product.
 
 ## The story
 
-I wanted a VPN that is mine, on a cheap VPS, with a QR code for my phone and nothing else listening. I also wanted to know whether I could hand an AI agent an IP and a root password and get a hardened box back without touching a terminal. The answer to both was yes, after the agent and I tripped over six things that were not in any guide. Then I asked three other models to tear the result apart before publishing it, twice, and they found more — including a lock-out bug in the very guard that was supposed to prevent lock-outs, and a re-run that quietly reopened a locked-down UI. This repository is all of those things, plus the script, so the next person — or the next agent — starts at the end.
+I wanted a VPN that is mine, on a cheap VPS, with a QR code for my phone and nothing else listening. I also wanted to know whether I could hand an AI agent an IP and a root password and get a hardened box back without touching a terminal. The answer to both was yes, after the agent and I tripped over six things that were not in any guide. Then I asked three other models to tear the result apart before publishing it, twice, and they found more — including a lock-out bug in the very guard that was supposed to prevent lock-outs, and a re-run that quietly reopened a locked-down UI. Then I bought the domain, because a script, a prompt and a form reach three different people. This repository is all of those things, so the next person — or the next agent — starts at the end.
 
-**Paul Fleury** — French internet entrepreneur in Lisbon, running [megastack.sh](https://megastack.sh), a cybersecurity consultancy — this is the kind of box it builds for clients, published. Designed and operated with [Perplexity Computer](https://www.perplexity.ai/computer). Companion projects: [xnftables](https://github.com/paulfxyz/xnftables), [cup-of-news](https://github.com/paulfxyz/cup-of-news), [pplx-cost-transparency](https://github.com/paulfxyz/pplx-cost-transparency).
+**Paul Fleury** — French internet entrepreneur in Lisbon, running [megastack.sh](https://megastack.sh), a cybersecurity consultancy; [LinkedIn](https://www.linkedin.com/in/paulfxyz/). Designed and operated with [Perplexity Computer](https://www.perplexity.ai/computer). Companion projects: [xnftables](https://github.com/paulfxyz/xnftables), [cup-of-news](https://github.com/paulfxyz/cup-of-news), [pplx-cost-transparency](https://github.com/paulfxyz/pplx-cost-transparency).
 
 ## License
 
-[MIT](LICENSE). wg-easy is AGPL-3.0 and Caddy is Apache-2.0; both are used as unmodified container images. topgrade is GPL-3.0 and is installed as an unmodified release binary. "WireGuard" is a registered trademark of Jason A. Donenfeld; this project is not affiliated with WireGuard, wg-easy or Caddy.
+[MIT](LICENSE). wg-easy is AGPL-3.0 and Caddy is Apache-2.0; both are used as unmodified container images. topgrade is GPL-3.0 and is installed as an unmodified release binary. phpseclib is MIT. "WireGuard" is a registered trademark of Jason A. Donenfeld; this project is not affiliated with WireGuard, wg-easy or Caddy.

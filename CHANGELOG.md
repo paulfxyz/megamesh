@@ -1,16 +1,23 @@
 # Changelog
 
+## 1.4.0 — 2026-10-18
+
+- **megamesh.sh is live**: landing page in the megastack.sh design language plus the web deployer (door 03) — a stateless PHP endpoint around phpseclib that logs into the user's VPS, runs `megamesh.sh` with defaults (`MEGAMESH_LOCK_SSH=no`), polls the log and hands over the admin credentials. Source under `site/`.
+- **Installer renamed `install.sh` → `megamesh.sh`** (served at https://megamesh.sh/megamesh.sh). Run standalone it fetches the matching release tarball for helpers and configs; `install.sh` remains as a shim.
+- **New logo**: a single M shaped like a shield (`docs/logo.svg`, `docs/logo-mark.svg`); hero updated.
+- Naming rule: "Megamesh" as a word, `megamesh` / `megamesh.sh` in technical contexts.
+
 ## 1.3.0 — 2026-10-18
 
 - **Scheduled upgrades with topgrade.** `scripts/upgrade.sh` → `megamesh-upgrade`: topgrade (`system` + `containers`) → `docker compose up -d` → health check (wg-easy healthy, `wg0` up, Caddy on 443) → image rollback by recorded image ID on failure → reboot only when the kernel/libc requires it (`MEGAMESH_AUTO_REBOOT`, default 1). Weekly systemd timer (`MEGAMESH_UPGRADE_SCHEDULE`, default `Mon *-*-* 04:30`, 20 min jitter, persistent). `--dry-run` and `--no-reboot` flags.
-- `install.sh`: installs topgrade 17.13.1 from the GitHub release as a static musl binary, pinned by version and SHA-256 (`TOPGRADE_VERSION`, `TOPGRADE_SHA256_X86_64`); writes `/etc/megamesh/topgrade.toml` and the systemd units; validates the schedule with `systemd-analyze calendar`; `MEGAMESH_TOPGRADE=0` opts out. Records `MEGAMESH_AUTO_REBOOT` in `/etc/megamesh.conf`.
+- `megamesh.sh`: installs topgrade 17.13.1 from the GitHub release as a static musl binary, pinned by version and SHA-256 (`TOPGRADE_VERSION`, `TOPGRADE_SHA256_X86_64`); writes `/etc/megamesh/topgrade.toml` and the systemd units; validates the schedule with `systemd-analyze calendar`; `MEGAMESH_TOPGRADE=0` opts out. Records `MEGAMESH_AUTO_REBOOT` in `/etc/megamesh.conf`.
 - `megamesh-status`: shows the next timer run, topgrade version and the last run's result lines.
 - Logo (`docs/logo.svg`), hero updated, README "Keeping it updated" section, HARDENING/TROUBLESHOOTING/PROMPT updated.
 - Fixed during live testing: topgrade stops its containers step at the first failed pull, so rollback references are image IDs rather than `*:megamesh-prev` tags; `allow_root = true` for non-interactive root runs; firewall exposure check ignores fail2ban reject/drop rich rules.
 
 ## 1.2.0 — 2026-10-18
 
-- **Renamed `proxy` → `megamesh`** (nod to megastack.sh). Repository is now `paulfxyz/megamesh` (GitHub redirects the old URL). Env-var prefix `PROXY_*` → `MEGAMESH_*`; helpers `megamesh-status` / `megamesh-lockdown`; `/etc/megamesh.conf`; default dir `/opt/megamesh`; config file names `00-megamesh-hardening.conf`, `99-megamesh-hardening.conf`, `megamesh-sshd.local`, `modules-load.d/megamesh.conf`; credentials file `/root/megamesh-admin-credentials`. Existing installs: re-run `install.sh` from the new checkout; it writes the new file names (remove the old `*proxy*` drop-ins by hand or with the snippet in docs/TROUBLESHOOTING.md).
+- **Renamed `proxy` → `megamesh`** (nod to megastack.sh). Repository is now `paulfxyz/megamesh` (GitHub redirects the old URL). Env-var prefix `PROXY_*` → `MEGAMESH_*`; helpers `megamesh-status` / `megamesh-lockdown`; `/etc/megamesh.conf`; default dir `/opt/megamesh`; config file names `00-megamesh-hardening.conf`, `99-megamesh-hardening.conf`, `megamesh-sshd.local`, `modules-load.d/megamesh.conf`; credentials file `/root/megamesh-admin-credentials`. Existing installs: re-run `megamesh.sh` from the new checkout; it writes the new file names (remove the old `*proxy*` drop-ins by hand or with the snippet in docs/TROUBLESHOOTING.md).
 - README: "Whitelisting the author" section and `egress.json` — the reference server's address as the owner's public egress, machine-readable.
 - Second audit pass (same three models) on the renamed tree; see docs/AUDIT.md.
 
@@ -44,7 +51,7 @@ Response to a three-model audit of 1.0.0 (Claude Opus 5.5, GPT-6.1 Sol Pro, Gemi
 
 First release, distilled from the reference deployment on `paulfleury.network` (CentOS Stream 9, Hostkey 1 vCPU / 1 GB).
 
-- `install.sh`: idempotent, non-interactive installer — swap guard, packages, kernel modules, sysctl, key-only SSH with lock-out guard, fail2ban, firewalld three-door policy, Docker daemon fix, wg-easy v15 + Caddy stack, hostname, unattended security updates, self-check.
+- `megamesh.sh`: idempotent, non-interactive installer — swap guard, packages, kernel modules, sysctl, key-only SSH with lock-out guard, fail2ban, firewalld three-door policy, Docker daemon fix, wg-easy v15 + Caddy stack, hostname, unattended security updates, self-check.
 - `PROMPT.md`: the agent prompt with the known traps baked in.
 - `config/`: the exact files running on the reference server.
 - `scripts/status.sh`: one-screen health check.

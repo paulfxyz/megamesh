@@ -24,7 +24,7 @@ DRY=0; REBOOT_OK="$MEGAMESH_AUTO_REBOOT"
 for a in "$@"; do case "$a" in --dry-run) DRY=1 ;; --no-reboot) REBOOT_OK=0 ;; *) echo "usage: $0 [--dry-run] [--no-reboot]"; exit 2 ;; esac; done
 log() { printf '%s megamesh-upgrade: %s\n' "$(date '+%F %T')" "$*"; }
 cd "$MEGAMESH_DIR" || { log "✖ ${MEGAMESH_DIR} not found"; exit 1; }
-command -v topgrade >/dev/null || { log "✖ topgrade not installed (re-run install.sh with MEGAMESH_TOPGRADE=1)"; exit 1; }
+command -v topgrade >/dev/null || { log "✖ topgrade not installed (re-run megamesh.sh with MEGAMESH_TOPGRADE=1)"; exit 1; }
 
 services=(wg-easy caddy)
 declare -A prev_img prev_ref

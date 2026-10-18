@@ -1,0 +1,12 @@
+# megamesh.sh
+Options -Indexes
+AddType text/plain .sh
+AddType image/svg+xml .svg
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "DENY"
+</IfModule>

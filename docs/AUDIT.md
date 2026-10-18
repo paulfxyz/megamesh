@@ -17,7 +17,7 @@ All three agreed the architecture was right (two published ports, unpublished UI
 | Finding (models) | Fix in 1.1.0 | Verified how |
 |---|---|---|
 | **SSH lock-out**: `PermitRootLogin prohibit-password` written even when the script claims to keep password login on; `AllowUsers root` makes it total. (all three — Critical/High) | `PermitRootLogin` and both password directives now follow the same `lock` decision. `MEGAMESH_LOCK_SSH=yes` without a key refuses to run. Installer prints effective `sshd -T` values and tells you to test a new login. | Re-run on the reference server: `permitrootlogin=without-password passwordauthentication=no` with a key present; code path for the key-less case reviewed. |
-| **SSH port moves before the firewall opens it** (Claude, GPT — Medium) | Firewall step runs before the SSH step. | Order in `install.sh`. |
+| **SSH port moves before the firewall opens it** (Claude, GPT — Medium) | Firewall step runs before the SSH step. | Order in `megamesh.sh`. |
 | **Public setup wizard race**: the admin account did not exist while 443 was already reachable; the logbook even advertised it. (all three — Critical/High) | Default unattended setup via wg-easy `INIT_*` on first start, through a 0600 env file, then scrubbed and container recreated. Credentials in `/root/megamesh-admin-credentials` (0600). Verification step distinguishes `/login` from `/setup`. Docs rewritten in past tense — the owner had completed the wizard before the audit ran. | Fresh-install path not yet exercised end to end (the reference server was already set up); the env-file mechanism and the `/login` check were exercised by the re-run. |
 | **Phase 2 recipes wrong**: `10.8.0.1` is inside the container's netns; firewalld rich rule for `10.8.0.0/24` would never match (traffic is MASQUERADEd to `10.42.42.42` on the `docker` zone); `10.42.42.0/24` matcher is a footgun. (all three — High/Medium) | Phase 2a rewritten around a measured mechanism: with Docker `userland-proxy` off, tunnel-origin requests reach Caddy as exactly `10.42.42.42`. `megamesh-lockdown` implements it with validation, in-place write and preconditions. Phase 2b (SSH via VPN) withdrawn with an explanation. | Live Caddy access-log measurements, both proxy modes, from inside wg-easy and from a public vantage point — table in [HARDENING.md](HARDENING.md#how-it-was-verified). |
 | **`SYS_MODULE` and `/lib/modules` unnecessary** (GPT, Gemini — High/Low) | Removed; host loads and persists the modules. | Container recreated on the reference server with `NET_ADMIN` only: `wg0` up, same keys, peer intact. |
@@ -44,7 +44,7 @@ One prompt, three models, roughly 20k input tokens each, a few dollars on OpenRo
 
 ## Round 2: v1.1.0 → v1.2.0 (final pass, after the rename)
 
-Same three models, same instructions, told to focus on what was still wrong or newly introduced. Reports: [`audit/round2-*`](audit/). Grades B / C / A-; all three said "not publishable as-is" for a shared reason that the author had just observed live: **re-running `install.sh` rewrote the Caddyfile in open mode and switched VPN-only off.**
+Same three models, same instructions, told to focus on what was still wrong or newly introduced. Reports: [`audit/round2-*`](audit/). Grades B / C / A-; all three said "not publishable as-is" for a shared reason that the author had just observed live: **re-running `megamesh.sh` rewrote the Caddyfile in open mode and switched VPN-only off.**
 
 | Finding (models) | Fix in 1.2.0 | Verified how |
 |---|---|---|

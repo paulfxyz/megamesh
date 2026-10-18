@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420" role="img" aria-label="megamesh: the public internet sees three doors — SSH, WireGuard and HTTPS — everything else is dropped. Behind them, a WireGuard tunnel, wg-easy and Caddy on a 1 GB VPS.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420" role="img" aria-label="Megamesh: the public internet sees three doors — SSH, WireGuard and HTTPS — everything else is dropped. Behind them, a WireGuard tunnel, wg-easy and Caddy on a 1 GB VPS.">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#0b0f14"/>
@@ -17,8 +17,9 @@
   <rect width="1200" height="420" fill="url(#grid)"/>
 
   <!-- title -->
-  <text x="60" y="96" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="64" font-weight="700" fill="#f4f4f2">megamesh</text>
-  <text x="60" y="134" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" fill="#b9c0c8">Your own WireGuard VPN, one IP and root away.</text>
+  <g transform="translate(60,40) scale(1.1)"><path fill="#E5000A" fill-rule="evenodd" d="M8 10 H18.5 L32 26.5 L45.5 10 H56 V36 C56 47 46 55 32 59 C18 55 8 47 8 36 Z M20 30 L32 44 L44 30 V37.5 C44 44 38 48.5 32 51 C26 48.5 20 44 20 37.5 Z"/></g>
+  <text x="138" y="96" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="64" font-weight="700" fill="#f4f4f2">megamesh<tspan fill="#E5000A">.sh</tspan></text>
+  <text x="138" y="134" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" fill="#b9c0c8">Your own WireGuard VPN, one IP and root away.</text>
   <text x="1140" y="96" text-anchor="end" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5c6771">a megastack.sh build</text>
 
   <!-- the wall -->
@@ -56,5 +57,5 @@
     </g>
   </g>
 
-  <text x="1140" y="400" text-anchor="end" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5c6771">github.com/paulfxyz/megamesh - MIT</text>
+  <text x="1140" y="400" text-anchor="end" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5c6771">megamesh.sh - github.com/paulfxyz/megamesh - MIT</text>
 </svg>

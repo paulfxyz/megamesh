@@ -10,7 +10,7 @@
 # block gets a `remote_ip` matcher. A VPN client's request travels wg0 → wg-easy (MASQUERADE to the container
 # address 10.42.42.42) → Docker hairpin DNAT → Caddy, so Caddy sees client_ip 10.42.42.42 exactly. Public
 # traffic is DNATed with its real source preserved. Verified on the reference server with Docker's
-# userland-proxy OFF (install.sh sets it); with the userland proxy ON the hairpin would show the bridge
+# userland-proxy OFF (megamesh.sh sets it); with the userland proxy ON the hairpin would show the bridge
 # gateway 10.42.42.1 instead, and public traffic could too in some setups — so this script refuses to enable
 # unless userland-proxy is off. The Caddyfile is a single-file bind mount and is rewritten IN PLACE
 # (cp, not mv/sed -i): a new inode would never be seen by the running container.
@@ -76,7 +76,7 @@ case "${1:-status}" in
     [[ "$url" =~ $url_re ]] || { echo "✖ redirect URL must be a plain http(s) URL (no spaces, quotes, braces or semicolons)"; exit 1; }
     docker inspect wg-easy >/dev/null 2>&1 || { echo "✖ wg-easy container not found"; exit 1; }
     if python3 -c 'import json,sys; sys.exit(0 if json.load(open("/etc/docker/daemon.json")).get("userland-proxy") is False else 1)' 2>/dev/null; then :; else
-      echo "✖ refusing: Docker userland-proxy is not disabled, so VPN traffic would not be identifiable as ${MEGAMESH_WG_EASY_IP}. Re-run install.sh (it sets \"userland-proxy\": false) and recreate the stack."; exit 1
+      echo "✖ refusing: Docker userland-proxy is not disabled, so VPN traffic would not be identifiable as ${MEGAMESH_WG_EASY_IP}. Re-run megamesh.sh (it sets \"userland-proxy\": false) and recreate the stack."; exit 1
     fi
     peers=$({ docker exec wg-easy wg show wg0 peers 2>/dev/null || true; } | wc -l)
     (( peers > 0 )) || { echo "✖ refusing: WireGuard has no peers yet. Create a device first or you lock yourself out of the UI."; exit 1; }
