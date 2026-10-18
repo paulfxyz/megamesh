@@ -1,0 +1,20 @@
+# megamesh — topgrade configuration for the VPS (/etc/megamesh/topgrade.toml)
+# Only two steps matter on a single-purpose box: the distro packages and the container images.
+# megamesh-upgrade wraps this with a health check, rollback and the reboot decision.
+[misc]
+allow_root = true         # the VPS has no unprivileged user; megamesh-upgrade runs as root from a systemd timer
+only = ["system", "containers"]
+assume_yes = true
+no_retry = true
+skip_notify = true
+no_self_update = true     # topgrade itself is pinned by install.sh (version + sha256), not self-updated
+cleanup = true
+display_time = true
+set_title = false
+
+[containers]
+runtime = "docker"
+system_prune = false      # megamesh-upgrade prunes only after a healthy run
+
+[linux]
+dnf_arguments = "--refresh"

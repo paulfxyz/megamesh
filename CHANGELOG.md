@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0 — 2026-10-18
+
+- **Scheduled upgrades with topgrade.** `scripts/upgrade.sh` → `megamesh-upgrade`: topgrade (`system` + `containers`) → `docker compose up -d` → health check (wg-easy healthy, `wg0` up, Caddy on 443) → image rollback by recorded image ID on failure → reboot only when the kernel/libc requires it (`MEGAMESH_AUTO_REBOOT`, default 1). Weekly systemd timer (`MEGAMESH_UPGRADE_SCHEDULE`, default `Mon *-*-* 04:30`, 20 min jitter, persistent). `--dry-run` and `--no-reboot` flags.
+- `install.sh`: installs topgrade 17.13.1 from the GitHub release as a static musl binary, pinned by version and SHA-256 (`TOPGRADE_VERSION`, `TOPGRADE_SHA256_X86_64`); writes `/etc/megamesh/topgrade.toml` and the systemd units; validates the schedule with `systemd-analyze calendar`; `MEGAMESH_TOPGRADE=0` opts out. Records `MEGAMESH_AUTO_REBOOT` in `/etc/megamesh.conf`.
+- `megamesh-status`: shows the next timer run, topgrade version and the last run's result lines.
+- Logo (`docs/logo.svg`), hero updated, README "Keeping it updated" section, HARDENING/TROUBLESHOOTING/PROMPT updated.
+- Fixed during live testing: topgrade stops its containers step at the first failed pull, so rollback references are image IDs rather than `*:megamesh-prev` tags; `allow_root = true` for non-interactive root runs; firewall exposure check ignores fail2ban reject/drop rich rules.
+
 ## 1.2.0 — 2026-10-18
 
 - **Renamed `proxy` → `megamesh`** (nod to megastack.sh). Repository is now `paulfxyz/megamesh` (GitHub redirects the old URL). Env-var prefix `PROXY_*` → `MEGAMESH_*`; helpers `megamesh-status` / `megamesh-lockdown`; `/etc/megamesh.conf`; default dir `/opt/megamesh`; config file names `00-megamesh-hardening.conf`, `99-megamesh-hardening.conf`, `megamesh-sshd.local`, `modules-load.d/megamesh.conf`; credentials file `/root/megamesh-admin-credentials`. Existing installs: re-run `install.sh` from the new checkout; it writes the new file names (remove the old `*proxy*` drop-ins by hand or with the snippet in docs/TROUBLESHOOTING.md).

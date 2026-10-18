@@ -1,11 +1,14 @@
-# megamesh
-
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.1.0-e3120b?style=for-the-badge)
+<img src="docs/logo.svg" width="128" height="128" alt="megamesh logo">
+
+# megamesh
+
+![Version](https://img.shields.io/badge/version-1.3.0-e3120b?style=for-the-badge)
 ![WireGuard](https://img.shields.io/badge/WireGuard-wg--easy_v15-88171A?style=for-the-badge&logo=wireguard&logoColor=white)
 ![Caddy](https://img.shields.io/badge/TLS-Caddy_2_%2B_Let%27s_Encrypt-1f88c0?style=for-the-badge)
 ![Firewall](https://img.shields.io/badge/default_policy-DROP-critical?style=for-the-badge)
+![Updates](https://img.shields.io/badge/updates-topgrade_weekly_%2B_rollback-2d5f8b?style=for-the-badge)
 ![Tested on](https://img.shields.io/badge/tested_on-CentOS_Stream_9_·_1_vCPU_·_1_GB-23382f?style=for-the-badge)
 ![Audited](https://img.shields.io/badge/audited_by-3_frontier_models-5b4b8a?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-286348?style=for-the-badge)
@@ -14,7 +17,7 @@
 
 <p><strong>A personal WireGuard VPN with a web admin UI, hardened by default, on the cheapest VPS you can find.</strong></p>
 <p>Two ways in: a script if you are a sysop, a prompt if you have an AI agent. Both start from the same two facts — an IP and a root password.</p>
-<p><a href="#quick-start-sysop">Script</a> · <a href="#quick-start-ai-agent">Prompt</a> · <a href="#what-you-get">What you get</a> · <a href="#vpn-only-mode">VPN-only mode</a> · <a href="#whitelisting-the-author">Whitelist me</a> · <a href="docs/HARDENING.md">Hardening</a> · <a href="docs/AUDIT.md">Audit</a> · <a href="docs/DNS.md">DNS</a> · <a href="docs/TROUBLESHOOTING.md">Troubleshooting</a> · <a href="docs/LOGBOOK.md">Logbook</a></p>
+<p><a href="#quick-start-sysop">Script</a> · <a href="#quick-start-ai-agent">Prompt</a> · <a href="#what-you-get">What you get</a> · <a href="#vpn-only-mode">VPN-only mode</a> · <a href="#keeping-it-updated">Updates</a> · <a href="#whitelisting-the-author">Whitelist me</a> · <a href="docs/HARDENING.md">Hardening</a> · <a href="docs/AUDIT.md">Audit</a> · <a href="docs/DNS.md">DNS</a> · <a href="docs/TROUBLESHOOTING.md">Troubleshooting</a> · <a href="docs/LOGBOOK.md">Logbook</a></p>
 
 </div>
 
@@ -22,7 +25,7 @@
 
 Commercial VPNs ask you to trust a company you cannot audit, with servers you share with strangers. Rolling your own is cheap and well documented, yet most guides stop at "WireGuard is up" and leave the box with password SSH, a wide-open firewall and no updates — the reference server for this project had logged **76,073 failed SSH logins** in 25 days, with fail2ban "running" and zero jails.
 
-`megamesh` is the opinionated remainder: one VPS, one domain, one admin. WireGuard for the tunnel, [wg-easy](https://github.com/wg-easy/wg-easy) for the profiles and QR codes, [Caddy](https://caddyserver.com) for the certificate, firewalld for a deny-by-default policy with exactly three doors, and the small set of host hardening you would want anyway. It is written down twice — as a script that does it, and as a prompt that teaches an agent to do it — because the second form survives distributions and providers the first one has never seen. Before going public it was audited twice by three frontier models; the findings that held up were fixed and re-verified on the live server, the rest are listed with reasons ([docs/AUDIT.md](docs/AUDIT.md)).
+`megamesh` is the opinionated remainder: one VPS, one domain, one admin. WireGuard for the tunnel, [wg-easy](https://github.com/wg-easy/wg-easy) for the profiles and QR codes, [Caddy](https://caddyserver.com) for the certificate, firewalld for a deny-by-default policy with exactly three doors, [topgrade](https://github.com/topgrade-rs/topgrade) on a weekly timer to keep packages *and* container images current with a health check and rollback, and the small set of host hardening you would want anyway. It is written down twice — as a script that does it, and as a prompt that teaches an agent to do it — because the second form survives distributions and providers the first one has never seen. Before going public it was audited twice by three frontier models; the findings that held up were fixed and re-verified on the live server, the rest are listed with reasons ([docs/AUDIT.md](docs/AUDIT.md)).
 
 ## What you get
 
@@ -43,7 +46,8 @@ public internet ──▶ tcp/22    SSH, key-only, fail2ban
 | Firewall | firewalld public zone, target `DROP`, ICMP allow-list, opened before SSH moves | Three doors, everything else is a black hole; `firewall-cmd --list-all` is the audit |
 | SSH | Key-only, `prohibit-password`, no forwarding, `MaxAuthTries 3` | Passwords and root-password login stay on until a key is present; `yes` without a key refuses to run |
 | Brute force | fail2ban `sshd`, aggressive, 3 tries → 24 h, escalating to 30 d | Turns 76k attempts into a handful of banned IPs |
-| Host | sysctl hardening, swap guard, `dnf-automatic`/`unattended-upgrades` (all updates on CentOS Stream, which ships no errata metadata; security-only elsewhere), Docker log rotation, `mem_limit`s | A 1 GB VPS that stays up and patched |
+| Host | sysctl hardening, swap guard, `dnf-automatic`/`unattended-upgrades` daily (all updates on CentOS Stream, which ships no errata metadata; security-only elsewhere), Docker log rotation, `mem_limit`s | A 1 GB VPS that stays up and patched |
+| Upgrades | `megamesh-upgrade` on a weekly systemd timer: [topgrade](https://github.com/topgrade-rs/topgrade) (`system` + `containers` steps) → `docker compose up -d` → health check (wg-easy healthy, `wg0` up, Caddy answering) → image rollback on failure → reboot only if the kernel asks | The containers get updates too, and a bad image cannot take the VPN down unattended |
 | Containers | wg-easy with `NET_ADMIN` only (no `SYS_MODULE`, no `/lib/modules`), Docker userland proxy off | Smaller blast radius; the host loads the kernel modules |
 | First start | wg-easy brought up alone, admin account proven (`/login`), only then Caddy | Fails closed: if setup did not happen, nothing becomes public |
 
@@ -62,9 +66,9 @@ Then:
 
 1. Create the DNS A record `vpn.example.com → <server IP>` ([docs/DNS.md](docs/DNS.md)). Caddy is already retrying and will pick up the certificate within minutes.
 2. `cat /root/megamesh-admin-credentials` — the admin account was created during the install, before the UI was reachable. Move the password into your password manager, `shred -u` the file, log in at `https://vpn.example.com/`, and enable two-factor authentication under your account.
-3. Add a device, scan the QR code, connect. `megamesh-status` shows handshakes, firewall, bans, certificate and mode on one screen.
+3. Add a device, scan the QR code, connect. `megamesh-status` shows handshakes, firewall, bans, certificate, next upgrade run and mode on one screen.
 
-All settings are environment variables — see the top of [`install.sh`](install.sh): SSH port, WireGuard port, a public key to install, whether to lock passwords (`auto` = only if a key exists), admin username/password or let it generate one, skip the slow system update, install directory, VPN-only mode and its redirect.
+All settings are environment variables — see the top of [`install.sh`](install.sh): SSH port, WireGuard port, a public key to install, whether to lock passwords (`auto` = only if a key exists), admin username/password or let it generate one, skip the slow system update, install directory, VPN-only mode and its redirect, the upgrade schedule (`MEGAMESH_UPGRADE_SCHEDULE`, systemd `OnCalendar`), whether upgrades may reboot (`MEGAMESH_AUTO_REBOOT`), or `MEGAMESH_TOPGRADE=0` to skip topgrade entirely.
 
 Re-running is safe and keeps your choices: the script has been run seven times on the reference server, the last ones over the live deployment with a connected peer and VPN-only mode on, keeping keys, peers, certificate and mode intact. A re-run that found the UI in VPN-only mode never writes the open configuration in between.
 
@@ -96,6 +100,24 @@ Public 443 stays open so Let's Encrypt keeps renewing, but the public sees a `30
 
 Restricting SSH to the VPN as well is deliberately not offered yet: the obvious firewalld recipe does not match the traffic the host actually sees, and a wrong rule locks you out. The docs explain why and what a correct version needs. If you want to go further than firewalld, [xnftables](https://github.com/paulfxyz/xnftables) is the hand-written, deny-all nftables policy this project is the gentle cousin of.
 
+## Keeping it updated
+
+Two layers, both unattended:
+
+- **Daily**: `dnf-automatic` / `unattended-upgrades` apply package updates (all updates on CentOS Stream, which publishes no errata metadata; security-only elsewhere).
+- **Weekly** (Monday 04:30 server time by default, ±20 min jitter): `megamesh-upgrade`, a thin wrapper around [topgrade](https://github.com/topgrade-rs/topgrade) restricted to its `system` and `containers` steps.
+
+```sh
+megamesh-upgrade --dry-run        # what topgrade would do, touches nothing
+megamesh-upgrade --no-reboot      # run now, never reboot
+journalctl -u megamesh-upgrade    # every run, with the topgrade summary
+systemctl list-timers megamesh-upgrade.timer
+```
+
+What a run does: remember the image ID each container runs → `topgrade` (packages, then `docker pull` of every local image) → `docker compose up -d` (recreates only what changed) → wait up to two minutes for wg-easy to be healthy with `wg0` up and Caddy answering on 443 → on success prune the old images, on failure re-tag the previous image IDs and recreate, so the VPN is back on the images that worked → if `dnf needs-restarting -r` (or `/var/run/reboot-required`) says the kernel changed and `MEGAMESH_AUTO_REBOOT=1`, reboot one minute later; containers come back on their own.
+
+Topgrade is installed from its GitHub release as a static binary, **pinned by version and SHA-256** in `install.sh`, with self-update off; it is updated when the pin is bumped here, not by itself. Image tags stay on major versions (`wg-easy:15`, `caddy:2-alpine`), so a weekly pull never jumps a major release. Honest note: the rollback branch has been reviewed and the happy path exercised on the reference server; a real failed upgrade has not yet happened to test it in anger.
+
 ## Whitelisting the author
 
 This repository doubles as the public source of truth for **where I come from on the internet**. When my devices are on this VPN, everything I do exits from one address:
@@ -124,19 +146,22 @@ PROMPT.md                     ← the agent prompt, with the known traps and the
 egress.json                   ← the author's public egress address, machine-readable
 scripts/status.sh             ← one-screen health check (installed as megamesh-status)
 scripts/lockdown.sh           ← VPN-only mode switch (installed as megamesh-lockdown)
+scripts/upgrade.sh            ← topgrade wrapper: health check, rollback, reboot (installed as megamesh-upgrade)
 config/                       ← the files running on the reference server (Caddyfile is the VPN-only render)
   compose.yml                 ← wg-easy (NET_ADMIN only) + caddy, two published ports, mem limits
   Caddyfile                   ← TLS-ALPN, HSTS, h1/h2, Server header stripped
   wg-easy.env                 ← container env (INIT_* lines are removed after first start)
   megamesh.conf               ← /etc/megamesh.conf, settings the helpers read
   firewalld/public.sh         ← the three-door policy as firewall-cmd commands
+  topgrade/topgrade.toml      ← /etc/megamesh/topgrade.toml: only system + containers, non-interactive
+  systemd/megamesh-upgrade.*  ← oneshot service + weekly timer
   sshd/00-megamesh-hardening.conf
   fail2ban/megamesh-sshd.local
   sysctl/99-megamesh-hardening.conf
   modules-load/megamesh.conf
   docker/daemon.json
 docs/
-  HARDENING.md                ← what is in place and why; VPN-only mode and how it was measured
+  HARDENING.md                ← what is in place and why; VPN-only mode and how it was measured; upgrade policy
   AUDIT.md                    ← the three-model audit: findings, fixes, what was declined
   audit/                      ← the three raw reports
   DNS.md                      ← A record, PTR (incl. Hostkey), and why not to self-host ns1/ns2
@@ -149,11 +174,11 @@ docs/
 - **Not a privacy service.** Your VPS provider sees your traffic exit their network; this hides you from the café Wi-Fi and your ISP, not from a subpoena.
 - **Not multi-tenant.** One admin, your devices. wg-easy supports many peers, but the hardening assumes a single trusted operator.
 - **Not tested everywhere.** One distribution, one provider, one VPS size are verified. The Debian/Ubuntu branch, non-default ports and the fresh-install unattended path are reasoned and partially exercised, not run end to end. Issues and PRs with a logbook of what you hit are the most useful contribution.
-- **Not a replacement for reading.** `install.sh` is ~450 lines of plain bash with comments. Read it before you run it as root on a machine you care about.
+- **Not a replacement for reading.** `install.sh` is ~480 lines of plain bash with comments. Read it before you run it as root on a machine you care about.
 
 ## Status and roadmap
 
-v1.2.0 is the state of the reference server on 2026-10-18 after two audit rounds ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy. Planned: a fresh-VPS run of the unattended path, verifying the Debian/Ubuntu branch on a second provider, SSH-via-VPN with a confirm-or-rollback window. Not planned: supporting OpenVPN, multi-user auth, or turning this into a product.
+v1.3.0 is the state of the reference server on 2026-10-18 after two audit rounds and the topgrade integration ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy. Planned: a fresh-VPS run of the unattended path, verifying the Debian/Ubuntu branch on a second provider, SSH-via-VPN with a confirm-or-rollback window. Not planned: supporting OpenVPN, multi-user auth, or turning this into a product.
 
 ## The story
 
@@ -163,4 +188,4 @@ I wanted a VPN that is mine, on a cheap VPS, with a QR code for my phone and not
 
 ## License
 
-[MIT](LICENSE). wg-easy is AGPL-3.0 and Caddy is Apache-2.0; both are used as unmodified container images. "WireGuard" is a registered trademark of Jason A. Donenfeld; this project is not affiliated with WireGuard, wg-easy or Caddy.
+[MIT](LICENSE). wg-easy is AGPL-3.0 and Caddy is Apache-2.0; both are used as unmodified container images. topgrade is GPL-3.0 and is installed as an unmodified release binary. "WireGuard" is a registered trademark of Jason A. Donenfeld; this project is not affiliated with WireGuard, wg-easy or Caddy.

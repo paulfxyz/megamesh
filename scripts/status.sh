@@ -24,6 +24,11 @@ b "Admin UI";        curl -s -o /dev/null -w "  https://${DOMAIN}/ → HTTP %{ht
 b "Pending updates"
   if command -v dnf >/dev/null; then n=$(dnf -q check-update 2>/dev/null | grep -cE '^[A-Za-z0-9]' || true); else n=$(apt list --upgradable 2>/dev/null | grep -c '/' || true); fi
   echo "  ${n:-0} package(s)  (auto-applied by $(command -v dnf >/dev/null && echo dnf-automatic || echo unattended-upgrades))"
+b "Scheduled upgrades"
+  if systemctl list-unit-files megamesh-upgrade.timer >/dev/null 2>&1 && systemctl is-enabled megamesh-upgrade.timer >/dev/null 2>&1; then
+    echo "  timer: $(systemctl show megamesh-upgrade.timer -p NextElapseUSecRealtime --value | sed 's/^$/(none)/') · topgrade $(topgrade --version 2>/dev/null | awk '{print $2}')"
+    last=$(journalctl -u megamesh-upgrade -o cat --no-pager -n 400 2>/dev/null | grep -E 'megamesh-upgrade: (✔|✖|↻|no reboot)' | tail -2 | sed 's/^/  last: /'); echo "${last:-  last: (never ran)}"
+  else echo "  megamesh-upgrade timer not enabled"; fi
 b "VPN-only mode"
   if command -v megamesh-lockdown >/dev/null; then MEGAMESH_DIR="$MEGAMESH_DIR" megamesh-lockdown status 2>&1 | sed 's/^/  /'; else echo "  megamesh-lockdown not installed"; fi
 echo

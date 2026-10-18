@@ -28,6 +28,11 @@ MEGAMESH_ADMIN_PASSWORD="${MEGAMESH_ADMIN_PASSWORD:-}" # admin password for unat
 MEGAMESH_VPN_ONLY_SET="${MEGAMESH_VPN_ONLY+x}"       # remembers whether the caller set MEGAMESH_VPN_ONLY explicitly
 MEGAMESH_VPN_ONLY="${MEGAMESH_VPN_ONLY:-0}"          # 1 = admin UI only reachable through the tunnel (needs >=1 peer; see scripts/lockdown.sh). Re-runs keep an existing VPN-only mode.
 MEGAMESH_REDIRECT_URL="${MEGAMESH_REDIRECT_URL:-}"   # where outsiders are sent when MEGAMESH_VPN_ONLY=1, e.g. https://example.com
+MEGAMESH_TOPGRADE="${MEGAMESH_TOPGRADE:-1}"          # 1 = install topgrade + weekly megamesh-upgrade timer (packages + container images, health-checked)
+MEGAMESH_UPGRADE_SCHEDULE="${MEGAMESH_UPGRADE_SCHEDULE:-Mon *-*-* 04:30}"   # systemd OnCalendar, server local time
+MEGAMESH_AUTO_REBOOT="${MEGAMESH_AUTO_REBOOT:-1}"    # 1 = megamesh-upgrade reboots when the kernel/libc needs it
+TOPGRADE_VERSION="${TOPGRADE_VERSION:-17.13.1}"
+TOPGRADE_SHA256_X86_64="${TOPGRADE_SHA256_X86_64:-0ba74b9995a0aa5fbd2796361e647e93a964e7fe894c4bf9daeee1449d75f26a}"   # topgrade-v17.13.1-x86_64-unknown-linux-musl.tar.gz
 WG_EASY_IMAGE="${WG_EASY_IMAGE:-ghcr.io/wg-easy/wg-easy:15}"   # pin a digest (image@sha256:…) for strict reproducibility
 CADDY_IMAGE="${CADDY_IMAGE:-caddy:2-alpine}"
 
@@ -171,7 +176,7 @@ firewall-cmd -q --permanent --set-log-denied=off >/dev/null 2>&1 || true   # exi
 firewall-cmd -q --reload || die "firewalld reload failed — inspect: firewall-cmd --permanent --zone=public --list-all"
 ok "Public zone (${wan_if:-?}): DROP everything except tcp/${MEGAMESH_SSH_PORT}, udp/${MEGAMESH_WG_PORT}, tcp/443 (+ ping and PMTU ICMP)"
 extra=$({ firewall-cmd --zone=public --list-ports | tr ' ' '\n' | grep -vxE "${MEGAMESH_SSH_PORT}/tcp|${MEGAMESH_WG_PORT}/udp|443/tcp|${PREV_SSH_PORT:-x}/tcp" || true; } | tr '\n' ' ')
-extra_s=$(firewall-cmd --zone=public --list-services); extra_r=$({ firewall-cmd --zone=public --list-rich-rules | grep -v ' reject' || true; } | wc -l)   # fail2ban bans are reject rich rules
+extra_s=$(firewall-cmd --zone=public --list-services); extra_r=$({ firewall-cmd --zone=public --list-rich-rules | grep -vE ' (reject|drop)' || true; } | grep -c . || true)   # fail2ban bans are reject/drop rich rules
 [[ -z "${extra// }" && -z "$extra_s" && "$extra_r" == 0 ]] || warn "Public zone also has: ports [${extra}] services [${extra_s}] rich rules [${extra_r}] — not installer-owned, review them"
 
 # ─── 5. SSH: key-only when a key exists; never lock a key-less box ───────────
@@ -425,11 +430,13 @@ MEGAMESH_DIR=${MEGAMESH_DIR}
 MEGAMESH_DOMAIN=${MEGAMESH_DOMAIN}
 MEGAMESH_WG_PORT=${MEGAMESH_WG_PORT}
 MEGAMESH_SSH_PORT=${MEGAMESH_SSH_PORT}
+MEGAMESH_AUTO_REBOOT=${MEGAMESH_AUTO_REBOOT}
 EOF
 if [[ -f "${SELF_DIR}/scripts/status.sh" ]]; then
   install -m 0755 "${SELF_DIR}/scripts/status.sh"   /usr/local/bin/megamesh-status
   install -m 0755 "${SELF_DIR}/scripts/lockdown.sh" /usr/local/bin/megamesh-lockdown
-  ok "Installed megamesh-status and megamesh-lockdown"
+  install -m 0755 "${SELF_DIR}/scripts/upgrade.sh"  /usr/local/bin/megamesh-upgrade
+  ok "Installed megamesh-status, megamesh-lockdown, megamesh-upgrade"
 else
   warn "scripts/ not found next to install.sh — megamesh-status / megamesh-lockdown not installed"
 fi
@@ -437,6 +444,32 @@ if [[ "$MEGAMESH_VPN_ONLY" == 1 ]]; then
   if MEGAMESH_DIR="$MEGAMESH_DIR" /usr/local/bin/megamesh-lockdown enable "$MEGAMESH_REDIRECT_URL"; then :; else
     warn "VPN-only mode not enabled (see message above). Run later: megamesh-lockdown enable ${MEGAMESH_REDIRECT_URL:-https://your-site}"
   fi
+fi
+
+# ─── 10b. topgrade + weekly upgrade timer ───────────────────────────────────
+if [[ "$MEGAMESH_TOPGRADE" == 1 ]]; then
+  arch=$(uname -m)
+  if [[ "$arch" != x86_64 ]]; then
+    warn "topgrade: no pinned checksum for ${arch} — skipping; install topgrade manually and re-run"
+  elif [[ "$(topgrade --version 2>/dev/null | awk '{print $2}')" != "$TOPGRADE_VERSION" ]]; then
+    log "Installing topgrade ${TOPGRADE_VERSION} (pinned, checksum-verified)"
+    tgz=$(mktemp); url="https://github.com/topgrade-rs/topgrade/releases/download/v${TOPGRADE_VERSION}/topgrade-v${TOPGRADE_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+    curl -fsSL "$url" -o "$tgz" || die "could not download ${url}"
+    echo "${TOPGRADE_SHA256_X86_64}  ${tgz}" | sha256sum -c --quiet - || die "topgrade tarball checksum mismatch — refusing to install"
+    tar xzf "$tgz" -C /usr/local/bin topgrade && chmod 0755 /usr/local/bin/topgrade && rm -f "$tgz"
+    ok "topgrade $(topgrade --version | awk '{print $2}') installed"
+  fi
+  if command -v topgrade >/dev/null && [[ -f "${SELF_DIR}/config/topgrade/topgrade.toml" ]]; then
+    install -d -m 0755 /etc/megamesh
+    install -m 0644 "${SELF_DIR}/config/topgrade/topgrade.toml" /etc/megamesh/topgrade.toml
+    install -m 0644 "${SELF_DIR}/config/systemd/megamesh-upgrade.service" /etc/systemd/system/megamesh-upgrade.service
+    sed "s|^OnCalendar=.*|OnCalendar=${MEGAMESH_UPGRADE_SCHEDULE}|" "${SELF_DIR}/config/systemd/megamesh-upgrade.timer" > /etc/systemd/system/megamesh-upgrade.timer
+    systemd-analyze calendar "$MEGAMESH_UPGRADE_SCHEDULE" >/dev/null 2>&1 || die "MEGAMESH_UPGRADE_SCHEDULE is not a valid systemd OnCalendar expression: ${MEGAMESH_UPGRADE_SCHEDULE}"
+    systemctl daemon-reload && systemctl enable --now megamesh-upgrade.timer >/dev/null 2>&1
+    ok "megamesh-upgrade timer: ${MEGAMESH_UPGRADE_SCHEDULE} (next: $(systemctl show megamesh-upgrade.timer -p NextElapseUSecRealtime --value)); auto-reboot=${MEGAMESH_AUTO_REBOOT}"
+  fi
+else
+  systemctl disable --now megamesh-upgrade.timer >/dev/null 2>&1 || true
 fi
 
 # ─── 11. Verify ──────────────────────────────────────────────────────────────
@@ -460,6 +493,7 @@ cat <<EOF
   3. Log in at https://${MEGAMESH_DOMAIN}/ $( [[ -f $cred_file ]] && echo "— credentials: cat ${cred_file}" || echo "(wizard: Host = ${MEGAMESH_DOMAIN}, Port = ${MEGAMESH_WG_PORT})" )
      Enable two-factor authentication under your account, add a device, scan the QR code.
   4. Later: megamesh-status for a health check; megamesh-lockdown enable https://your-site to make the UI
-           VPN-only (outsiders get redirected). docs/HARDENING.md explains both.
+           VPN-only (outsiders get redirected); megamesh-upgrade --dry-run to preview the weekly upgrade.
+           docs/HARDENING.md explains all three.
 ────────────────────────────────────────────────────────────────────────
 EOF

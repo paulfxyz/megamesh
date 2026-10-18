@@ -1,0 +1,12 @@
+[Unit]
+Description=megamesh — topgrade system + container upgrade with health check and rollback
+After=network-online.target docker.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/megamesh-upgrade
+TimeoutStartSec=45min
+Nice=10
+IOSchedulingClass=idle

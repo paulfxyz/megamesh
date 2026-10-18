@@ -63,6 +63,18 @@ Provider rescue console / KVM. Mount the disk, remove `/etc/ssh/sshd_config.d/00
 
 Do it from a machine on a normal network: `nmap -sS -sU -p 22,80,443,51820,51821 <ip>`. Expected: 22 open, 443 open, 51820 `open|filtered` (WireGuard is silent), 80 and 51821 filtered. Sandboxes behind a transparent egress proxy report every TCP port as open — not a valid test.
 
+### `megamesh-upgrade` says "NOT healthy after upgrade — rolling back"
+
+A pulled image broke something. The wrapper re-tagged the previous image IDs and recreated the containers, so the VPN should be back; `journalctl -u megamesh-upgrade` has the topgrade output and the health status after rollback. `docker logs wg-easy` / `docker logs caddy` tell you why the new image failed. The next weekly run will pull again; to skip a known-bad version, pin the image to a digest: `WG_EASY_IMAGE=ghcr.io/wg-easy/wg-easy@sha256:… bash install.sh`.
+
+### topgrade: "Containers: FAILED" but the images are up to date
+
+topgrade stops its containers step at the first pull error, so one unpullable local image (a locally built one, a tag that only exists on this box) silences the rest. Add it to `ignored_containers` in `/etc/megamesh/topgrade.toml` (wildcards allowed), then `megamesh-upgrade --dry-run` to confirm the plan lists every image you expect.
+
+### The server rebooted on a Monday morning
+
+That is `megamesh-upgrade` after a kernel update, with `MEGAMESH_AUTO_REBOOT=1` (default). `journalctl -u megamesh-upgrade -b -1` shows the "reboot required" line from the previous boot. Set `MEGAMESH_AUTO_REBOOT=0` in `/etc/megamesh.conf` (or re-run `install.sh` with it) to be told instead of rebooted; move the window with `MEGAMESH_UPGRADE_SCHEDULE`.
+
 ### Upgrading from the `proxy` days (≤ 1.1.0)
 
 File names changed in 1.2.0. After re-running `install.sh` from the new checkout, remove the old ones so there is one source of truth:

@@ -29,6 +29,10 @@ GOAL
      HTTPS (tcp/443). Allow ping and the ICMP types needed for path-MTU. Nothing else, no port 80.
   3. The box hardened for one personal user: key-only SSH, fail2ban on SSH, automatic security updates,
      docker log rotation, sane sysctl, swap if RAM < 2 GB.
+  3b. Unattended upgrades that also cover the containers: topgrade (pinned release binary, checksum verified,
+     self-update off, allow_root, only the "system" and "containers" steps) on a weekly systemd timer, wrapped in
+     a script that records image IDs, runs `docker compose up -d`, waits for wg-easy healthy + wg0 + Caddy on 443,
+     re-tags the previous image IDs if that fails, and reboots only when `dnf needs-restarting -r` asks.
   4. The admin account must exist BEFORE the UI is reachable from the internet (see wg-easy unattended setup).
 
 RULES
@@ -75,6 +79,9 @@ KNOWN TRAPS (these cost real time; check them up front)
   - The Caddyfile is a single-file bind mount: edit it IN PLACE (cp over it), never `sed -i`/`mv`, or the
     running container keeps the old inode and reports "config is unchanged".
   - Do not open tcp/80. Caddy will use the TLS-ALPN-01 challenge on 443. Tell me to always type https://.
+  - topgrade: it aborts its containers step at the first failed `docker pull`, so never leave local-only tags
+    lying around (keep rollback references as image IDs, not tags); it needs `allow_root = true` to run as root
+    non-interactively; CentOS Stream has no errata metadata, so a "security only" dnf policy applies nothing.
 
 CADDYFILE (/opt/megamesh/Caddyfile — use exactly this, replace the two placeholders)
   {

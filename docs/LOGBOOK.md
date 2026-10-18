@@ -46,6 +46,8 @@ The whole session was driven by [Perplexity Computer](https://www.perplexity.ai/
 23. **Renamed** from `proxy` to **megamesh** (a nod to the owner's consultancy, [megastack.sh](https://megastack.sh)): repository, env-var prefix (`MEGAMESH_*`), helper commands (`megamesh-status`, `megamesh-lockdown`), config file names on the server, `/etc/megamesh.conf`. The stack directory on the reference server stays `/opt/wireguard`.
 24. **Second audit round** on the renamed tree (same three models). New findings: re-running `install.sh` reopened a locked-down UI (observed live, fixed: mode is detected and kept, the open Caddyfile is never written in between); unattended first start could scrub `INIT_*` before setup ran (fixed: wg-easy starts alone, `/login` is proven, then Caddy); CentOS Stream has no errata metadata so `upgrade_type=security` applied nothing (fixed: all updates on Stream); `set -e` pipeline traps in `lockdown.sh`; password/URL sanitising; firewall reports non-owned exposure and retires the previous WireGuard port; allow-list caveats. Reports in [audit/](audit/) (`round2-*`).
 
+25. **topgrade.** The owner asked for the box to keep itself updated, containers included. Installed topgrade 17.13.1 (pinned, checksum-verified) with `megamesh-upgrade` as the wrapper and a weekly timer. Three live runs through transient systemd units: run 1 — topgrade refused to run as root (`allow_root = true` added); run 2 — `Containers: FAILED` because topgrade tried to pull the local `*:megamesh-prev` rollback tags and aborted the step before wg-easy was pulled (backups became image IDs, tags dropped); run 3 — `System update: OK`, `Containers: OK`, both images "up to date", healthy, no reboot needed. Timer armed for Monday 04:42 CEST (04:30 + jitter).
+
 ## End state
 
 ```
@@ -57,7 +59,8 @@ wg0:         listening :51820, 1 peer (owner's laptop)
 admin UI:    https://paulfleury.network/ → 302 https://paulfleury.com/ for outsiders, /login through the tunnel · Let's Encrypt until 2027-01-16
 sshd:        passwordauthentication no · permitrootlogin without-password · maxauthtries 3
 fail2ban:    sshd jail active
-updates:     dnf-automatic, all updates daily (CentOS Stream has no errata metadata)
+updates:     dnf-automatic daily (all updates: CentOS Stream has no errata metadata)
+             megamesh-upgrade weekly (topgrade 17.13.1: system + containers, health check, rollback, reboot if needed)
 vpn-only:    ENABLED — outsiders → 302 https://paulfleury.com, tunnel path → UI
 ```
 

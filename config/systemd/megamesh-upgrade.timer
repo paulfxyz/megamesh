@@ -1,0 +1,10 @@
+[Unit]
+Description=megamesh — weekly upgrade run (installer sets OnCalendar from MEGAMESH_UPGRADE_SCHEDULE)
+
+[Timer]
+OnCalendar=Mon *-*-* 04:30
+RandomizedDelaySec=20min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

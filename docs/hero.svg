@@ -47,12 +47,12 @@
   <!-- inside -->
   <g transform="translate(740,180)">
     <rect x="0" y="0" width="400" height="160" rx="10" fill="#161d26" stroke="#2a333e"/>
-    <text x="20" y="30" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13" fill="#7f8a96">INSIDE -- one small VPS</text>
+    <text x="20" y="30" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13" fill="#7f8a96">INSIDE -- one small VPS, 1 vCPU / 1 GB</text>
     <g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="14" fill="#d5dbe2">
       <text x="20" y="62">wg-easy v15</text><text x="170" y="62">admin UI, QR codes, peers</text>
       <text x="20" y="88">caddy</text><text x="170" y="88">auto-TLS, 443 only, h1/h2</text>
-      <text x="20" y="114">fail2ban</text><text x="170" y="114">key-only ssh, auto-updates</text>
-      <text x="20" y="140" fill="#7f8a96">1 vCPU - 1 GB RAM - ~400 MB used</text>
+      <text x="20" y="114">fail2ban</text><text x="170" y="114">key-only ssh, bans in 3 tries</text>
+      <text x="20" y="140">topgrade</text><text x="170" y="140">weekly, health-checked, rollback</text>
     </g>
   </g>
 
