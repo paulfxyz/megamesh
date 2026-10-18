@@ -267,7 +267,8 @@ footer::before{content:"";position:absolute;inset:auto -10% -40% -10%;height:60%
 .foot__status{display:inline-flex;align-items:center;gap:.5rem}
 .foot__status i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 color-mix(in oklab,var(--accent) 45%,transparent);animation:fs-pulse 2.4s ease-out infinite}
 @keyframes fs-pulse{0%{box-shadow:0 0 0 0 color-mix(in oklab,var(--accent) 45%,transparent)}100%{box-shadow:0 0 0 9px transparent}}
-@media (max-width:900px){.foot__top{grid-template-columns:1fr 1fr}.foot__brand{grid-column:1 / -1}}
+.foot__top--sm{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:900px){.foot__top,.foot__top--sm{grid-template-columns:1fr 1fr}.foot__brand{grid-column:1 / -1}}
 @media (max-width:520px){.foot__top{grid-template-columns:1fr 1fr;gap:2rem 1.2rem}.foot__col:last-child{grid-column:1 / -1}.foot__brand .brand{font-size:1.6rem}.brand--lg .logo{width:44px;height:44px}.brand--lg .word{font-size:1.8rem;display:inline-flex}}
 @media (prefers-reduced-motion:reduce){.foot__status i{animation:none}}
 
