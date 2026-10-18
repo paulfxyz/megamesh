@@ -103,7 +103,7 @@ proxy-lockdown disable
 
 `enable` validates the generated Caddyfile, writes it **in place** (the Caddyfile is a single-file bind mount — `sed -i` or `mv` would create a new inode the running container never sees, which is how "config is unchanged" bit the author), reloads Caddy, and checks the tunnel-side path answers. Then test from a device *off* the VPN: `curl -sI https://vpn.example.com/ | grep -i location` should show your redirect. Devices with split tunneling (AllowedIPs not `0.0.0.0/0`) reach the domain over the plain internet and are treated as outsiders — that is the intended meaning of "only on the VPN".
 
-The reference server has this **coded, rendered and validated but not enabled**; the owner will flip it when ready.
+The reference server runs in this mode since 2026-10-18: outsiders are sent to `https://paulfleury.com`, the UI is reachable only through the tunnel.
 
 ## Not done, and why
 

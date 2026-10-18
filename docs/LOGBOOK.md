@@ -53,7 +53,7 @@ admin UI:    https://paulfleury.network/ → 302 /login · Let's Encrypt until 2
 sshd:        passwordauthentication no · permitrootlogin without-password · maxauthtries 3
 fail2ban:    sshd jail active
 updates:     dnf-automatic security, daily
-vpn-only:    rendered + validated, not enabled
+vpn-only:    ENABLED — outsiders → 302 https://paulfleury.com, tunnel path → UI
 ```
 
 ## Things that would have been faster to know
@@ -65,8 +65,9 @@ vpn-only:    rendered + validated, not enabled
 - Do not probe your own open ports from a sandbox behind an egress proxy — every port shows "open". Verify from the host's ruleset or a real external vantage point.
 - Let's Encrypt returns the odd 504; Caddy's retry handles it. Do not restart Caddy in a loop.
 
+21. **PTR set** via the Hostkey panel (Network → IP settings and DNS PTR management → `paulfleury.network`, "IP PTR data updated"); `ns1.hostkey.com` answered immediately, public resolvers within the hour.
+22. **2FA enabled** by the owner on the wg-easy account. **`proxy-lockdown enable https://paulfleury.com`** run on request: from the public internet `/`, `/login` and `/api/*` all answer `302 https://paulfleury.com/`; through the tunnel path the UI answers `200`.
+
 ## Still open
 
-- PTR record (owner, Hostkey panel — see [DNS.md](DNS.md)).
-- Two-factor authentication on the admin account (owner, in the UI).
-- `proxy-lockdown enable https://paulfleury.com` when the owner says so.
+Nothing. The reference server is complete.
