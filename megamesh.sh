@@ -10,7 +10,7 @@
 #
 # Every setting is an environment variable. Nothing is interactive. Re-running is safe.
 # Verified on CentOS Stream 9 (Hostkey "VPS 1 vCore / 1 GB"). Rocky/Alma 9 take the same code path
-# but have not been run. Debian 12 / Ubuntu 22.04+ follow a best-effort branch that has NOT been verified.
+# but have not been run. Ubuntu 24.04 is verified (through the web deployer); Debian 12 follows the same branch, best-effort.
 
 set -euo pipefail
 
@@ -61,7 +61,7 @@ PREV_SSH_PORT=""; PREV_WG_PORT=""
 if [[ -f /etc/megamesh.conf ]]; then
   PREV_SSH_PORT=$(awk -F= '$1=="MEGAMESH_SSH_PORT"{print $2}' /etc/megamesh.conf); PREV_WG_PORT=$(awk -F= '$1=="MEGAMESH_WG_PORT"{print $2}' /etc/megamesh.conf)
 fi
-MEGAMESH_VERSION="1.5.1"
+MEGAMESH_VERSION="1.5.2"
 SELF_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 if [[ ! -f "${SELF_DIR}/scripts/status.sh" ]]; then
   # standalone download: fetch the matching release so helpers and configs are available
@@ -77,7 +77,7 @@ fi
 . /etc/os-release
 case "${ID}:${ID_LIKE:-}" in
   centos:*|rocky:*|almalinux:*|rhel:*|*:*rhel*|*:*fedora*) FAMILY=el ;;
-  debian:*|ubuntu:*|*:*debian*)                           FAMILY=deb; warn "Debian/Ubuntu path is best-effort and not yet verified." ;;
+  debian:*|ubuntu:*|*:*debian*)                           FAMILY=deb; case "$ID:$VERSION_ID" in ubuntu:24.04) ;; *) warn "Debian/Ubuntu path: only Ubuntu 24.04 is verified; this one is best-effort." ;; esac ;;
   *) die "Unsupported distribution: ${PRETTY_NAME}" ;;
 esac
 log "Detected ${PRETTY_NAME} (${FAMILY})"

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.2 — 2026-10-18
+
+- **Ubuntu 24.04 verified.** A blank 1 vCPU / 1 GB Ubuntu 24.04.5 VPS was installed end to end through the web deployer: root password rotated first, swap, apt upgrade, kernel modules, firewalld DROP with three ports, SSH hardening with the given key, fail2ban (first ban within minutes), wg-easy + Caddy up, admin account created unattended, topgrade timer, verification green, `MEGAMESH_EXIT=0`. The installer no longer warns on Ubuntu 24.04; Debian 12 keeps the best-effort notice.
+- **Deployer: resume to hand-over.** When the check finds a finished install with its credentials file still on the server, the button becomes "Show my hand-over" and reads it instead of re-running the installer (the earlier tab had been lost mid-install — the real case).
+- Deployer fixes: the phase indicator no longer jumps to "Harden" on the swap step; hidden buttons are really hidden; copy says what is verified.
+- README: honest about the deployer always leaving password SSH on, even with a key.
+
 ## 1.5.1 — 2026-10-18
 
 - **megamesh.sh redesigned again.** The Construct (1.5.0) lasted an evening. The site is now light, typographic and modern: mist grey `#f2f4f6`, ink `#060a12`, electric blue `#2c56f5` fading to teal; Geist + Geist Mono; pill navigation, floating dock, scroll-brightening manifesto, a three-tab terminal that types the three ways in, live GitHub stars/release, a count-up and a stage-by-stage pipeline drawing. No illustrations. Light/dark switch and the 50-language picker kept; engravings and Matrix references removed.

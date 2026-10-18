@@ -350,3 +350,4 @@ textarea{min-height:84px;resize:vertical}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}.rv{opacity:1!important;transform:none!important}.manif .w{color:var(--ink)!important}.dock{transform:none}.lines path.hi{stroke-dashoffset:0}}
 
 #why{padding-bottom:clamp(2rem,4vw,4rem)}
+[hidden]{display:none!important}

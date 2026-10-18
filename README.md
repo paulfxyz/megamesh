@@ -7,7 +7,7 @@
 **Your server, your exit.**
 
 <a href="https://megamesh.sh"><img src="https://img.shields.io/badge/megamesh.sh-site_%2B_deployer-2c56f5?style=for-the-badge" alt="megamesh.sh"></a>
-<img src="https://img.shields.io/badge/version-1.5.1-060a12?style=for-the-badge" alt="version 1.5.1">
+<img src="https://img.shields.io/badge/version-1.5.2-060a12?style=for-the-badge" alt="version 1.5.2">
 <img src="https://img.shields.io/badge/WireGuard-wg--easy_v15-2c56f5?style=for-the-badge&logo=wireguard&logoColor=white" alt="WireGuard · wg-easy v15">
 <img src="https://img.shields.io/badge/firewall-DROP_%C2%B7_3_ports-060a12?style=for-the-badge" alt="firewall DROP, 3 ports">
 <img src="https://img.shields.io/badge/updates-topgrade_weekly_%2B_rollback-0e6a72?style=for-the-badge" alt="topgrade weekly + rollback">
@@ -57,7 +57,7 @@ All three start from the same two facts — an IP and a root password — and en
 
 ### 01 — Script, if you run servers
 
-A fresh VPS, root, a domain whose A record you can set. CentOS Stream 9 is verified end to end; Rocky / Alma 9 take the same code path but have not been run; Debian 12 / Ubuntu 22.04+ have a best-effort branch that is not yet verified.
+A fresh VPS, root, a domain whose A record you can set. CentOS Stream 9 (the reference server) and Ubuntu 24.04 (a blank 1 vCPU / 1 GB VPS, installed through the web deployer on 2026-10-18) are verified end to end; Rocky / Alma 9 share the first code path and Debian 12 the second, but have not been run.
 
 ```sh
 curl -fsSLO https://megamesh.sh/megamesh.sh && less megamesh.sh      # read it first — it is one file
@@ -100,7 +100,7 @@ Open [megamesh.sh/deploy](https://megamesh.sh/deploy/). Four steps on one page:
 3. **Install** — if you chose a new root password it is applied first (`chpasswd`), and every call from then on logs in with it, which is also the proof it took. Then the same `megamesh.sh` everyone else runs starts detached on your server; the page polls the install log, shows which phase it is in (connect · update · harden · containers · verify) and how long it has been running. A closed tab does not kill the install.
 4. **Hand over** — admin URL, admin username and password, your new root password, the SSH line, each with a copy button; the A record to add (`your domain → your IP`); and a button that shreds the credentials file on your server once you have saved everything.
 
-The honest part, also stated on the page: your root password transits through megamesh.sh for the minutes of the install and is never written anywhere — the endpoint is stateless, no database, no sessions, no logs of credentials, only a per-IP rate-limit counter. The deployer keeps SSH password login on (`MEGAMESH_LOCK_SSH=no`) unless you gave it a key, because it refuses to lock a door it cannot prove you can open; the result is a good VPN with a root password nobody else has seen, not a finished hardening — ask a techie friend to add a key, turn on `megamesh-lockdown`, and read [docs/HARDENING.md](docs/HARDENING.md) with you. Targets must be a public IPv4 with root password login. The deployer's source is in [`site/`](site/): one PHP file around [phpseclib](https://phpseclib.com), one JS file for the page.
+The honest part, also stated on the page: your root password transits through megamesh.sh for the minutes of the install and is never written anywhere — the endpoint is stateless, no database, no sessions, no logs of credentials, only a per-IP rate-limit counter. The deployer always keeps SSH password login on (`MEGAMESH_LOCK_SSH=no`) — even when you give it a key, which it installs — because it refuses to lock a door it cannot prove you can open; the result is a good VPN with a root password nobody else has seen, not a finished hardening — ask a techie friend to add a key, turn on `megamesh-lockdown`, and read [docs/HARDENING.md](docs/HARDENING.md) with you. Targets must be a public IPv4 with root password login. The deployer's source is in [`site/`](site/): one PHP file around [phpseclib](https://phpseclib.com), one JS file for the page.
 
 ## What you get
 
@@ -241,16 +241,16 @@ docs/
 
 - **Not a privacy service.** Your VPS provider sees your traffic exit their network; this hides you from the café Wi-Fi and your ISP, not from a subpoena.
 - **Not multi-tenant.** One admin, your devices. wg-easy supports many peers, but the hardening assumes a single trusted operator.
-- **Not tested everywhere.** One distribution, one provider, one VPS size are verified. The Debian/Ubuntu branch, non-default ports, the fresh-install unattended path and the deployer's full run are reasoned and partially exercised, not yet run end to end on a blank machine. Issues and PRs with a logbook of what you hit are the most useful contribution.
+- **Not tested everywhere.** Two distributions (CentOS Stream 9, Ubuntu 24.04), two providers, one VPS size. The deployer's full run — root-password change, install, resume after a closed tab, hand-over, credential shredding — was exercised on the Ubuntu box. Rocky/Alma, Debian 12 and non-default ports are reasoned, not run. Issues and PRs with a logbook of what you hit are the most useful contribution.
 - **Not a replacement for reading.** `megamesh.sh` is ~500 lines of plain bash with comments. Read it before you run it as root on a machine you care about, and before you hand its URL to a web form.
 
 ## Status, naming, roadmap
 
-v1.5.1 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
+v1.5.2 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
 
 - **Naming**: "Megamesh" as a word, in prose; `megamesh` or `megamesh.sh` in lower case when talking about the code, the command or the site.
 - **Logo**: a single M whose two legs curve into the point of a shield, with one node where the strokes meet — [`docs/logo.svg`](docs/logo.svg) white on its blue tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`. Palette: mist `#f2f4f6`, ink `#060a12`, blue `#2c56f5`, teal `#0e6a72`; Geist for text, Geist Mono wherever the page talks to machines.
-- **Planned**: a fresh-VPS run of the unattended path and of the deployer, translations behind the language picker, verifying the Debian/Ubuntu branch on a second provider, SSH-via-VPN with a confirm-or-rollback window.
+- **Planned**: translations behind the language picker, a Debian 12 and a Rocky 9 run, SSH-via-VPN with a confirm-or-rollback window.
 - **Not planned**: OpenVPN, multi-user auth, turning this into a product.
 
 ## The story

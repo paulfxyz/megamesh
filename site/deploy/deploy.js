@@ -58,7 +58,7 @@
     if (!okAll) { err.textContent = 'Fix the highlighted fields.'; return; }
     creds.ip = $('ip').value.trim(); creds.port = ($('port').value.trim() || '22'); creds.pw = $('pw').value;
     creds.domain = $('domain').value.trim().toLowerCase(); creds.email = $('email').value.trim(); creds.pubkey = $('pubkey').value.trim();
-    newpw = $('newpw').value;
+    newpw = $('newpw').value; delete $('start').dataset.handover;
     if (newpw && newpw === creds.pw) newpw = '';
     const go = $('go'); go.disabled = true; go.innerHTML = '<span class="spin"></span>Connecting…';
     try {
@@ -78,10 +78,12 @@
       ].map(([k, v]) => `<div><b>${esc(k)}</b>${esc(v)}</div>`).join('');
       const note = $('check-note'); const start = $('start');
       if (!r.supported) { note.hidden = false; note.innerHTML = '<b>Unsupported system.</b> The installer knows CentOS Stream / Rocky / Alma 9 and Debian / Ubuntu on x86_64. Reinstall the VPS with CentOS Stream 9 from your provider\'s panel and try again.'; start.dataset.blocked = '1'; }
+      else if (r.finished && r.creds) { note.hidden = false; note.innerHTML = '<b>A finished install is waiting for you.</b> The credentials file is still on the server — the button below reads it and shows the hand-over, nothing is installed again.'; delete start.dataset.blocked; start.dataset.handover = '1'; }
       else if (r.running) { note.hidden = false; note.innerHTML = '<b>An install is already running</b> on this server. Installing will attach to it rather than start another.'; delete start.dataset.blocked; }
-      else if (!r.verified) { note.hidden = false; note.innerHTML = '<b>Best-effort system.</b> Only CentOS Stream 9 has been verified end to end; this one takes a code path that has not been run yet. It will probably work — if it fails, the log will say where.'; delete start.dataset.blocked; }
+      else if (!r.verified) { note.hidden = false; note.innerHTML = '<b>Best-effort system.</b> Only CentOS Stream 9 and Ubuntu 24.04 have been verified end to end; this one takes a code path that has not been run yet. It will probably work — if it fails, the log will say where.'; delete start.dataset.blocked; }
       else if (r.mem_mb < 900) { note.hidden = false; note.innerHTML = '<b>Small box.</b> Under 1 GB visible RAM; the installer adds swap before updating, which is exactly the case it was built for.'; delete start.dataset.blocked; }
       else { note.hidden = true; delete start.dataset.blocked; }
+      start.textContent = start.dataset.handover ? 'Show my hand-over →' : 'Install Megamesh →';
       $('agree').checked = false; start.disabled = true;
       step(2);
     } catch (ex) { err.textContent = ex.message; }
@@ -91,7 +93,7 @@
   $('back1').addEventListener('click', () => step(1));
 
   // ── step 2 → (passwd) → start → poll ─────────────────────────────────────
-  const PH = [/Installer started|Downloading/, /Updating packages|Upgraded|Installed|Complete!|Installing (packages|Docker)/, /firewall|sshd|fail2ban|sysctl|swap/i, /Pulling|Pulled|Container |compose|wg-easy|caddy/i, /health|verify|Admin|credentials|MEGAMESH_EXIT|✔ Done|Status:/i];
+  const PH = [/Installer started|Downloading|Detected|swap/i, /Updating packages|Upgraded|Installed|Complete!|Installing (packages|Docker)|apt upgrade|dnf upgrade|Kernel modules/, /firewall|sshd|SSH hardening|fail2ban|sysctl/i, /Pulling|Pulled|Container |compose|wg-easy|caddy/i, /health|verif|Admin account|credentials|MEGAMESH_EXIT|✔ Done|Status:/i];
   let phase = 0;
   const setPhase = (n) => { phase = Math.max(phase, n); for (let i = 0; i < 5; i++) $('ph' + i).className = i < phase ? 'done' : i === phase ? 'on' : ''; };
   let seen = 0;
@@ -128,6 +130,7 @@
 
   $('start').addEventListener('click', async () => {
     const b = $('start'); b.disabled = true; $('check-err').textContent = '';
+    if (b.dataset.handover) { delete b.dataset.handover; b.innerHTML = '<span class="spin"></span>Reading…'; step(3); setPhase(5); try { await handover(); } catch (ex) { $('check-err').textContent = ex.message; } b.disabled = false; b.textContent = 'Install Megamesh →'; return; }
     try {
       if (newpw) {
         b.innerHTML = '<span class="spin"></span>Changing root password…';

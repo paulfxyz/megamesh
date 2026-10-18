@@ -17,7 +17,7 @@ header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: no-referrer');
 
-const MEGAMESH_RELEASE = '1.5.1';                 // tag of the release the deployer installs
+const MEGAMESH_RELEASE = '1.5.2';                 // tag of the release the deployer installs
 const MEGAMESH_TARBALL = 'https://github.com/paulfxyz/megamesh/archive/refs/tags/v' . MEGAMESH_RELEASE . '.tar.gz';
 const LOGFILE   = '/root/megamesh-install.log';
 const CREDFILE  = '/root/megamesh-admin-credentials';
@@ -83,16 +83,17 @@ $strip = fn(string $s) => preg_replace('/\x1b\[[0-9;]*[A-Za-z]/', '', $s);
 
 switch ($action) {
     case 'check': {
-        $o = $run('. /etc/os-release 2>/dev/null; echo "ID=$ID"; echo "PRETTY=$PRETTY_NAME"; echo "LIKE=$ID_LIKE"; echo "ARCH=$(uname -m)"; echo "MEM=$(awk \'/MemTotal/ {print int($2/1024)}\' /proc/meminfo)"; echo "CPU=$(nproc)"; echo "DOCKER=$(command -v docker >/dev/null && echo 1 || echo 0)"; echo "INSTALLED=$(test -f /etc/megamesh.conf && echo 1 || echo 0)"; echo "RUNNING=$(test -f ' . LOGFILE . ' && ! grep -q MEGAMESH_EXIT= ' . LOGFILE . ' && echo 1 || echo 0)"; echo "UID=$(id -u)"');
+        $o = $run('. /etc/os-release 2>/dev/null; echo "ID=$ID"; echo "PRETTY=$PRETTY_NAME"; echo "VERSION_ID=$VERSION_ID"; echo "LIKE=$ID_LIKE"; echo "ARCH=$(uname -m)"; echo "MEM=$(awk \'/MemTotal/ {print int($2/1024)}\' /proc/meminfo)"; echo "CPU=$(nproc)"; echo "DOCKER=$(command -v docker >/dev/null && echo 1 || echo 0)"; echo "INSTALLED=$(test -f /etc/megamesh.conf && echo 1 || echo 0)"; echo "RUNNING=$(test -f ' . LOGFILE . ' && ! grep -q MEGAMESH_EXIT= ' . LOGFILE . ' && echo 1 || echo 0)"; echo "FINISHED=$(grep -q MEGAMESH_EXIT=0 ' . LOGFILE . ' 2>/dev/null && echo 1 || echo 0)"; echo "CREDS=$(test -f ' . CREDFILE . ' && echo 1 || echo 0)"; echo "UID=$(id -u)"');
         $kv = [];
         foreach (explode("\n", $o) as $l) if (str_contains($l, '=')) { [$k, $v] = explode('=', $l, 2); $kv[$k] = trim($v); }
         if (($kv['UID'] ?? '') !== '0') fail('Logged in, but not as root.');
         $id = $kv['ID'] ?? ''; $like = $kv['LIKE'] ?? '';
         $supported = in_array($id, ['centos', 'rocky', 'almalinux', 'rhel', 'debian', 'ubuntu'], true) || preg_match('/rhel|fedora|debian/', $like);
-        $verified = ($id === 'centos' && str_contains($kv['PRETTY'] ?? '', '9'));
+        $verified = ($id === 'centos' && str_contains($kv['PRETTY'] ?? '', '9')) || ($id === 'ubuntu' && str_starts_with($kv['VERSION_ID'] ?? '', '24.04'));
         if (($kv['ARCH'] ?? '') !== 'x86_64') $supported = false;
         out(['ok' => true, 'os' => $kv['PRETTY'] ?: 'unknown', 'arch' => $kv['ARCH'] ?? '?', 'mem_mb' => (int)($kv['MEM'] ?? 0), 'cpus' => (int)($kv['CPU'] ?? 0),
              'docker' => ($kv['DOCKER'] ?? '0') === '1', 'installed' => ($kv['INSTALLED'] ?? '0') === '1', 'running' => ($kv['RUNNING'] ?? '0') === '1',
+             'finished' => ($kv['FINISHED'] ?? '0') === '1', 'creds' => ($kv['CREDS'] ?? '0') === '1',
              'supported' => $supported, 'verified' => $verified]);
     }
 
