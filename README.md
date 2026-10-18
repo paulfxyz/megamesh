@@ -27,7 +27,7 @@
 <th width="33%" align="left"><sub>DOOR 03 · YOU JUST WANT A VPN</sub><br><a href="https://megamesh.sh/deploy/">The deployer</a></th>
 </tr>
 <tr valign="top">
-<td>One idempotent bash file, every setting an environment variable, nothing interactive. Read it, then run it as root on a fresh VPS.<br><br><code>curl -fsSLO https://megamesh.sh/megamesh.sh</code></td>
+<td>One idempotent bash file, every setting an environment variable, nothing interactive. Read it, then run it as root on a fresh VPS with two env vars: domain and email.</td>
 <td>Paste <a href="PROMPT.md"><code>PROMPT.md</code></a> into any agent that can run shell commands over SSH. It carries the rules, the order of operations and the six traps we hit, so the agent starts at the end.</td>
 <td>A form at <a href="https://megamesh.sh/deploy/">megamesh.sh/deploy</a>: IP, root password, domain, email. It installs the same thing, hands you the admin login and one DNS record, then forgets you.</td>
 </tr>
