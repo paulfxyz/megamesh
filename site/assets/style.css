@@ -44,15 +44,16 @@ code,kbd,pre{font-family:var(--f-mono)}
 .brand.ping .ring{animation:ring .9s var(--ease)}.brand.ping .ring.r2{animation-delay:.15s}
 @keyframes ring{0%{opacity:.9;transform:scale(.5)}100%{opacity:0;transform:scale(3.4)}}
 .brand .fx{position:absolute;left:50%;top:50%;width:260px;height:260px;margin:-130px 0 0 -130px;pointer-events:none;z-index:2}
-/* wordmark: Bricolage Grotesque 800; letters lift one by one on hover, the .sh leans in; click pops */
+/* wordmark: Bricolage Grotesque 800; pops as one block on hover, the .sh leans in; click pops harder */
 .brand .word{font-family:'Bricolage Grotesque',Geist,sans-serif;font-weight:800;letter-spacing:-.035em;font-size:1.5rem;display:inline-flex;align-items:baseline;font-variation-settings:'opsz' 40,'wdth' 100;transition:font-variation-settings .5s var(--ease)}
-.brand .word .ch{display:inline-block;transition:transform .5s var(--ease),color .4s;transition-delay:calc(var(--i) * 28ms)}
-.brand:hover .word .ch{transform:translateY(-3px)}
+.brand .word .ch{display:inline-block}
+.brand .word{transition:transform .45s cubic-bezier(.22,1.6,.36,1),font-variation-settings .5s var(--ease)}
+.brand:hover .word{transform:scale(1.05)}
 .brand:hover .word{font-variation-settings:'opsz' 40,'wdth' 92}
 .brand .sh{color:var(--faint);font-weight:700;font-size:.74em;font-style:italic;display:inline-block;margin-left:.06em;transform-origin:left bottom;transition:transform .5s var(--ease),color .4s}
 .brand:hover .sh{transform:skewX(-6deg) translateX(3px);color:var(--accent)}
 @keyframes squash{0%{transform:scale(1)}30%{transform:scale(1.08,.9)}60%{transform:scale(.96,1.05)}100%{transform:scale(1)}}
-@media (prefers-reduced-motion:reduce){.brand .word .ch,.brand .sh,.brand .word{transition:none}.brand.ping .word{animation:none}}
+@media (prefers-reduced-motion:reduce){.brand .sh,.brand .word,.brand .logo svg{transition:none}.brand.ping .word{animation:none}}
 .ib{--h:44px;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;height:var(--h);min-width:var(--h);padding:0 .9rem;border-radius:999px;border:1px solid var(--line);background:color-mix(in oklab,var(--surface) 70%,transparent);color:var(--ink);font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.06em;cursor:pointer;transition:border-color .25s,background .25s,transform .2s}
 .ib:hover{border-color:var(--line2);background:var(--surface2);transform:translateY(-1px)}
 .ib svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
@@ -392,23 +393,24 @@ html:not([lang=en]) .manif{letter-spacing:-.01em}
 /* once drawn, stay drawn (so hover/leave never re-triggers the intro) */
 .brand.drawn .logo .m{animation:none;stroke-dasharray:none;stroke-dashoffset:0}
 .brand.drawn .logo .node{animation:none;opacity:1}
-/* hover: the shield grows and shrinks (no tilt, no wave), the node pulses in counter-phase, the stroke shimmers; particles sparkle around it (canvas .fx) */
-.brand:hover .logo svg{animation:lg-pulse 1.1s cubic-bezier(.45,0,.55,1) infinite}
+/* hover: one big zoom-in explosion (overshoot, then settles larger) with a particle burst + sparkle stream; no wave, no breathing */
+.brand .logo svg{transition:transform .45s cubic-bezier(.22,1.4,.36,1)}
+.brand:hover .logo svg{animation:lg-zoomin .75s cubic-bezier(.22,1.6,.36,1) both}
 .brand:hover .logo .mL,.brand:hover .logo .mR,.brand:hover .logo .mV,.brand.ping .logo .m{stroke-dashoffset:0!important}
-.brand:hover .logo .m{animation:lg-shimmer 1.1s ease-in-out infinite}
-.brand:hover .logo .node{animation:lg-node 1.1s cubic-bezier(.45,0,.55,1) infinite}
-@keyframes lg-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.22)}}
-@keyframes lg-shimmer{0%,100%{stroke:var(--accent)}50%{stroke:#7aa2ff}}
-@keyframes lg-node{0%,100%{transform:scale(1.6)}50%{transform:scale(.8)}}
+.brand:hover .logo .m{animation:lg-shimmer .75s ease-out both}
+.brand:hover .logo .node{animation:lg-node .75s cubic-bezier(.22,1.6,.36,1) both}
+@keyframes lg-zoomin{0%{transform:scale(1)}40%{transform:scale(1.75)}70%{transform:scale(1.08)}100%{transform:scale(1.2)}}
+@keyframes lg-shimmer{0%{stroke:var(--accent)}40%{stroke:#9ec5ff;filter:drop-shadow(0 0 5px #7aa2ff)}100%{stroke:var(--accent);filter:none}}
+@keyframes lg-node{0%{transform:scale(1)}40%{transform:scale(2.4)}100%{transform:scale(1.3)}}
 /* click: hard shrink, then a big pop with a firework burst (canvas) and a shockwave ring; the word pops with it */
 .brand.ping .logo svg{animation:lg-bang .9s cubic-bezier(.22,1.5,.36,1) both}
 .brand.ping .logo .m{animation:lg-flash .9s ease-out both}
 .brand.ping .logo .node{animation:lg-bangN .9s cubic-bezier(.22,1.5,.36,1) both}
 .brand.ping .word{animation:lg-wpop .9s cubic-bezier(.22,1.5,.36,1) both}
 .brand.ping .sh{animation:lg-flashT .9s ease-out both}
-@keyframes lg-bang{0%{transform:scale(1)}14%{transform:scale(.45)}40%{transform:scale(1.85)}62%{transform:scale(.9)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes lg-bang{0%{transform:scale(1.2)}14%{transform:scale(.4)}40%{transform:scale(2.3)}62%{transform:scale(.95)}80%{transform:scale(1.3)}100%{transform:scale(1.2)}}
 @keyframes lg-bangN{0%{transform:scale(1)}14%{transform:scale(2.6)}40%{transform:scale(.3)}70%{transform:scale(1.4)}100%{transform:scale(1)}}
 @keyframes lg-flash{0%{stroke:var(--accent)}14%{stroke:var(--accent2)}40%{stroke:#9ec5ff;filter:drop-shadow(0 0 6px #7aa2ff)}100%{stroke:var(--accent);filter:none}}
 @keyframes lg-flashT{0%,100%{color:var(--faint)}30%,60%{color:var(--accent)}}
-@keyframes lg-wpop{0%,100%{transform:scale(1)}14%{transform:scale(.94)}40%{transform:scale(1.09)}62%{transform:scale(.98)}}
+@keyframes lg-wpop{0%,100%{transform:scale(1.05)}14%{transform:scale(.92)}40%{transform:scale(1.14)}62%{transform:scale(1.02)}}
 @media (prefers-reduced-motion:reduce){.brand .logo *,.brand:hover .logo svg,.brand.ping .logo svg,.brand.ping .word,.brand.ping .sh,.brand.ping .ring{animation:none!important;stroke-dashoffset:0!important;opacity:1}.brand .fx{display:none}}

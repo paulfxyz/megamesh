@@ -132,12 +132,12 @@
       raf = (ps.length || hovering) ? requestAnimationFrame(tick) : 0;
     };
     const go = () => { if (!raf) raf = requestAnimationFrame(tick); };
-    return { hover() { hovering = true; spawn(8, 'hover'); go(); }, leave() { hovering = false; }, burst() { spawn(56, 'burst'); go(); } };
+    return { hover() { hovering = true; spawn(22, 'burst'); spawn(8, 'hover'); go(); }, leave() { hovering = false; }, burst() { spawn(56, 'burst'); go(); } };
   })();
   brand && brand.addEventListener('pointerenter', px.hover);
   brand && brand.addEventListener('pointerleave', px.leave);
   brand && brand.addEventListener('click', (e) => {
-    brand.classList.remove('ping'); void brand.offsetWidth; brand.classList.add('ping'); px.burst();
+    brand.classList.remove('ping'); void brand.offsetWidth; brand.classList.add('ping'); px.burst(); px.burst();
     if (location.pathname === '/' || location.pathname === '/index.html') { e.preventDefault(); scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); }
   });
 

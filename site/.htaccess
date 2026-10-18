@@ -11,6 +11,9 @@ AddDefaultCharset utf-8
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
   Header set X-Frame-Options "DENY"
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
   <FilesMatch "\.(webp|svg|css|js)$">
     Header set Cache-Control "public, max-age=86400"
   </FilesMatch>
