@@ -1,0 +1,10 @@
+[sshd]
+enabled = true
+mode = aggressive
+port = 22
+backend = systemd
+maxretry = 3
+findtime = 10m
+bantime = 24h
+bantime.increment = true
+bantime.maxtime = 30d

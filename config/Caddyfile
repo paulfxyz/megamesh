@@ -1,0 +1,18 @@
+{
+	email hello@paulfleury.com
+	servers {
+		protocols h1 h2
+	}
+}
+
+paulfleury.network {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		-Server
+	}
+	reverse_proxy wg-easy:51821
+}

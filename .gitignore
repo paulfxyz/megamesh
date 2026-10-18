@@ -1,0 +1,5 @@
+*.pem
+*.key
+id_*
+*.conf.bak*
+.DS_Store
