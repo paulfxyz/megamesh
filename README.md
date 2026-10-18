@@ -1,21 +1,22 @@
 <div align="center">
 
-<img src="docs/logo.svg" width="112" height="112" alt="Megamesh logo: a red M shaped like a shield">
+<img src="docs/logo.svg" width="112" height="112" alt="Megamesh logo: a single M whose legs curve into a shield, with one ultraviolet node">
 
 # Megamesh
 
-**Your own WireGuard VPN, hardened by default, on the cheapest VPS you can find.**
+**Your server. Your tunnel. Your exit.**
 
-<a href="https://megamesh.sh"><img src="https://img.shields.io/badge/megamesh.sh-site_%2B_deployer-E5000A?style=for-the-badge" alt="megamesh.sh"></a>
-<img src="https://img.shields.io/badge/version-1.4.0-0a0a0a?style=for-the-badge" alt="version 1.4.0">
-<img src="https://img.shields.io/badge/WireGuard-wg--easy_v15-88171A?style=for-the-badge&logo=wireguard&logoColor=white" alt="WireGuard · wg-easy v15">
-<img src="https://img.shields.io/badge/firewall-DROP_%C2%B7_3_ports-critical?style=for-the-badge" alt="firewall DROP, 3 ports">
-<img src="https://img.shields.io/badge/updates-topgrade_weekly_%2B_rollback-2d5f8b?style=for-the-badge" alt="topgrade weekly + rollback">
-<img src="https://img.shields.io/badge/audited_by-3_frontier_models-5b4b8a?style=for-the-badge" alt="audited by 3 frontier models">
-<img src="https://img.shields.io/badge/license-MIT-286348?style=for-the-badge" alt="MIT">
+<a href="https://megamesh.sh"><img src="https://img.shields.io/badge/megamesh.sh-site_%2B_the_Operator-5B3DF5?style=for-the-badge" alt="megamesh.sh"></a>
+<img src="https://img.shields.io/badge/version-1.5.0-111111?style=for-the-badge" alt="version 1.5.0">
+<img src="https://img.shields.io/badge/WireGuard-wg--easy_v15-2F6BFF?style=for-the-badge&logo=wireguard&logoColor=white" alt="WireGuard · wg-easy v15">
+<img src="https://img.shields.io/badge/firewall-DROP_%C2%B7_3_ports-111111?style=for-the-badge" alt="firewall DROP, 3 ports">
+<img src="https://img.shields.io/badge/updates-topgrade_weekly_%2B_rollback-5B3DF5?style=for-the-badge" alt="topgrade weekly + rollback">
+<img src="https://img.shields.io/badge/audited_by-3_frontier_models-111111?style=for-the-badge" alt="audited by 3 frontier models">
+<img src="https://img.shields.io/badge/license-MIT-5B3DF5?style=for-the-badge" alt="MIT">
 
-<img src="docs/hero.svg" width="100%" alt="Megamesh: the public internet sees three doors — SSH, WireGuard and HTTPS — everything else is dropped. Behind them, a WireGuard tunnel, wg-easy and Caddy on a 1 GB VPS.">
+<a href="https://megamesh.sh"><img src="docs/pills.webp" width="100%" alt="Two open hands: the left offers a blue pill, the right a glass pill you can see through."></a>
 
+<p><strong>Blue pill</strong>: a commercial VPN — a shared exit, a privacy policy you take on faith, a company you cannot audit.<br><strong>Glass pill</strong>: your own hardened WireGuard VPN on a 1 GB VPS — your keys, one admin, every line on GitHub.</p>
 <p>One VPS, one domain, one admin. WireGuard for the tunnel, a web UI with QR codes for your devices, a certificate that renews itself, a firewall with exactly three doors, and weekly upgrades that roll back if they break anything.</p>
 
 </div>
@@ -24,17 +25,17 @@
 <tr>
 <th width="33%" align="left"><sub>DOOR 01 · YOU RUN SERVERS</sub><br><a href="#01--script-if-you-run-servers">The script</a></th>
 <th width="33%" align="left"><sub>DOOR 02 · YOU HAVE AN AI AGENT</sub><br><a href="#02--prompt-if-you-have-an-ai-agent">The prompt</a></th>
-<th width="33%" align="left"><sub>DOOR 03 · YOU JUST WANT A VPN</sub><br><a href="https://megamesh.sh/deploy/">The deployer</a></th>
+<th width="33%" align="left"><sub>DOOR 03 · YOU JUST WANT A VPN</sub><br><a href="https://megamesh.sh/deploy/">The Operator</a></th>
 </tr>
 <tr valign="top">
 <td>One idempotent bash file, every setting an environment variable, nothing interactive. Read it, then run it as root on a fresh VPS with two env vars: domain and email.</td>
 <td>Paste <a href="PROMPT.md"><code>PROMPT.md</code></a> into any agent that can run shell commands over SSH. It carries the rules, the order of operations and the six traps we hit, so the agent starts at the end.</td>
-<td>A form at <a href="https://megamesh.sh/deploy/">megamesh.sh/deploy</a>: IP, root password, domain, email. It installs the same thing, hands you the admin login and one DNS record, then forgets you.</td>
+<td>A form at <a href="https://megamesh.sh/deploy/">megamesh.sh/deploy</a>: IP, root password, domain, email. It changes the root password to one you choose, loads the same program, hands you the admin login and one DNS record, then forgets you.</td>
 </tr>
 <tr valign="top">
 <td><sub><b>You bring</b> SSH, a domain, ten minutes<br><b>Hardening</b> full — key-only SSH once a key exists, every option yours</sub></td>
 <td><sub><b>You bring</b> the server details, a browser tab for DNS<br><b>Hardening</b> full — the prompt enforces it and verifies by reading state</sub></td>
-<td><sub><b>You bring</b> four fields and patience for one coffee<br><b>Hardening</b> nice, not finished — SSH keeps its password until a techie friend adds a key</sub></td>
+<td><sub><b>You bring</b> four fields and patience for one coffee<br><b>Hardening</b> nice, not finished — a fresh root password, but SSH keeps password login until a techie friend adds a key</sub></td>
 </tr>
 </table>
 
@@ -48,7 +49,7 @@ Commercial VPNs ask you to trust a company you cannot audit, with servers you sh
 
 Megamesh is the opinionated remainder. WireGuard for the tunnel, [wg-easy](https://github.com/wg-easy/wg-easy) for the profiles and QR codes, [Caddy](https://caddyserver.com) for the certificate, firewalld for a deny-by-default policy with exactly three doors, [topgrade](https://github.com/topgrade-rs/topgrade) on a weekly timer to keep packages *and* container images current with a health check and rollback, and the small set of host hardening you would want anyway.
 
-It is written down three times — as a script that does it, as a prompt that teaches an agent to do it, and as a web page that does it for you — because each form reaches people the others do not. Before going public it was audited twice by three frontier models; the findings that held up were fixed and re-verified on the live server, the rest are listed with reasons ([docs/AUDIT.md](docs/AUDIT.md)).
+It is written down three times — as a script that does it, as a prompt that teaches an agent to do it, and as a web page (the Operator) that does it for you — because each form reaches people the others do not. Before going public it was audited twice by three frontier models; the findings that held up were fixed and re-verified on the live server, the rest are listed with reasons ([docs/AUDIT.md](docs/AUDIT.md)).
 
 ## Three ways in
 
@@ -88,18 +89,18 @@ Open [`PROMPT.md`](PROMPT.md), fill in the server block (IP, root password, OS, 
 
 The reference deployment was done exactly this way, by [Perplexity Computer](https://www.perplexity.ai/computer) over SSH, with the owner supplying only the server details and a logged-in browser tab for the DNS change. The full account is in [docs/LOGBOOK.md](docs/LOGBOOK.md).
 
-### 03 — Deployer, if you just want a VPN
+### 03 — The Operator, if you just want a VPN
 
-<a href="https://megamesh.sh/deploy/"><img src="docs/deployer.png" width="100%" alt="The deployer at megamesh.sh/deploy: four steps — server, check, install, hand over"></a>
+<a href="https://megamesh.sh/deploy/"><img src="docs/deployer.png" width="100%" alt="The Operator at megamesh.sh/deploy: “I need a VPN.” “Loading.” — four steps: server, check, load, hand over"></a>
 
 Open [megamesh.sh/deploy](https://megamesh.sh/deploy/). Four steps on one page:
 
-1. **Details** — the server's public IP, the root password your provider emailed you, the domain you want the VPN to answer on, and an email for certificate notices. Optionally an SSH public key, if you have one.
-2. **Check** — the page logs in once over SSH, confirms it is root on a supported x86_64 distribution, reads RAM, CPUs, whether Docker or a previous Megamesh is already there, and shows you what it found before touching anything.
-3. **Install** — it runs the same `megamesh.sh` everyone else runs, with defaults, detached from the browser; the page polls the install log every few seconds, so a closed tab does not kill the install.
-4. **Handover** — it shows the admin username and password it created, the A record to add (`your domain → your IP`), and a "forget" button that shreds the credentials file on your server and clears the page. You add the record, open `https://your-domain/`, log in, enable 2FA, add your phone. Done.
+1. **Server** — the public IP, the root password your provider emailed you, the domain you want the VPN to answer on, an email for certificate notices. Optionally an SSH public key, and optionally — recommended — a **new root password**: the one from the provider has already travelled by email, so the Operator replaces it on the server before loading anything (there is a generator next to the field). Save it in your password manager; it is shown again at hand-over.
+2. **Check** — the page logs in once over SSH, confirms it is root on a supported x86_64 distribution, reads RAM, CPUs, whether Docker or a previous Megamesh is already there, and shows you the plan before touching anything. You tick a box that says what is about to happen.
+3. **Load** — if you chose a new root password it is applied first (`chpasswd`), and every call from then on logs in with it, which is also the proof it took. Then the same `megamesh.sh` everyone else runs starts detached on your server; the page polls the install log, shows which phase it is in (connect · update · harden · containers · verify) and how long it has been running. A closed tab does not kill the install.
+4. **Hand over** — admin URL, admin username and password, your new root password, the SSH line, each with a copy button; the A record to add (`your domain → your IP`); and a button that shreds the credentials file on your server once you have saved everything.
 
-The honest part, also stated on the page: your root password transits through megamesh.sh for the minutes of the install and is never written anywhere — the endpoint is stateless, no database, no sessions, no logs of credentials, only a per-IP rate-limit counter. The deployer keeps SSH on a password (`MEGAMESH_LOCK_SSH=no`) because it has no key of yours to install; the result is a good VPN, not a finished hardening — ask a techie friend to add a key, turn on `megamesh-lockdown`, and read [docs/HARDENING.md](docs/HARDENING.md) with you. Targets must be a public IPv4 with root password login. The deployer's source is in [`site/`](site/): one PHP file around [phpseclib](https://phpseclib.com), one JS file for the page.
+The honest part, also stated on the page: your root password transits through megamesh.sh for the minutes of the install and is never written anywhere — the endpoint is stateless, no database, no sessions, no logs of credentials, only a per-IP rate-limit counter. The Operator keeps SSH password login on (`MEGAMESH_LOCK_SSH=no`) unless you gave it a key, because it refuses to lock a door it cannot prove you can open; the result is a good VPN with a root password nobody else has seen, not a finished hardening — ask a techie friend to add a key, turn on `megamesh-lockdown`, and read [docs/HARDENING.md](docs/HARDENING.md) with you. Targets must be a public IPv4 with root password login. The Operator's source is in [`site/`](site/): one PHP file around [phpseclib](https://phpseclib.com), one JS file for the page.
 
 ## What you get
 
@@ -184,20 +185,23 @@ Read it as a convenience signal, never as the only control:
 
 <a href="https://megamesh.sh"><img src="docs/site.png" width="100%" alt="megamesh.sh — Your server. Your tunnel. Your exit."></a>
 
-[megamesh.sh](https://megamesh.sh) is the project's front door: what it is, the three ways in, what is inside the box, the honest limits, and the deployer. It borrows the design language of [megastack.sh](https://megastack.sh) — black, one red, monospace where it talks to machines — because Megamesh is the kind of box that consultancy builds for clients, published.
+[megamesh.sh](https://megamesh.sh) is the project's front door, and it has its own identity rather than a borrowed one. The art direction is called **the Construct**, after the white loading room: bone-white page on a faint grid, ink type set in Instrument Serif, one ultraviolet accent, a monospace wherever the page talks to machines. The illustrations are graphite engravings in the house style of [calliope.agency](https://calliope.agency) — two hands offering a blue pill and a glass pill, a bald man in a very good coat, two armchairs and a television in an empty room, a wall with three doors and a crowd of identical agents outside it, a white rabbit, a spoon, a phone booth, an operator's headset on a tape machine. The page runs on those references: *the choice* (blue pill vs glass pill — commercial VPN vs your own), *follow the white rabbit* (the three ways in), *the agents* (76,073 brute-force attempts at three doors), *the loading program* (what is inside), *there is no spoon* (what this is not), *the hard line* (your exit address). Door 03 is **the Operator**: “I need a VPN.” “Loading.” No green, no red — on purpose.
 
-The site is static HTML plus one PHP endpoint, and it lives in [`site/`](site/) so it can be read, forked or self-hosted:
+<a href="https://megamesh.sh/#choice"><img src="docs/choice.png" width="100%" alt="The choice: blue pill (commercial VPN) vs glass pill (your own VPN)"></a>
+
+Site features: a light/dark switch (dark is the same room at night — graphite, and the engravings become negatives), a language picker listing the 50 most spoken languages with flags and search (the site reads in English today; the choice is remembered and translations will follow it), engravings that materialise as you scroll, a typewriter line, a count-up, and a logo that redraws itself on hover and pings on click. Everything is static HTML/CSS/JS plus one PHP endpoint, in [`site/`](site/):
 
 ```
 site/index.html          ← the landing page
-site/deploy/             ← the deployer UI (index.html + deploy.js, no framework)
-site/api/deploy.php      ← the stateless endpoint: check · start · status · handover · forget
+site/deploy/             ← the Operator (index.html + deploy.js, no framework)
+site/api/deploy.php      ← the stateless endpoint: check · passwd · start · status · handover · forget
 site/api/lib/            ← autoload.php; phpseclib 4 + constant_time_encoding are vendored at deploy time, not committed
+site/assets/             ← style.css (tokens, both themes), ui.js (theme, languages, reveals), art/*.webp (the engravings)
 site/megamesh.sh         ← the installer, served as text/plain at https://megamesh.sh/megamesh.sh
 site/.htaccess           ← content types, dotfile denial, security headers; api/lib/ is unreachable from the web
 ```
 
-How the deployer works: the browser posts the four fields to `deploy.php`; `check` opens an SSH session with phpseclib, verifies root and the distribution, and returns what it saw. `start` uploads an env file, launches `nohup setsid bash megamesh.sh` on the server with its output in `/root/megamesh-install.log`, and returns immediately. `status` tails that log on every poll and watches for the exit marker; `handover` reads `/root/megamesh-admin-credentials` once and returns it; `forget` shreds `/root/megamesh-admin-credentials` and the env file on the server and clears the page. Credential-bearing actions are rate-limited per client IP (12 per 10 minutes); nothing else is written on the hosting side. It runs on plain shared PHP hosting — no composer, no database, nothing to keep alive. To host your own copy, drop the vendored libraries next to `autoload.php` as described in [`site/api/lib/README.md`](site/api/lib/README.md) and upload `site/`.
+How the Operator works: the browser posts the fields to `deploy.php`; `check` opens an SSH session with phpseclib, verifies root and the distribution, and returns what it saw. `passwd` (optional) pipes `root:<new>` through `chpasswd` and the client switches to the new password for every later call. `start` uploads an env file, launches `nohup setsid bash megamesh.sh` with its output in `/root/megamesh-install.log`, and returns immediately. `status` tails that log on every poll and watches for the exit marker; `handover` reads `/root/megamesh-admin-credentials` once; `forget` shreds it and the env file. Credential-bearing actions are rate-limited per client IP (12 per 10 minutes); nothing else is written on the hosting side. It runs on plain shared PHP hosting — no composer, no database, nothing to keep alive. To host your own copy, drop the vendored libraries next to `autoload.php` as described in [`site/api/lib/README.md`](site/api/lib/README.md) and upload `site/`.
 
 ## Repository layout
 
@@ -221,7 +225,7 @@ config/                       ← the files running on the reference server (Cad
   sysctl/99-megamesh-hardening.conf
   modules-load/megamesh.conf
   docker/daemon.json
-site/                         ← megamesh.sh: landing page and the web deployer (see "The website")
+site/                         ← megamesh.sh: landing page and the Operator (see "The website")
 docs/
   HARDENING.md                ← what is in place and why; VPN-only mode and how it was measured; upgrade policy
   AUDIT.md                    ← the three-model audit: findings, fixes, what was declined
@@ -229,30 +233,30 @@ docs/
   DNS.md                      ← A record, PTR (incl. Hostkey), and why not to self-host ns1/ns2
   TROUBLESHOOTING.md          ← symptom → cause → fix
   LOGBOOK.md                  ← the reference deployment, hour by hour
-  logo.svg · logo-mark.svg    ← the shield M, with and without the tile
-  hero.svg                    ← the three-doors diagram above
-  site.png · deployer.png     ← screenshots of megamesh.sh and the deployer
+  logo.svg · logo-mark.svg    ← the M-shield, on its tile and bare (currentColor)
+  pills.webp · morpheus.webp  ← two of the engravings, for this page
+  site.png · deployer.png · choice.png ← screenshots of megamesh.sh
 ```
 
 ## What this is not
 
 - **Not a privacy service.** Your VPS provider sees your traffic exit their network; this hides you from the café Wi-Fi and your ISP, not from a subpoena.
 - **Not multi-tenant.** One admin, your devices. wg-easy supports many peers, but the hardening assumes a single trusted operator.
-- **Not tested everywhere.** One distribution, one provider, one VPS size are verified. The Debian/Ubuntu branch, non-default ports, the fresh-install unattended path and the web deployer's full run are reasoned and partially exercised, not yet run end to end on a blank machine. Issues and PRs with a logbook of what you hit are the most useful contribution.
+- **Not tested everywhere.** One distribution, one provider, one VPS size are verified. The Debian/Ubuntu branch, non-default ports, the fresh-install unattended path and the Operator's full run are reasoned and partially exercised, not yet run end to end on a blank machine. Issues and PRs with a logbook of what you hit are the most useful contribution.
 - **Not a replacement for reading.** `megamesh.sh` is ~500 lines of plain bash with comments. Read it before you run it as root on a machine you care about, and before you hand its URL to a web form.
 
 ## Status, naming, roadmap
 
-v1.4.0 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration and the launch of [megamesh.sh](https://megamesh.sh) ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
+v1.5.0 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign as the Construct ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
 
 - **Naming**: "Megamesh" as a word, in prose; `megamesh` or `megamesh.sh` in lower case when talking about the code, the command or the site.
-- **Logo**: a single M drawn as a shield — [`docs/logo.svg`](docs/logo.svg) on its tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`.
-- **Planned**: a fresh-VPS run of the unattended path and of the deployer, verifying the Debian/Ubuntu branch on a second provider, SSH-via-VPN with a confirm-or-rollback window.
+- **Logo**: a single M whose two legs curve into the point of a shield, with one ultraviolet node where the strokes meet — [`docs/logo.svg`](docs/logo.svg) on its bone tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`. Palette: bone `#F3F1EA`, ink `#111111`, ultraviolet `#5B3DF5`, the blue pill `#2F6BFF`. No green, no red.
+- **Planned**: a fresh-VPS run of the unattended path and of the Operator, translations behind the language picker, verifying the Debian/Ubuntu branch on a second provider, SSH-via-VPN with a confirm-or-rollback window.
 - **Not planned**: OpenVPN, multi-user auth, turning this into a product.
 
 ## The story
 
-I wanted a VPN that is mine, on a cheap VPS, with a QR code for my phone and nothing else listening. I also wanted to know whether I could hand an AI agent an IP and a root password and get a hardened box back without touching a terminal. The answer to both was yes, after the agent and I tripped over six things that were not in any guide. Then I asked three other models to tear the result apart before publishing it, twice, and they found more — including a lock-out bug in the very guard that was supposed to prevent lock-outs, and a re-run that quietly reopened a locked-down UI. Then I bought the domain, because a script, a prompt and a form reach three different people. This repository is all of those things, so the next person — or the next agent — starts at the end.
+I wanted a VPN that is mine, on a cheap VPS, with a QR code for my phone and nothing else listening. I also wanted to know whether I could hand an AI agent an IP and a root password and get a hardened box back without touching a terminal. The answer to both was yes, after the agent and I tripped over six things that were not in any guide. Then I asked three other models to tear the result apart before publishing it, twice, and they found more — including a lock-out bug in the very guard that was supposed to prevent lock-outs, and a re-run that quietly reopened a locked-down UI. Then I bought the domain, because a script, a prompt and a form reach three different people — and gave the form a bald man in a very good coat. This repository is all of those things, so the next person — or the next agent — starts at the end.
 
 **Paul Fleury** — French internet entrepreneur in Lisbon, running [megastack.sh](https://megastack.sh), a cybersecurity consultancy; [LinkedIn](https://www.linkedin.com/in/paulfxyz/). Designed and operated with [Claude](https://www.claude.ai) and [Perplexity Computer](https://www.perplexity.ai/computer). Companion projects: [xnftables](https://github.com/paulfxyz/xnftables), [cup-of-news](https://github.com/paulfxyz/cup-of-news), [pplx-cost-transparency](https://github.com/paulfxyz/pplx-cost-transparency).
 

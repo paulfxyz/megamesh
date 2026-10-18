@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.0 — 2026-10-18
+
+- **megamesh.sh redesigned — "the Construct".** Own identity instead of the megastack.sh look: bone white, ink, one ultraviolet; Instrument Serif + Instrument Sans + Geist Mono; faint grid. Eight graphite engravings in the calliope.agency style (pills in hands, the bald man in the coat, two chairs and a TV, the wall with three doors and the agents, white rabbit, spoon, phone booth, operator's tape deck). Matrix references throughout; no green, no red.
+- **Light/dark switch** (dark = graphite room, engravings as negatives), **language picker** with the 50 most spoken languages, flags and search (English content only for now; choice remembered), mobile menu, scroll reveals, typewriter, count-up, logo that redraws on hover and pings on click.
+- **The Operator** (door 03, formerly "the deployer") can now **change the root password** before the install: optional field with a generator, applied via `chpasswd` as a separate `passwd` action; the client switches to the new password for all later calls, which proves it took. Shown again at hand-over with copy buttons. Also: per-field validation, consent checkbox, plan summary, phase indicator and elapsed time during the install, retry after lost contact, non-secret fields survive a reload.
+- **New logo**: one M whose legs curve into a shield point, with an ultraviolet node (`docs/logo.svg`, `docs/logo-mark.svg`, `docs/favicon.svg`). README rebuilt around the new identity with screenshots (`docs/site.png`, `docs/deployer.png`, `docs/choice.png`).
+- Site asset URLs are versioned (`?v=`) so cached stylesheets never outlive a deploy; `/api/lib/` denial fixed to survive Apache's `<FilesMatch>` merge order.
+
 ## 1.4.0 — 2026-10-18
 
 - **megamesh.sh is live**: landing page in the megastack.sh design language plus the web deployer (door 03) — a stateless PHP endpoint around phpseclib that logs into the user's VPS, runs `megamesh.sh` with defaults (`MEGAMESH_LOCK_SSH=no`), polls the log and hands over the admin credentials. Source under `site/`.

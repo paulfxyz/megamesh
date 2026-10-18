@@ -4,6 +4,7 @@
  *
  * Stateless: every request carries the target's SSH credentials, opens one SSH session, does one thing, returns.
  * Nothing is written to disk except a per-client-IP rate-limit counter (no credentials in it) and nothing is logged.
+ * `passwd` changes root's password to one the user chose (optional, before `start`); the new one is never echoed back.
  *
  * Actions: check | start | status | handover | forget
  */
@@ -16,7 +17,7 @@ header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: no-referrer');
 
-const MEGAMESH_RELEASE = '1.4.0';                 // tag of the release the deployer installs
+const MEGAMESH_RELEASE = '1.5.0';                 // tag of the release the deployer installs
 const MEGAMESH_TARBALL = 'https://github.com/paulfxyz/megamesh/archive/refs/tags/v' . MEGAMESH_RELEASE . '.tar.gz';
 const LOGFILE   = '/root/megamesh-install.log';
 const CREDFILE  = '/root/megamesh-admin-credentials';
@@ -39,7 +40,7 @@ use phpseclib4\Net\SSH2;
 
 // ── validation ───────────────────────────────────────────────────────────────
 $action = (string)($in['action'] ?? '');
-if (!in_array($action, ['check', 'start', 'status', 'handover', 'forget'], true)) fail('Unknown action');
+if (!in_array($action, ['check', 'passwd', 'start', 'status', 'handover', 'forget'], true)) fail('Unknown action');
 
 $ip = (string)($in['ip'] ?? '');
 if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false)
@@ -55,9 +56,11 @@ if (filter_var($email, FILTER_VALIDATE_EMAIL) === false || strlen($email) > 254 
 $pubkey = trim((string)($in['pubkey'] ?? ''));
 if ($pubkey !== '' && !preg_match('/^(ssh-ed25519|ssh-rsa|ecdsa-sha2-nistp(256|384|521)|sk-ssh-ed25519@openssh\.com|sk-ecdsa-sha2-nistp256@openssh\.com) [A-Za-z0-9+\/=]+( [^\s\'"\\\\]{0,120})?$/', $pubkey))
     fail('SSH public key is not a single OpenSSH line.');
+$newpw = (string)($in['newpw'] ?? '');
+if ($action === 'passwd' && !preg_match('/^[\x21-\x7E]{12,128}$/', $newpw)) fail('New root password: 12–128 printable characters, no spaces.');
 
 // ── rate limit on credential-bearing connection attempts ─────────────────────
-if (in_array($action, ['check', 'start'], true)) {
+if (in_array($action, ['check', 'passwd', 'start'], true)) {
     $client = $_SERVER['REMOTE_ADDR'] ?? '0';
     $f = sys_get_temp_dir() . '/megamesh-rl-' . hash('sha256', 'mm|' . $client);
     $hits = array_filter(array_map('intval', @file($f, FILE_IGNORE_NEW_LINES) ?: []), fn($t) => $t > time() - RL_WINDOW);
@@ -71,7 +74,7 @@ set_time_limit(110);
 $ssh = new SSH2($ip, $port, 12);
 $ssh->setTimeout(90);
 try {
-    if (!$ssh->login('root', $pw)) fail('SSH login as root failed — check the IP, port and root password. (Key-only servers cannot use the deployer; use the script instead.)', 401);
+    if (!$ssh->login('root', $pw)) fail('SSH login as root failed — check the IP, port and root password. (Key-only servers cannot use the Operator; use the script instead.)', 401);
 } catch (\Throwable $e) {
     fail('Could not reach ' . $ip . ':' . $port . ' over SSH — is the server up and is port ' . $port . ' open?', 502);
 }
@@ -91,6 +94,13 @@ switch ($action) {
         out(['ok' => true, 'os' => $kv['PRETTY'] ?: 'unknown', 'arch' => $kv['ARCH'] ?? '?', 'mem_mb' => (int)($kv['MEM'] ?? 0), 'cpus' => (int)($kv['CPU'] ?? 0),
              'docker' => ($kv['DOCKER'] ?? '0') === '1', 'installed' => ($kv['INSTALLED'] ?? '0') === '1', 'running' => ($kv['RUNNING'] ?? '0') === '1',
              'supported' => $supported, 'verified' => $verified]);
+    }
+
+    case 'passwd': {
+        // change root's password before anything else; the client switches to it and the next login proves it took
+        $o = $run('printf %s ' . escapeshellarg(base64_encode("root:" . $newpw . "\n")) . ' | base64 -d | chpasswd 2>&1 && echo PWOK');
+        if (!str_contains($o, 'PWOK')) fail('Could not change the root password: ' . trim($strip($o)), 500);
+        out(['ok' => true, 'changed' => true]);
     }
 
     case 'start': {

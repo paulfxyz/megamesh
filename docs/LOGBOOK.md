@@ -77,3 +77,12 @@ vpn-only:    ENABLED — outsiders → 302 https://paulfleury.com, tunnel path �
 ## Still open
 
 Nothing. The reference server is complete.
+
+## 26. megamesh.sh becomes the Construct (2026-10-18, evening)
+
+The first site borrowed megastack.sh's black-and-red. It was replaced the same day with its own direction: a white loading room, graphite engravings generated in the calliope.agency house style, Matrix references with the pills recoloured (blue vs glass — no red anywhere, no green anywhere). Light/dark switch, a 50-language picker (English only behind it for now), and the deployer renamed the Operator.
+
+## 27. The Operator changes root's password (2026-10-18, evening)
+
+Door 03 users arrive with a root password that has been in an email. The Operator now takes an optional new one, applies it with `chpasswd` as its own `passwd` action before anything else, and uses it for every call after — so the next SSH login is the proof. It still will not disable password login without a key: the rule from the first audit (never lock a door you cannot prove you can open) applies to the web form too.
+

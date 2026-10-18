@@ -2,6 +2,8 @@
 Options -Indexes
 AddType text/plain .sh
 AddType image/svg+xml .svg
+AddType image/webp .webp
+AddDefaultCharset utf-8
 <FilesMatch "^\.">
   Require all denied
 </FilesMatch>
@@ -9,4 +11,7 @@ AddType image/svg+xml .svg
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
   Header set X-Frame-Options "DENY"
+  <FilesMatch "\.(webp|svg|css|js)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
 </IfModule>
