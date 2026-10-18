@@ -2,7 +2,7 @@
 
 <img src="docs/logo.svg" width="128" height="128" alt="megamesh logo">
 
-# megamesh
+# Megamesh
 
 ![Version](https://img.shields.io/badge/version-1.3.0-e3120b?style=for-the-badge)
 ![WireGuard](https://img.shields.io/badge/WireGuard-wg--easy_v15-88171A?style=for-the-badge&logo=wireguard&logoColor=white)
@@ -13,7 +13,7 @@
 ![Audited](https://img.shields.io/badge/audited_by-3_frontier_models-5b4b8a?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-286348?style=for-the-badge)
 
-<img src="docs/hero.svg" width="100%" alt="megamesh: the public internet sees three doors — SSH, WireGuard and HTTPS — everything else is dropped. Behind them, a WireGuard tunnel, wg-easy and Caddy on a 1 GB VPS.">
+<img src="docs/hero.svg" width="100%" alt="Megamesh: the public internet sees three doors — SSH, WireGuard and HTTPS — everything else is dropped. Behind them, a WireGuard tunnel, wg-easy and Caddy on a 1 GB VPS.">
 
 <p><strong>A personal WireGuard VPN with a web admin UI, hardened by default, on the cheapest VPS you can find.</strong></p>
 <p>Two ways in: a script if you are a sysop, a prompt if you have an AI agent. Both start from the same two facts — an IP and a root password.</p>
