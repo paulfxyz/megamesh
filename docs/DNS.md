@@ -14,7 +14,7 @@ Verify from your laptop:
 
 ```sh
 dig +short A vpn.example.com @1.1.1.1
-curl -sI https://vpn.example.com/ | head -3      # expect: HTTP/2 302 … location: /setup/1 (first run) or /login
+curl -sI https://vpn.example.com/ | head -3      # expect: HTTP/2 302 … location: /login (or your redirect URL in VPN-only mode)
 ```
 
 ## Reverse DNS (PTR)
@@ -48,8 +48,8 @@ Result: `dig A paulfleury.network @1.1.1.1` → `151.243.225.214` after ~3 minut
 
 Hostkey exposes reverse DNS per IP in the client area ([invapi.hostkey.com](https://invapi.hostkey.com/)):
 
-1. *My servers* → open server **69416** → the IP addresses block.
-2. Next to `151.243.225.214` use *Edit / rDNS (PTR)* and enter `paulfleury.network` (trailing dot optional).
+1. *My servers* → open your server → the **Network** tab.
+2. Click **IP settings and DNS PTR management** (rightmost button on the IP row), enter `paulfleury.network` in the PTR box, click **Update PTR**.
 3. Save; propagation is typically minutes to an hour. Verify with `dig -x 151.243.225.214 +short` → `paulfleury.network.`
 
-If the field is missing or greyed out, open a ticket from the same panel with "set PTR for 151.243.225.214 to paulfleury.network" — Hostkey support does it by hand for some IP ranges. Only the owner of the IP block (the hosting provider) can publish PTR records; nothing at Namecheap can do it.
+Hostkey's own nameserver (`dig -x <ip> @ns1.hostkey.com`) answers immediately; public resolvers follow within the hour. Only the owner of the IP block (the hosting provider) can publish PTR records; nothing at Namecheap can do it. Done on the reference server on 2026-10-18.

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# proxy — one-screen health check. Run as root on the server.
+# megamesh — one-screen health check. Run as root on the server.
 set -uo pipefail
-[[ -z "${PROXY_DIR:-}" && -f /etc/proxy.conf ]] && . /etc/proxy.conf   # installer-recorded settings; env vars still win
-PROXY_DIR="${PROXY_DIR:-/opt/proxy}"
-DOMAIN=$(grep -m1 -oE '^[a-zA-Z0-9.-]+\.[a-z]{2,}' "${PROXY_DIR}/Caddyfile" 2>/dev/null || hostname)
+[[ -z "${MEGAMESH_DIR:-}" && -f /etc/megamesh.conf ]] && . /etc/megamesh.conf   # installer-recorded settings; env vars still win
+MEGAMESH_DIR="${MEGAMESH_DIR:-/opt/megamesh}"
+DOMAIN=$(grep -m1 -oE '^[a-zA-Z0-9.-]+\.[a-z]{2,}' "${MEGAMESH_DIR}/Caddyfile" 2>/dev/null || hostname)
 b() { printf '\n\033[1m%s\033[0m\n' "$*"; }
 
 b "Host";            echo "  $(hostname) · $(uname -r) · up $(uptime -p | sed 's/up //')"
@@ -21,8 +21,9 @@ b "TLS certificate"
     echo "  no certificate yet — docker logs caddy | grep -i obtain"
   fi
 b "Admin UI";        curl -s -o /dev/null -w "  https://${DOMAIN}/ → HTTP %{http_code} %{redirect_url}\n" --resolve "${DOMAIN}:443:127.0.0.1" "https://${DOMAIN}/" 2>/dev/null || echo "  not reachable locally"
-b "Pending security updates"
-  if command -v dnf >/dev/null; then dnf -q updateinfo list --security --available 2>/dev/null | grep -cE '^[A-Za-z0-9]' | sed 's/^/  /'; else apt list --upgradable 2>/dev/null | grep -c -- '-security' | sed 's/^/  /'; fi
+b "Pending updates"
+  if command -v dnf >/dev/null; then n=$(dnf -q check-update 2>/dev/null | grep -cE '^[A-Za-z0-9]' || true); else n=$(apt list --upgradable 2>/dev/null | grep -c '/' || true); fi
+  echo "  ${n:-0} package(s)  (auto-applied by $(command -v dnf >/dev/null && echo dnf-automatic || echo unattended-upgrades))"
 b "VPN-only mode"
-  if command -v proxy-lockdown >/dev/null; then PROXY_DIR="$PROXY_DIR" proxy-lockdown status 2>&1 | sed 's/^/  /'; else echo "  proxy-lockdown not installed"; fi
+  if command -v megamesh-lockdown >/dev/null; then MEGAMESH_DIR="$MEGAMESH_DIR" megamesh-lockdown status 2>&1 | sed 's/^/  /'; else echo "  megamesh-lockdown not installed"; fi
 echo

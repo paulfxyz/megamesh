@@ -1,0 +1,21 @@
+{
+  "owner": "Paul Fleury",
+  "purpose": "Public egress address of the owner's personal WireGuard VPN. Traffic from this address is the owner.",
+  "hostname": "paulfleury.network",
+  "ipv4": [
+    "151.243.225.214"
+  ],
+  "ipv6": [],
+  "since": "2026-10-18",
+  "verify": {
+    "forward": "dig +short A paulfleury.network",
+    "reverse": "dig +short -x 151.243.225.214",
+    "ports_open_to_public": [
+      "22/tcp",
+      "51820/udp",
+      "443/tcp"
+    ]
+  },
+  "source_of_truth": "https://github.com/paulfxyz/megamesh/blob/main/egress.json",
+  "policy": "Convenience signal, never the only control: pair any allow-list entry with authentication. Drop the entry if the PTR stops matching the hostname or if this file has not been touched for 12 months. A hosting provider can reassign an IP; this file is updated first when that happens."
+}

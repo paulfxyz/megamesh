@@ -35,11 +35,16 @@ The whole session was driven by [Perplexity Computer](https://www.perplexity.ai/
 14. **DNS.** In the owner's Namecheap tab: removed the parking CNAME and the URL redirect, added `A @ → 151.243.225.214`. Resolvable on 1.1.1.1 ~3 minutes later.
 15. **Certificate.** Caddy logged one `HTTP 504` fetching a nonce from Let's Encrypt (their side), then `certificate obtained successfully`. `https://paulfleury.network/` → `302 /setup/1`.
 
-16. **Installer validation.** `install.sh` (this repository) was run over the live deployment with `PROXY_SKIP_UPDATE=1 PROXY_DIR=/opt/wireguard`. First attempt died silently at `firewall-cmd --set-log-denied=off`, which exits 2 when the value is already set — fixed with `|| true`. Second run completed end-to-end; containers reported `Running`, not recreated. The hand-made drop-ins from steps 2–7 were then removed in favour of the installer's files (`00-proxy-hardening.conf`, `proxy-sshd.local`, `99-proxy-hardening.conf`, `proxy.conf`).
-17. **Note.** The reference server keeps the stack in `/opt/wireguard` (its Compose project name, and therefore its volume names, derive from the directory). A fresh install uses `/opt/proxy`; `/etc/proxy.conf` tells the helper commands where to look.
+16. **Installer validation.** `install.sh` (this repository) was run over the live deployment with `MEGAMESH_SKIP_UPDATE=1 MEGAMESH_DIR=/opt/wireguard`. First attempt died silently at `firewall-cmd --set-log-denied=off`, which exits 2 when the value is already set — fixed with `|| true`. Second run completed end-to-end; containers reported `Running`, not recreated. The hand-made drop-ins from steps 2–7 were then removed in favour of the installer's files (`00-megamesh-hardening.conf`, `megamesh-sshd.local`, `99-megamesh-hardening.conf`, `megamesh.conf`).
+17. **Note.** The reference server keeps the stack in `/opt/wireguard` (its Compose project name, and therefore its volume names, derive from the directory). A fresh install uses `/opt/megamesh`; `/etc/megamesh.conf` tells the helper commands where to look.
 18. **Admin account and first device.** The owner completed the wizard himself (wg-easy 15.4.0), created a peer, connected from his laptop and confirmed traffic through the tunnel, then disconnected. From this point the UI answers `302 /login`.
 19. **Three-model audit** of the repository at v1.0.0 (Claude Opus 5.5, GPT-6.1 Sol Pro, Gemini 4 Argon via OpenRouter; reports in [docs/audit/](audit/)). Grades C / D / B+. Converging findings: an SSH lock-out when no key is present (`PermitRootLogin prohibit-password` written unconditionally), SSH port moved before the firewall opened it, phase-2 recipes that ignored the container network namespace, `SYS_MODULE` not needed, `curl | sh` on Debian, `daemon.json` clobbered, stale docs. All fixed in 1.1.0 — see [AUDIT.md](AUDIT.md).
-20. **Live tests for 1.1.0.** Dropped `SYS_MODULE` and the `/lib/modules` mount: `wg0` up, same keys, peer intact. Set Docker `"userland-proxy": false` and recreated the stack: tunnel-origin requests now reach Caddy as `10.42.42.42` (were `10.42.42.1`), public requests keep their real IP. Re-ran the rewritten `install.sh` over the live server: idempotent, admin check reports "login page", helpers installed. `proxy-lockdown render vpn-only https://paulfleury.com` validates; **not enabled** — the owner will say when.
+20. **Live tests for 1.1.0.** Dropped `SYS_MODULE` and the `/lib/modules` mount: `wg0` up, same keys, peer intact. Set Docker `"userland-proxy": false` and recreated the stack: tunnel-origin requests now reach Caddy as `10.42.42.42` (were `10.42.42.1`), public requests keep their real IP. Re-ran the rewritten `install.sh` over the live server: idempotent, admin check reports "login page", helpers installed. `megamesh-lockdown render vpn-only https://paulfleury.com` validates; **not enabled** — the owner will say when.
+
+21. **PTR set** via the Hostkey panel (Network → IP settings and DNS PTR management → `paulfleury.network`, "IP PTR data updated"); `ns1.hostkey.com` answered immediately, public resolvers within the hour.
+22. **2FA enabled** by the owner on the wg-easy account. **`megamesh-lockdown enable https://paulfleury.com`** run on request: from the public internet `/`, `/login` and `/api/*` all answer `302 https://paulfleury.com/`; through the tunnel path the UI answers `200`.
+23. **Renamed** from `proxy` to **megamesh** (a nod to the owner's consultancy, [megastack.sh](https://megastack.sh)): repository, env-var prefix (`MEGAMESH_*`), helper commands (`megamesh-status`, `megamesh-lockdown`), config file names on the server, `/etc/megamesh.conf`. The stack directory on the reference server stays `/opt/wireguard`.
+24. **Second audit round** on the renamed tree (same three models). New findings: re-running `install.sh` reopened a locked-down UI (observed live, fixed: mode is detected and kept, the open Caddyfile is never written in between); unattended first start could scrub `INIT_*` before setup ran (fixed: wg-easy starts alone, `/login` is proven, then Caddy); CentOS Stream has no errata metadata so `upgrade_type=security` applied nothing (fixed: all updates on Stream); `set -e` pipeline traps in `lockdown.sh`; password/URL sanitising; firewall reports non-owned exposure and retires the previous WireGuard port; allow-list caveats. Reports in [audit/](audit/) (`round2-*`).
 
 ## End state
 
@@ -49,24 +54,22 @@ icmp allow:  echo-request destination-unreachable time-exceeded packet-too-big
 containers:  wg-easy (healthy, NET_ADMIN only)   caddy (up)
 docker:      userland-proxy off · live-restore · log rotation · no-new-privileges
 wg0:         listening :51820, 1 peer (owner's laptop)
-admin UI:    https://paulfleury.network/ → 302 /login · Let's Encrypt until 2027-01-16
+admin UI:    https://paulfleury.network/ → 302 https://paulfleury.com/ for outsiders, /login through the tunnel · Let's Encrypt until 2027-01-16
 sshd:        passwordauthentication no · permitrootlogin without-password · maxauthtries 3
 fail2ban:    sshd jail active
-updates:     dnf-automatic security, daily
+updates:     dnf-automatic, all updates daily (CentOS Stream has no errata metadata)
 vpn-only:    ENABLED — outsiders → 302 https://paulfleury.com, tunnel path → UI
 ```
 
 ## Things that would have been faster to know
 
 - Check `swapon --show`, not `ls /swapfile`.
+- Re-run your own installer on your own locked-down box before telling anyone re-runs are safe.
 - Check `fail2ban-client status`, not `systemctl is-active fail2ban`.
 - Read `/etc/docker/daemon.json` before trusting a published port.
 - Load the legacy iptables modules before the first `docker compose up`.
 - Do not probe your own open ports from a sandbox behind an egress proxy — every port shows "open". Verify from the host's ruleset or a real external vantage point.
 - Let's Encrypt returns the odd 504; Caddy's retry handles it. Do not restart Caddy in a loop.
-
-21. **PTR set** via the Hostkey panel (Network → IP settings and DNS PTR management → `paulfleury.network`, "IP PTR data updated"); `ns1.hostkey.com` answered immediately, public resolvers within the hour.
-22. **2FA enabled** by the owner on the wg-easy account. **`proxy-lockdown enable https://paulfleury.com`** run on request: from the public internet `/`, `/login` and `/api/*` all answer `302 https://paulfleury.com/`; through the tunnel path the UI answers `200`.
 
 ## Still open
 

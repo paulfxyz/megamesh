@@ -13,6 +13,12 @@ paulfleury.network {
 		Referrer-Policy "no-referrer"
 		-Server
 	}
-	encode zstd gzip
-	reverse_proxy wg-easy:51821
+	@vpn remote_ip 10.42.42.42
+	handle @vpn {
+		encode zstd gzip
+		reverse_proxy wg-easy:51821
+	}
+	handle {
+		redir https://paulfleury.com 302
+	}
 }

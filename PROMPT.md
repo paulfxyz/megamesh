@@ -2,7 +2,7 @@
 
 Paste this into any AI agent that can run shell commands over SSH (Perplexity Computer, Claude Code, Codex, OpenHands, Devin, aider, your own agent…). Replace the values in the first block. That is all the context it needs; the rest of the prompt is the know-how so the agent does not have to rediscover the traps.
 
-If you want the agent to follow this repository exactly, add one line: *"Clone `https://github.com/paulfxyz/proxy`, read `install.sh` and `docs/` before acting, then run `install.sh`."* The prompt below also works standalone.
+If you want the agent to follow this repository exactly, add one line: *"Clone `https://github.com/paulfxyz/megamesh`, read `install.sh` and `docs/` before acting, then run `install.sh`."* The prompt below also works standalone.
 
 **Before you paste it:** generate your own SSH key pair on your laptop (`ssh-keygen -t ed25519`) and put the *public* key in the prompt. The agent must never be the only holder of a credential to your server. Give it the initial root password — you will rotate it right after — and have your provider's rescue console bookmarked.
 
@@ -34,7 +34,7 @@ GOAL
 RULES
   - FIRST ACTIONS, in this order: (1) install MY public key for root; (2) open a second SSH session with
     it and confirm it works; (3) generate a long random root password, change it, and write it to a
-    root-only file on the server (/root/.proxy-root-password, mode 0600) — tell me the path, not the value;
+    root-only file on the server (/root/.megamesh-root-password, mode 0600) — tell me the path, not the value;
     (4) only then disable password authentication, and set PermitRootLogin to prohibit-password. Never disable
     passwords before a key login has succeeded. Keep MaxAuthTries low.
   - If you need your own key for the session, add it as a SECOND key and tell me to remove it afterwards.
@@ -42,7 +42,7 @@ RULES
   - Never print the root password, private keys, WireGuard private keys or the admin password in your
     output or in any file you leave in your own workspace. Tell me where on the server you stored them.
   - Make every change idempotent and leave config in files (sshd_config.d drop-in, fail2ban jail.d,
-    sysctl.d, modules-load.d, /opt/proxy/compose.yml, /opt/proxy/Caddyfile) so it survives reboots.
+    sysctl.d, modules-load.d, /opt/megamesh/compose.yml, /opt/megamesh/Caddyfile) so it survives reboots.
   - Open a new firewall port BEFORE moving a service onto it. Reload the firewall and restart sshd only
     with a second session open, and verify with a NEW connection afterwards.
   - Verify after each step by reading state (sshd -T, firewall-cmd --list-all, docker ps, wg show, curl),
@@ -69,14 +69,14 @@ KNOWN TRAPS (these cost real time; check them up front)
     Use unattended setup on the FIRST start only: INIT_ENABLED=true, INIT_USERNAME, INIT_PASSWORD (plaintext,
     generate 32 chars), INIT_HOST=<domain>, INIT_PORT=51820 (this is both the endpoint and the listen port).
     Pass them via an env_file (mode 0600), wait for the container to be healthy, remove the INIT_* lines,
-    recreate the container. Store the admin credentials in /root/proxy-admin-credentials (0600).
+    recreate the container. Store the admin credentials in /root/megamesh-admin-credentials (0600).
   - Caddy needs the DNS A record before it can get a certificate. Deploy anyway; it retries on its own.
     A transient "HTTP 504 fetching nonce" from Let's Encrypt is normal — do not restart Caddy in a loop.
   - The Caddyfile is a single-file bind mount: edit it IN PLACE (cp over it), never `sed -i`/`mv`, or the
     running container keeps the old inode and reports "config is unchanged".
   - Do not open tcp/80. Caddy will use the TLS-ALPN-01 challenge on 443. Tell me to always type https://.
 
-CADDYFILE (/opt/proxy/Caddyfile — use exactly this, replace the two placeholders)
+CADDYFILE (/opt/megamesh/Caddyfile — use exactly this, replace the two placeholders)
   {
   	email <email>
   	servers {
@@ -95,7 +95,7 @@ CADDYFILE (/opt/proxy/Caddyfile — use exactly this, replace the two placeholde
   	encode zstd gzip
   	reverse_proxy wg-easy:51821
   }
-  Validate with `docker run --rm -v /opt/proxy/Caddyfile:/etc/caddy/Caddyfile:ro caddy:2-alpine caddy validate`.
+  Validate with `docker run --rm -v /opt/megamesh/Caddyfile:/etc/caddy/Caddyfile:ro caddy:2-alpine caddy validate`.
 
 DELIVER
   - What to put in DNS (A record; recommend keeping the registrar's DNS, not self-hosting nameservers)
