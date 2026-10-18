@@ -269,6 +269,46 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
+},
+"audit": {
+"remaining": [
+[
+"english",
+[
+"i.070"
+],
+"identical to source"
+],
+[
+"english",
+[
+"i.086"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.059"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.060"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.061"
+],
+"identical to source"
+]
+],
+"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — 你的服务器，你的出口。",
@@ -278,14 +318,14 @@
 "i.001": "为什么",
 "i.002": "代码",
 "i.003": "三种入口方式",
-"i.004": "你将获得什么",
-"i.005": "诚实的注意事项",
+"i.004": "所含功能",
+"i.005": "坦诚说明",
 "i.006": "你的出口",
-"i.007": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 3v12M7 10l5 5 5-5M5 21h14\"></path></svg>部署我的 VPN",
+"i.007": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 3v12M7 10l5 5 5-5M5 21h14\"></path></svg>立即部署",
 "i.008": "你自己的 VPN · 只需一个 IP 和 root 权限",
 "i.009": "你的服务器，<span class=\"r2\">你的<span class=\"grad\">出口。</span></span>",
 "i.010": "Megamesh 能将你租用的最便宜 VPS 变成带有设备 Web 管理界面的硬化个人 WireGuard VPN。仅开放三个端口、仅密钥 SSH 认证、自动 TLS、自带回滚机制的每周升级。完全归你所有、可审计、MIT 协议。",
-"i.011": "部署我的 VPN <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
+"i.011": "立即部署 <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
 "i.012": "在 GitHub 上 Star",
 "i.013": "开放端口总数",
 "i.014": "所需 RAM",
@@ -376,9 +416,9 @@
 "i.097": "源码",
 "i.098": "审计",
 "i.099": "复制",
-"i.100": "部署我的 <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
+"i.100": "立即部署 <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
 "i.101": "首页",
-"i.102": "megamesh.sh 主页",
+"i.102": "megamesh.sh 首页",
 "i.103": "语言",
 "i.104": "脚本",
 "i.105": "跳转到脚本",
@@ -391,7 +431,7 @@
 "m.d.description": "将你的 VPS IP、root 密码、域名和电子邮箱提供给部署工具。它会将 root 密码修改为你选择的新密码，安装 Megamesh，并交付你的管理员凭据。",
 "d.001": "为什么",
 "d.002": "代码",
-"d.003": "包含内容",
+"d.003": "所含功能",
 "d.004": "坦诚说明",
 "d.005": "← 返回",
 "d.006": "入口 03 · 部署工具",
@@ -438,7 +478,7 @@
 "d.047": "我已保存 — 删除服务器上的副本",
 "d.048": "源码",
 "d.049": "首页",
-"d.050": "主页",
+"d.050": "首页",
 "d.051": "megamesh.sh 首页",
 "d.052": "语言",
 "d.053": "脚本",
@@ -504,7 +544,7 @@
 "j.d.note_small": "<b>低配置服务器。</b> 可用 RAM 不足 1 GB；安装程序会在更新前自动添加 swap，这正是专门为此场景设计的。",
 "j.d.handover_btn": "查看交付凭据 →",
 "j.d.install_btn": "安装 Megamesh →",
-"j.d.check_btn": "检测服务器 →",
+"j.d.check_btn": "检查服务器 →",
 "j.d.starting": "正在启动…",
 "j.d.stopped": "已停止",
 "j.d.stopped_hint": "安装因错误而中断。",

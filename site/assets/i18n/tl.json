@@ -292,6 +292,10 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
+},
+"audit": {
+"remaining": [],
+"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — Ang iyong server, ang iyong exit.",
@@ -302,9 +306,9 @@
 "i.002": "Ang code",
 "i.003": "Tatlong paraan",
 "i.004": "Ang makukuha mo",
-"i.005": "Tapat na paalala",
+"i.005": "Tapat na mga tala",
 "i.006": "Ang iyong exit",
-"i.007": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 3v12M7 10l5 5 5-5M5 21h14\"></path></svg>I-deploy ko",
+"i.007": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 3v12M7 10l5 5 5-5M5 21h14\"></path></svg>I-deploy ang akin",
 "i.008": "Ang sarili mong VPN · isang IP at root access lang",
 "i.009": "Ang iyong server,<span class=\"r2\">ang iyong <span class=\"grad\">exit.</span></span>",
 "i.010": "Ginagawang pinatibay na personal WireGuard VPN na may web admin para sa iyong mga device ng Megamesh ang pinakamurang VPS na maaari mong rentahan. Tatlong bukas na port, key-only SSH, awtomatikong TLS, at lingguhang upgrade na kusa ring nagre-rollback. Sa iyo, ma-audit, MIT.",
@@ -400,7 +404,7 @@
 "i.098": "Mga Audit",
 "i.099": "Kopyahin",
 "i.100": "I-deploy ang akin <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
-"i.101": "Main",
+"i.101": "Pangunahin",
 "i.102": "megamesh.sh home",
 "i.103": "Wika",
 "i.104": "Ang script",
@@ -445,7 +449,7 @@
 "d.031": "← I-edit ang mga detalye",
 "d.032": "Naga-install",
 "d.033": "Matagal ang mga update ng package sa 1 vCPU box — normal ang 10 hanggang 30 minuto. Maaari mong iwanang nakabukas ang tab na ito; magpapatuloy ang pag-install sa iyong server kahit isara mo ito, at ang muling pagbubukas ng deployer gamit ang parehong detalye ay magpapatuloy nito.",
-"d.034": "Kumuha ng koneksyon",
+"d.034": "Kumonekta",
 "d.035": "I-update",
 "d.036": "I-harden",
 "d.037": "Mga Container",

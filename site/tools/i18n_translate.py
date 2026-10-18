@@ -10,7 +10,7 @@ Run inside the credential proxy:  pplx credentials run <handle> -- python3 tools
 - --review runs an independent model over each finished file and applies only the corrections that pass the same checks.
 - Results are cached in assets/i18n/<code>.json with a _meta.source_hash; a language is skipped when its hash matches (use --force).
 """
-import json, os, re, ssl, sys, hashlib, time, pathlib
+import json, os, re, ssl, sys, hashlib, time, pathlib, unicodedata
 import requests
 from requests.adapters import HTTPAdapter
 
@@ -32,7 +32,7 @@ LANGS = {  # code: (English name, script/variety instruction)
  'wuu': ('Wu Chinese', 'Shanghainese written in Chinese characters; where no established written form exists, use Traditional/Simplified-neutral Mandarin-readable wording with Wu vocabulary where natural'),
  'tl': ('Filipino', 'Filipino / Tagalog, Taglish acceptable for technical terms'), 'ko': ('Korean', 'standard polite 합니다체'), 'fa': ('Persian', 'Iranian Persian (Farsi)'),
  'ha': ('Hausa', 'Boko Latin script, Nigerian standard'), 'sw': ('Swahili', 'standard Kiswahili'), 'jv': ('Javanese', 'Latin script, ngoko-alus register'),
- 'it': ('Italian', 'standard Italian'), 'pa': ('Punjabi', 'Shahmukhi (Perso-Arabic) script as used in Pakistan'), 'gu': ('Gujarati', 'Gujarati script'),
+ 'it': ('Italian', 'standard Italian'), 'pa': ('Punjabi', 'Gurmukhi script only (ਪੰਜਾਬੀ), standard Indian Punjabi — never Shahmukhi/Perso-Arabic letters'), 'gu': ('Gujarati', 'Gujarati script'),
  'th': ('Thai', 'standard Thai'), 'kn': ('Kannada', 'Kannada script'), 'am': ('Amharic', 'Ge\'ez script'), 'bho': ('Bhojpuri', 'Devanagari'),
  'nan': ('Min Nan (Taiwanese Hokkien)', 'Taiwanese Hokkien written in Traditional Chinese characters (Hàn-jī), as recommended by Taiwan MOE'),
  'yo': ('Yoruba', 'with tone marks'), 'my': ('Burmese', 'Myanmar script, Unicode'), 'pl': ('Polish', 'standard Polish'), 'or': ('Odia', 'Odia script'),
@@ -40,7 +40,7 @@ LANGS = {  # code: (English name, script/variety instruction)
  'ml': ('Malayalam', 'Malayalam script'), 'ms': ('Malay', 'Bahasa Melayu, Malaysia'), 'nl': ('Dutch', 'Netherlands Dutch'), 'ne': ('Nepali', 'Devanagari'),
  'si': ('Sinhala', 'Sinhala script'), 'sd': ('Sindhi', 'Perso-Arabic Sindhi script'), 'uz': ('Uzbek', 'Latin script'), 'ro': ('Romanian', 'with diacritics ș ț'),
 }
-RTL = {'ar', 'ur', 'fa', 'sd', 'pa'}
+RTL = {'ar', 'ur', 'fa', 'sd'}
 
 SYSTEM = """You are a senior technical translator localising the website of Megamesh (megamesh.sh), an open-source tool that turns a cheap VPS into a hardened personal WireGuard VPN. The audience is mixed: sysadmins, developers, and ordinary people who just want a VPN.
 
@@ -108,7 +108,8 @@ def check(src, dst):
     if sig_tags(src) != sig_tags(dst): return 'tags differ'
     if sorted(PH.findall(src)) != sorted(PH.findall(dst)): return 'placeholders differ'
     if sorted(URL.findall(src)) != sorted(URL.findall(dst)): return 'URLs/paths differ'
-    sn, dn = re.findall(r'\d+', src), re.findall(r'\d+', dst)
+    asc = lambda t: ''.join(str(unicodedata.digit(c)) if c.isdecimal() and not c.isascii() else c for c in t)   # Burmese/Devanagari digits count as digits
+    sn, dn = re.findall(r'\d+', src), re.findall(r'\d+', asc(dst))
     for n in sn:
         if n in dn: dn.remove(n)
         else: return f'number {n} missing'

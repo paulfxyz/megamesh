@@ -274,6 +274,10 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
+},
+"audit": {
+"remaining": [],
+"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — Pelayan anda, laluan keluar anda.",
@@ -340,9 +344,9 @@
 "i.058": "Swap, nama hos, modul kernel yang diperlukan oleh bekas.",
 "i.059": "Kemas kini",
 "i.060": "Kemas kini sistem penuh, Docker dari repo ditandatangani, kemas kini automatik harian diaktifkan.",
-"i.061": "Perkemaskan",
+"i.061": "Ketatkan",
 "i.062": "Firewall dahulu, kemudian sshd, fail2ban, sysctl. Jangan sekali-kali kunci sebelum firewall dibuka.",
-"i.063": "Bekas",
+"i.063": "Kontena",
 "i.064": "wg-easy sahaja, akaun admin terbukti, baru Caddy. Gagal secara tertutup.",
 "i.065": "Sahkan",
 "i.066": "Handshake, port, percubaan semula sijil, pemasa. Kemudian ia menyerahkan kredential kepada anda.",
@@ -419,7 +423,7 @@
 "d.023": "E-mel anda <small>notis sijil sahaja</small>",
 "d.024": "Kunci awam SSH anda <small>pilihan — jika anda ada, ia akan dimasukkan dan pelayan diketatkan sepenuhnya</small>",
 "d.025": "<b>Baca sebelum anda klik.</b> Kata laluan root anda dihantar melalui HTTPS ke megamesh.sh, digunakan untuk log masuk ke pelayan anda sepanjang tempoh pemasangan, dan kemudian dilupuskan. Setiap penyegaran status akan log masuk semula dengannya. Kami tidak menyimpan sebarang salinan atau lognya. Jika anda tidak mahu, <a class=\"ul\" href=\"/#ways\">skrip</a> memberikan hasil yang sama tanpa kami di tengah-tengah.",
-"d.026": "Periksa pelayan →",
+"d.026": "Semak pelayan →",
 "d.027": "Pemeriksaan pelayan",
 "d.028": "Berjaya log masuk. Ini adalah apa yang ditemui oleh penebar, dan apa yang akan dilakukannya.",
 "d.029": "Saya faham bahawa pemasangan mengambil masa 10–30 minit, bahawa kata laluan root saya melalui megamesh.sh sepanjang masa itu dan tidak disimpan, dan bahawa SSH kekal dilindungi dengan kata laluan sehingga kunci dipasang.",

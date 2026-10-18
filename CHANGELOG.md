@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.5 — 2026-10-18
+
+- **Translation audit.** New `site/tools/i18n_audit.py`: flags stray letters from a neighbouring script, inconsistent translations of the same English term across the two pages, lost product names and leftover English; `--fix` retranslates only the flagged entries. First run found 617 issues across 49 languages — mostly nav/phase labels translated two ways, a handful of single-character script glitches (a Sinhala letter in Burmese, Bengali letters in Malayalam and Odia, Hangul in Gujarati), Punjabi split between two scripts — and left zero. Punjabi now ships in Gurmukhi (LTR, 🇮🇳) after the model proved unable to hold Shahmukhi consistently.
+- **Layout audit of all 50 languages**, both pages, desktop and 375 px: the deployer's anti-bot honeypot field (`left:-9999px`) made every right-to-left page scroll ten thousand pixels sideways — fixed; the pill navigation now collapses into the menu whenever a language's labels do not fit instead of wrapping or clipping; unbreakable long words (Tamil, Telugu, German compounds, Russian) wrap inside their boxes; the floating dock truncates gracefully.
+- README: how to review a language as a native speaker.
+
 ## 1.5.4 — 2026-10-18
 
 - **megamesh.sh in 50 languages.** The language picker now switches both pages, metadata and the deployer's runtime messages; RTL for Arabic, Urdu, Persian, Sindhi, Punjabi; display type retuned for CJK and Indic scripts. English stays in the HTML as the reference; other languages are JSON files applied client-side. Generated with Gemini 3.6 Flash, reviewed per entry by GPT-5 mini against the source (both via OpenRouter), with deterministic checks on markup, placeholders, numbers, URLs and paths. Tooling in `site/tools/`.

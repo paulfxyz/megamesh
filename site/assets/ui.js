@@ -8,7 +8,7 @@
   // ── i18n ─────────────────────────────────────────────────────────────────
   // English lives in the HTML. Other languages are JSON files keyed by data-i18n; applied client-side, remembered in mm-lang.
   const PAGE = location.pathname.startsWith('/deploy') ? 'd' : 'i';
-  const RTL = new Set(['ar', 'ur', 'fa', 'sd', 'pa']);
+  const RTL = new Set(['ar', 'ur', 'fa', 'sd']);
   const orig = new Map();
   const MM = window.MM = { lang: 'en', dict: null, t: (k, fb) => (MM.dict && typeof MM.dict[k] === 'string' ? MM.dict[k] : fb) };
   const VER = (document.querySelector('script[src*="ui.js"]') || {}).src?.match(/v=(\d+)/)?.[1] || '0';
@@ -37,6 +37,16 @@
     } catch { applyDict('en', null); return false; }
   };
   MM.setLang = setLang;
+  // nav that does not fit (long languages on desktop) collapses into the menu button
+  const navEl = $('#nav');
+  const fitNav = () => {
+    const nav = navEl; if (!nav) return; const wrap = nav.querySelector('.wrap'); const links = nav.querySelector('.nav-links');
+    nav.classList.remove('nav--tight'); if (!links || getComputedStyle(links).display === 'none') return;
+    const items = [...wrap.children].reduce((w, el) => w + el.getBoundingClientRect().width, 0) + 0.6 * 16 * (wrap.children.length - 1);
+    const linkRows = links.getBoundingClientRect().height > 48;
+    if (items > wrap.clientWidth - 8 || linkRows) nav.classList.add('nav--tight');
+  };
+  addEventListener('resize', fitNav); document.addEventListener('mm:lang', () => setTimeout(fitNav, 30)); setTimeout(fitNav, 0);
   const savedLang = store.get('mm-lang') || 'en';
   const langReady = savedLang !== 'en' ? setLang(savedLang) : Promise.resolve(true);
 
@@ -130,7 +140,7 @@
       script: [
         ['c', '# One file. Read it first.'], ['p', '$ ', 'curl -fsSLO https://megamesh.sh/megamesh.sh'], ['p', '$ ', 'less megamesh.sh'],
         ['p', '$ ', 'MEGAMESH_DOMAIN=vpn.example.com MEGAMESH_EMAIL=you@example.com bash megamesh.sh'],
-        ['o', '▶ megamesh 1.5.4 on CentOS Stream 9 (1 vCPU, 1 GB)'], ['ok', '✔ swap active · ✔ system updated · ✔ docker from signed repo'],
+        ['o', '▶ megamesh 1.5.5 on CentOS Stream 9 (1 vCPU, 1 GB)'], ['ok', '✔ swap active · ✔ system updated · ✔ docker from signed repo'],
         ['ok', '✔ firewalld: public DROP, 22/tcp 51820/udp 443/tcp'], ['ok', '✔ sshd hardened · ✔ fail2ban sshd jail · ✔ sysctl'],
         ['ok', '✔ wg-easy up, admin account created before 443 opened'], ['ok', '✔ caddy up — waiting for DNS to issue the certificate'],
         ['o', '  credentials: /root/megamesh-admin-credentials'], ['o', '  next: A record vpn.example.com → 203.0.113.10, then https://vpn.example.com/'],
@@ -186,7 +196,7 @@
     ['id','Bahasa Indonesia','Indonesian','id'],['de','Deutsch','German','de'],['ja','日本語','Japanese','jp'],['pcm','Naijá','Nigerian Pidgin','ng'],['mr','मराठी','Marathi','in'],
     ['te','తెలుగు','Telugu','in'],['tr','Türkçe','Turkish','tr'],['ta','தமிழ்','Tamil','in'],['yue','粵語','Cantonese','hk'],['vi','Tiếng Việt','Vietnamese','vn'],
     ['wuu','吳語','Wu Chinese','cn'],['tl','Filipino','Tagalog / Filipino','ph'],['ko','한국어','Korean','kr'],['fa','فارسی','Persian','ir'],['ha','Hausa','Hausa','ng'],
-    ['sw','Kiswahili','Swahili','ke'],['jv','Basa Jawa','Javanese','id'],['it','Italiano','Italian','it'],['pa','پنجابی / ਪੰਜਾਬੀ','Punjabi','pk'],['gu','ગુજરાતી','Gujarati','in'],
+    ['sw','Kiswahili','Swahili','ke'],['jv','Basa Jawa','Javanese','id'],['it','Italiano','Italian','it'],['pa','ਪੰਜਾਬੀ','Punjabi','in'],['gu','ગુજરાતી','Gujarati','in'],
     ['th','ไทย','Thai','th'],['kn','ಕನ್ನಡ','Kannada','in'],['am','አማርኛ','Amharic','et'],['bho','भोजपुरी','Bhojpuri','in'],['nan','閩南語','Min Nan (Hokkien)','tw'],
     ['yo','Yorùbá','Yoruba','ng'],['my','မြန်မာ','Burmese','mm'],['pl','Polski','Polish','pl'],['or','ଓଡ଼ିଆ','Odia','in'],['ln','Lingála','Lingala','cd'],
     ['uk','Українська','Ukrainian','ua'],['ig','Igbo','Igbo','ng'],['ml','മലയാളം','Malayalam','in'],['ms','Bahasa Melayu','Malay','my'],['nl','Nederlands','Dutch','nl'],

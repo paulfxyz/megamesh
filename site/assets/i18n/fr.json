@@ -275,6 +275,10 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
+},
+"audit": {
+"remaining": [],
+"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — Votre serveur, votre sortie.",
@@ -285,7 +289,7 @@
 "i.002": "Le code",
 "i.003": "Trois façons d'entrer",
 "i.004": "Ce que vous obtenez",
-"i.005": "Remarques franches",
+"i.005": "Remarques sincères",
 "i.006": "Votre sortie",
 "i.007": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 3v12M7 10l5 5 5-5M5 21h14\"></path></svg>Déployer le mien",
 "i.008": "Votre propre VPN · à une IP et un accès root",
@@ -383,7 +387,7 @@
 "i.098": "Audits",
 "i.099": "Copier",
 "i.100": "Déployer le mien <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
-"i.101": "Accueil",
+"i.101": "Principal",
 "i.102": "Accueil megamesh.sh",
 "i.103": "Langue",
 "i.104": "Le script",
@@ -426,7 +430,7 @@
 "d.029": "Je comprends que l'installation prend 10–30 minutes, que mon mot de passe root transite par megamesh.sh pendant ce temps sans être stocké, et que SSH reste protégé par mot de passe jusqu'à ce qu'une clé soit installée.",
 "d.030": "Installer Megamesh →",
 "d.031": "← Modifier les informations",
-"d.032": "Installation en cours",
+"d.032": "Installation",
 "d.033": "La mise à jour des paquets sur une machine 1 vCPU prend du temps — 10 à 30 minutes est une durée normale. Vous pouvez laisser cet onglet ouvert ; l'installation se poursuit sur votre serveur même si vous le fermez, et réouvrir le déployeur avec les mêmes informations la reprendra.",
 "d.034": "Connexion",
 "d.035": "Mise à jour",

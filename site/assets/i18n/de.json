@@ -277,6 +277,10 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
+},
+"audit": {
+"remaining": [],
+"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — Ihr Server, Ihr Exit-Knoten.",
@@ -434,7 +438,7 @@
 "d.035": "Aktualisieren",
 "d.036": "Härten",
 "d.037": "Container",
-"d.038": "Verifizieren",
+"d.038": "Überprüfen",
 "d.039": "Wird installiert",
 "d.040": "Jetzt erneut versuchen",
 "d.041": "Fertig. Ihr VPN ist <span class=\"grad\">installiert.</span>",

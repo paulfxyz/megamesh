@@ -267,13 +267,53 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
+},
+"audit": {
+"remaining": [
+[
+"english",
+[
+"i.070"
+],
+"identical to source"
+],
+[
+"english",
+[
+"i.086"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.059"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.060"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.061"
+],
+"identical to source"
+]
+],
+"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — 侬个服务器，侬个出口。",
 "m.i.description": "Megamesh 把最便宜个 VPS 变成带 Web 管理界面个硬化个人 WireGuard VPN。只要三个开放端口，纯密钥 SSH，fail2ban，自动 TLS，每周带健康检查同自动回滚个升级。脚本、AI 提示词或者一键部署器。开源，MIT 协议。",
 "m.i.og_title": "megamesh.sh — 侬个服务器，侬个出口。",
 "m.i.og_description": "在 1 GB VPS 上运行个硬化个人 WireGuard VPN。给运维个脚本，给 AI agent 个提示词，给其他人个 Web 部署器。开源，MIT 协议。",
-"i.001": "为什么",
+"i.001": "为啥",
 "i.002": "代码",
 "i.003": "三种部署方式",
 "i.004": "侬能得到啥",
@@ -374,11 +414,11 @@
 "i.097": "源码",
 "i.098": "审计记录",
 "i.099": "复制",
-"i.100": "部署我的 <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
-"i.101": "首页",
+"i.100": "部署我个 <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
+"i.101": "主页",
 "i.102": "megamesh.sh 主页",
 "i.103": "语言",
-"i.104": "安装脚本",
+"i.104": "脚本",
 "i.105": "跳转到脚本",
 "i.106": "切换深色模式",
 "i.107": "菜单",
@@ -389,8 +429,8 @@
 "m.d.description": "把 VPS IP、root 密码、域名同邮箱填给部署工具。伊会把 root 密码改成分你设好的新密码，安装 Megamesh，最后把管理员凭证交到你手里。",
 "d.001": "为啥",
 "d.002": "代码",
-"d.003": "你能拿到啥",
-"d.004": "实话实说",
+"d.003": "侬能得到啥",
+"d.004": "坦白说明",
 "d.005": "← 返回",
 "d.006": "入口 03 · 部署工具",
 "d.007": "部署<span class=\"grad\">我的。</span>",
@@ -437,7 +477,7 @@
 "d.048": "源码",
 "d.049": "首页",
 "d.050": "主页",
-"d.051": "megamesh.sh 首页",
+"d.051": "megamesh.sh 主页",
 "d.052": "语言",
 "d.053": "脚本",
 "d.054": "跳转到脚本",

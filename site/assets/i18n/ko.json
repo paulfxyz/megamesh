@@ -265,6 +265,46 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
+},
+"audit": {
+"remaining": [
+[
+"english",
+[
+"i.070"
+],
+"identical to source"
+],
+[
+"english",
+[
+"i.086"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.059"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.060"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.061"
+],
+"identical to source"
+]
+],
+"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — 당신의 서버, 당신의 출구.",
@@ -275,7 +315,7 @@
 "i.002": "코드",
 "i.003": "3가지 배포 방식",
 "i.004": "제공 기능",
-"i.005": "정직한 안내",
+"i.005": "솔직한 참고 사항",
 "i.006": "당신의 출구",
 "i.007": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 3v12M7 10l5 5 5-5M5 21h14\"></path></svg>내 VPN 배포하기",
 "i.008": "나만의 VPN · IP 하나와 root 권한만 있으면 준비 완료",
@@ -372,7 +412,7 @@
 "i.097": "소스 코드",
 "i.098": "보안 감사",
 "i.099": "복사",
-"i.100": "내 서버에 배포하기 <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
+"i.100": "내 VPN 배포하기 <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
 "i.101": "메인",
 "i.102": "megamesh.sh 홈",
 "i.103": "언어",

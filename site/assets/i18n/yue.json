@@ -272,6 +272,46 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
+},
+"audit": {
+"remaining": [
+[
+"english",
+[
+"i.070"
+],
+"identical to source"
+],
+[
+"english",
+[
+"i.086"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.059"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.060"
+],
+"identical to source"
+],
+[
+"english",
+[
+"d.061"
+],
+"identical to source"
+]
+],
+"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — 你嘅伺服器，你嘅出口。",
@@ -392,10 +432,10 @@
 "i.110": "返回頁頂",
 "m.d.title": "喺你嘅 VPS 上部署 Megamesh · megamesh.sh",
 "m.d.description": "為部署工具提供你嘅 VPS IP、root 密碼、功能域名同電郵。佢會將 root 密碼更改為你指定嘅新密碼，安裝 Megamesh 並將管理員登入憑據交畀你。",
-"d.001": "開發原因",
+"d.001": "點解",
 "d.002": "程式碼",
-"d.003": "你將獲得",
-"d.004": "坦白說明",
+"d.003": "你獲得嘅功能",
+"d.004": "誠實說明",
 "d.005": "← 返回",
 "d.006": "入口 03 · 部署工具",
 "d.007": "部署 <span class=\"grad\">我嘅 VPN。</span>",
@@ -442,7 +482,7 @@
 "d.048": "原始碼",
 "d.049": "主頁",
 "d.050": "主頁",
-"d.051": "megamesh.sh 主頁",
+"d.051": "megamesh.sh 首頁",
 "d.052": "語言",
 "d.053": "腳本",
 "d.054": "跳至腳本",

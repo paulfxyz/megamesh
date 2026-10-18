@@ -270,6 +270,10 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
+},
+"audit": {
+"remaining": [],
+"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — Your server, your exit.",
@@ -279,7 +283,7 @@
 "i.001": "Why",
 "i.002": "Di code",
 "i.003": "Three ways in",
-"i.004": "Wetin you dey get",
+"i.004": "Wetin you get",
 "i.005": "Honest notes",
 "i.006": "Your exit",
 "i.007": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 3v12M7 10l5 5 5-5M5 21h14\"></path></svg>Deploy mine",
@@ -336,7 +340,7 @@
 "i.058": "Swap, hostname, kernel modules wey the container go need.",
 "i.059": "Update",
 "i.060": "Full system update, Docker from de signed repo, daily automatic updates on.",
-"i.061": "Harden am",
+"i.061": "Harden",
 "i.062": "Firewall first, then sshd, fail2ban, sysctl. No lock anything before firewall open.",
 "i.063": "Containers",
 "i.064": "wg-easy alone, admin account proven, before Caddy. Fail closed if error dey.",
@@ -391,7 +395,7 @@
 "m.d.title": "Deploy Megamesh on your VPS · megamesh.sh",
 "m.d.description": "Give the deployer your VPS IP, root password, domain and email. E go change root password to the one you choose, install Megamesh and hand over with your admin credentials.",
 "d.001": "Why",
-"d.002": "The code",
+"d.002": "Di code",
 "d.003": "Wetin you get",
 "d.004": "Honest notes",
 "d.005": "← Back",

@@ -68,6 +68,11 @@ code,kbd,pre{font-family:var(--f-mono)}
 .nav-links a{padding:.5rem .8rem;border-radius:999px;font-size:var(--t-sm);color:var(--muted);transition:color .2s,background .2s}
 .nav-links a:hover{color:var(--ink);background:var(--surface2)}
 #menu{display:none}
+.nav--tight .nav-links{display:none;position:absolute;left:var(--pad);right:var(--pad);top:80px;flex-direction:column;gap:0;background:var(--surface2);border:1px solid var(--line);border-radius:var(--r);padding:.5rem;box-shadow:var(--shadow)}
+.nav--tight .nav-links.open{display:flex}
+.nav--tight .nav-links a{padding:.9rem 1rem;font-size:var(--t-base);border-radius:var(--r-sm)}
+.nav--tight #menu{display:inline-flex}
+.nav .btn,.nav .ib{flex-shrink:0}
 @media (max-width:1100px){
   .nav-links{display:none;position:absolute;left:var(--pad);right:var(--pad);top:80px;flex-direction:column;gap:0;background:var(--surface2);border:1px solid var(--line);border-radius:var(--r);padding:.5rem;box-shadow:var(--shadow)}
   .nav-links.open{display:flex}
@@ -360,6 +365,13 @@ html.rtl .eyebrow .sq,html.rtl .ways .n{margin-left:.6rem;margin-right:0}
 html:is([lang=ja],[lang=zh],[lang=yue],[lang=wuu],[lang=nan],[lang=ko],[lang=th],[lang=my],[lang=am],[lang=km]) :is(.hero__title,.h1){letter-spacing:0;line-height:1.08;font-size:calc(var(--t-3xl) * .82)}
 html:is([lang=ja],[lang=zh],[lang=yue],[lang=wuu],[lang=nan],[lang=ko],[lang=th],[lang=my],[lang=am]) .hero__title{font-size:calc(var(--t-hero) * .66);line-break:strict}
 html:is([lang=ar],[lang=ur],[lang=fa],[lang=sd],[lang=pa],[lang=hi],[lang=mr],[lang=bn],[lang=ta],[lang=te],[lang=kn],[lang=ml],[lang=gu],[lang=or],[lang=ne],[lang=bho],[lang=si]) :is(.hero__title,.h1){letter-spacing:0;line-height:1.15}
-html:is([lang=ar],[lang=ur],[lang=fa],[lang=sd],[lang=pa]) .hero__title{font-size:calc(var(--t-hero) * .8)}
+html:is([lang=ar],[lang=ur],[lang=fa],[lang=sd]) .hero__title{font-size:calc(var(--t-hero) * .8)}
 html:not([lang=en]) .manif{letter-spacing:-.01em}
 .dock .cp,.btn,.ib{white-space:nowrap}
+
+/* long words in long languages: let them break rather than push the page */
+.hero__title,.h1,.manif,.lead,.feat p,.ways .d,.honest p,.cards p{overflow-wrap:anywhere}
+.dock{max-width:calc(100vw - 2rem)}
+.dock .btn{max-width:62vw;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:420px){html:is([lang=ta],[lang=te],[lang=ml],[lang=kn],[lang=si],[lang=my],[lang=am]) :is(.hero__title){font-size:calc(var(--t-hero) * .7)}}
+.nav-links a{white-space:nowrap}
