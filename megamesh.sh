@@ -61,7 +61,7 @@ PREV_SSH_PORT=""; PREV_WG_PORT=""
 if [[ -f /etc/megamesh.conf ]]; then
   PREV_SSH_PORT=$(awk -F= '$1=="MEGAMESH_SSH_PORT"{print $2}' /etc/megamesh.conf); PREV_WG_PORT=$(awk -F= '$1=="MEGAMESH_WG_PORT"{print $2}' /etc/megamesh.conf)
 fi
-MEGAMESH_VERSION="1.5.6"
+MEGAMESH_VERSION="1.5.7"
 SELF_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 if [[ ! -f "${SELF_DIR}/scripts/status.sh" ]]; then
   # standalone download: fetch the matching release so helpers and configs are available
@@ -98,7 +98,12 @@ fi
 
 # ─── 1. Packages ─────────────────────────────────────────────────────────────
 if [[ "$FAMILY" == el ]]; then
-  if [[ "$MEGAMESH_SKIP_UPDATE" != 1 ]]; then log "dnf update (this is the slow part on 1 vCPU)"; dnf -y -q update; fi
+  if [[ "$MEGAMESH_SKIP_UPDATE" != 1 ]]; then
+    log "dnf update (this is the slow part on 1 vCPU)"
+    # one retry after a cache clean: a concurrent dnf (another run, dnf-makecache, the host's first-boot) can consume
+    # a package this transaction already downloaded, which dnf reports as a missing .rpm in /var/cache/dnf
+    dnf -y -q update || { warn "dnf update failed once — cleaning the package cache and retrying"; dnf -q clean packages; dnf -y -q update; }
+  fi
   dnf -y -q install epel-release
   dnf -y -q install curl openssl wireguard-tools firewalld fail2ban fail2ban-systemd dnf-automatic policycoreutils-python-utils python3
   if ! command -v docker >/dev/null; then
@@ -110,7 +115,10 @@ if [[ "$FAMILY" == el ]]; then
 else
   export DEBIAN_FRONTEND=noninteractive
   apt-get -qq update
-  if [[ "$MEGAMESH_SKIP_UPDATE" != 1 ]]; then log "apt upgrade"; apt-get -qq -y upgrade; fi
+  if [[ "$MEGAMESH_SKIP_UPDATE" != 1 ]]; then
+    log "apt upgrade"
+    apt-get -qq -y upgrade || { warn "apt upgrade failed once — fixing and retrying"; dpkg --configure -a; apt-get -qq -y -f install; apt-get -qq -y upgrade; }
+  fi
   apt-get -qq -y install curl openssl wireguard-tools firewalld fail2ban python3 python3-systemd unattended-upgrades ca-certificates gnupg
   if ! command -v docker >/dev/null; then
     log "Installing Docker CE from download.docker.com (signed apt repository)"
@@ -500,9 +508,16 @@ fi
 
 # ─── 11. Verify ──────────────────────────────────────────────────────────────
 log "Verification"
+# wg-easy needs a few seconds after "Started" (health check, wg0, UI); on a 1 vCPU box it can be 30+. Wait up to 90 s.
+for _i in $(seq 1 30); do
+  st=$(docker inspect -f '{{.State.Health.Status}}' wg-easy 2>/dev/null || true)
+  [[ "$st" == healthy ]] && break
+  sleep 3
+done
 docker ps --format '  {{.Names}}: {{.Status}}'
 if docker exec wg-easy wg show wg0 >/dev/null 2>&1; then ok "wg0 is up inside wg-easy"; else warn "wg0 not up yet — check: docker logs wg-easy"; fi
 redir=$(ui_redirect)
+for _i in $(seq 1 10); do [[ -n "$redir" ]] && break; sleep 3; redir=$(ui_redirect); done
 case "$redir" in
   */login*) ok "wg-easy UI answers internally and the admin account exists (login page)" ;;
   */setup*) warn "wg-easy UI is at the SETUP WIZARD — nobody has created the admin account. Do it now at https://${MEGAMESH_DOMAIN}/ before anyone else does." ;;

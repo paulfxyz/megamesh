@@ -7,7 +7,7 @@
 **Your server, your exit.**
 
 <a href="https://megamesh.sh"><img src="https://img.shields.io/badge/megamesh.sh-site_%2B_deployer-2c56f5?style=for-the-badge" alt="megamesh.sh"></a>
-<img src="https://img.shields.io/badge/version-1.5.6-060a12?style=for-the-badge" alt="version 1.5.6">
+<img src="https://img.shields.io/badge/version-1.5.7-060a12?style=for-the-badge" alt="version 1.5.7">
 <img src="https://img.shields.io/badge/WireGuard-wg--easy_v15-2c56f5?style=for-the-badge&logo=wireguard&logoColor=white" alt="WireGuard · wg-easy v15">
 <img src="https://img.shields.io/badge/firewall-DROP_%C2%B7_3_ports-060a12?style=for-the-badge" alt="firewall DROP, 3 ports">
 <img src="https://img.shields.io/badge/updates-topgrade_weekly_%2B_rollback-0e6a72?style=for-the-badge" alt="topgrade weekly + rollback">
@@ -57,7 +57,7 @@ All three start from the same two facts — an IP and a root password — and en
 
 ### 01 — Script, if you run servers
 
-A fresh VPS, root, a domain whose A record you can set. CentOS Stream 9 (the reference server) and Ubuntu 24.04 (a blank 1 vCPU / 1 GB VPS, installed through the web deployer on 2026-10-18) are verified end to end; Rocky / Alma 9 share the first code path and Debian 12 the second, but have not been run.
+A fresh VPS, root, a domain whose A record you can set. CentOS Stream 9 (the reference server), Ubuntu 24.04 (a blank 1 vCPU / 1 GB VPS, installed through the web deployer on 2026-10-18) and Rocky Linux 9.5 (same box, reinstalled, 2026-10-19) are verified end to end; Alma 9 shares Rocky's code path and Debian 12 Ubuntu's, but have not been run.
 
 ```sh
 curl -fsSLO https://megamesh.sh/megamesh.sh && less megamesh.sh      # read it first — it is one file
@@ -254,16 +254,16 @@ docs/
 
 - **Not a privacy service.** Your VPS provider sees your traffic exit their network; this hides you from the café Wi-Fi and your ISP, not from a subpoena.
 - **Not multi-tenant.** One admin, your devices. wg-easy supports many peers, but the hardening assumes a single trusted operator.
-- **Not tested everywhere.** Two distributions (CentOS Stream 9, Ubuntu 24.04), two providers, one VPS size. The deployer's full run — root-password change, install, resume after a closed tab, hand-over, credential shredding, and a second run that moved the box to a new domain — was exercised on the Ubuntu box (`vpn.paulfleury.eu`). Rocky/Alma, Debian 12 and non-default ports are reasoned, not run. Issues and PRs with a logbook of what you hit are the most useful contribution.
+- **Not tested everywhere.** Three distributions (CentOS Stream 9, Ubuntu 24.04, Rocky Linux 9.5), two providers, one VPS size. The deployer's full run — root-password change, install, resume after a closed tab, hand-over, credential shredding, and a second run that moved the box to a new domain — was exercised on the Ubuntu box (`vpn.paulfleury.eu`). Alma, Debian 12 and non-default ports are reasoned, not run. Issues and PRs with a logbook of what you hit are the most useful contribution.
 - **Not a replacement for reading.** `megamesh.sh` is ~500 lines of plain bash with comments. Read it before you run it as root on a machine you care about, and before you hand its URL to a web form.
 
 ## Status, naming, roadmap
 
-v1.5.6 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
+v1.5.7 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
 
 - **Naming**: "Megamesh" as a word, in prose; `megamesh` or `megamesh.sh` in lower case when talking about the code, the command or the site.
 - **Logo**: a single M whose two legs curve into the point of a shield, with one node where the strokes meet — [`docs/logo.svg`](docs/logo.svg) white on its blue tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`. Wordmark: **Bricolage Grotesque 800**, `megamesh` with a smaller italic `.sh`. The mark draws itself in on load. Hover is one big zoom-in explosion: the shield overshoots to 2.3× with a flash and a burst of blue sparks, then settles larger with a stream of sparkles around it; the `.sh` goes blue. Click is the bigger move: a hard shrink, then a 3× pop with a double firework burst of streaks, squares and dots and a shockwave ring. No wave, no tilt, no breathing, nothing moves sideways — size and particles only, in the navigation and in the footer alike. CSS for the mark, a tiny canvas for the particles, all of it off under `prefers-reduced-motion`.
-- **Planned**: native-speaker review of the translations, a Debian 12 and a Rocky 9 run, SSH-via-VPN with a confirm-or-rollback window.
+- **Planned**: native-speaker review of the translations, a Debian 12 run, SSH-via-VPN with a confirm-or-rollback window.
 - **Not planned**: OpenVPN, multi-user auth, turning this into a product.
 
 ## The story

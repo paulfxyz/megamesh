@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.7 — 2026-10-19
+
+- **Rocky Linux 9.5 verified end to end** on a blank 1 vCPU / 700 MB VPS (`vpn.paulfleury.eu`, reinstalled): swap, dnf update, Docker CE, firewalld, SSH hardening, fail2ban, wg-easy admin created unattended, Let's Encrypt certificate over TLS-ALPN with port 80 closed, admin login checked in a browser. Alma 9 shares the code path.
+- **`dnf update` / `apt upgrade` retry once.** Two installs collided on the test box (a web-deployer run and a manual one, minutes apart) and the second `dnf update` died on a package the first transaction had already consumed from the shared cache. The installer now cleans the package cache and retries once before giving up; apt gets `dpkg --configure -a` + `-f install` and a retry.
+- **Verification waits for wg-easy.** The final check used to run a second after `docker compose up`, so on a slow box it reported "wg0 not up yet" and an empty UI redirect even though both were fine thirty seconds later. It now waits for the container's health check (up to 90 s) and polls the UI before judging.
+
 ## 1.5.6 — 2026-10-18
 
 - **A real footer.** Brand block with the animated mark and the tagline, three link columns (Project, Ways in, Trust — the official exit, `egress.json`, the security policy, issues), status line with the official-exit date. The deployer page gets the compact version. Sixteen new strings translated and reviewed in all 49 languages; the translation tool now reviews only the strings generated in a run, so accepted translations are never reopened.
