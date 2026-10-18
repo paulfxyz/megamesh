@@ -1,226 +1,216 @@
 <!doctype html>
 <html lang="en" data-theme="light">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>megamesh.sh — Your server. Your tunnel. Your exit.</title>
-<meta name="description" content="Megamesh turns the cheapest VPS into a hardened personal WireGuard VPN with a web admin. Three open ports, key-only SSH, fail2ban, automatic TLS, weekly health-checked upgrades with rollback. Script, AI prompt, or one-click deployer. Open source, MIT.">
-<meta property="og:title" content="megamesh.sh — Your server. Your tunnel. Your exit.">
-<meta property="og:description" content="A hardened personal WireGuard VPN on a 1 GB VPS. Script for sysops, prompt for AI agents, a web deployer for everyone else. Open source, MIT.">
-<meta property="og:image" content="https://megamesh.sh/assets/og.png">
-<meta property="og:url" content="https://megamesh.sh/">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#f2f4f6">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/assets/style.css?v=1792341489">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>megamesh.sh — Your server, your exit.</title>
+<meta name="description" content="Megamesh turns the cheapest VPS into a hardened personal WireGuard VPN with a web admin. Three open ports, key-only SSH, fail2ban, automatic TLS, weekly health-checked upgrades with rollback. Script, AI prompt, or one-click deployer. Open source, MIT."/>
+<meta property="og:title" content="megamesh.sh — Your server, your exit."/>
+<meta property="og:description" content="A hardened personal WireGuard VPN on a 1 GB VPS. Script for sysops, prompt for AI agents, a web deployer for everyone else. Open source, MIT."/>
+<meta property="og:image" content="https://megamesh.sh/assets/og.png"/>
+<meta property="og:url" content="https://megamesh.sh/"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="theme-color" content="#f2f4f6"/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+<link rel="stylesheet" href="/assets/style.css?v=1792345888"/>
 <script>(function(){try{var t=localStorage.getItem('mm-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
 </head>
 <body>
 <div class="prog" id="prog" aria-hidden="true"></div>
-
-<nav class="nav" id="nav" aria-label="Main">
-  <div class="wrap">
-    <a class="brand" href="/" id="brand" aria-label="megamesh.sh home">
-      <span class="logo"><svg viewBox="0 0 64 64" aria-hidden="true"><path class="m" d="M14 14 V34 C14 44 21 51.5 32 56 C43 51.5 50 44 50 34 V14 M14 14 L32 32 L50 14"/><circle class="node" cx="32" cy="32" r="3.8"/></svg><i class="ring"></i><i class="ring r2"></i></span>
-      <span class="word">megamesh<span class="sh">.sh</span></span>
-    </a>
-    <div class="nav-links" id="links">
-      <a href="#why">Why</a><a href="#code">The code</a><a href="#ways">Three ways in</a><a href="#inside">What you get</a><a href="#honest">Honest notes</a><a href="#exit">Your exit</a>
-    </div>
-    <button class="ib" id="lang" type="button" aria-haspopup="dialog" aria-controls="lang-modal" title="Language"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span>EN</span></button>
-    <a class="ib sq" href="#code" title="The script" aria-label="Jump to the script"><svg viewBox="0 0 24 24"><path d="M5 7l5 5-5 5M12 17h7"/></svg></a>
-    <button class="ib sq" id="theme" type="button" aria-label="Toggle dark mode" aria-pressed="false"><svg class="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg><svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
-    <a class="btn btn--solid btn--sm cta-nav" href="/deploy/"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Deploy mine</a>
-    <button class="ib sq" id="menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="links"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></svg></button>
-  </div>
-</nav>
-
-<header class="hero">
-  <svg class="lines" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">
-    <defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#2c56f5"/><stop offset="1" stop-color="#0e6a72"/></linearGradient></defs>
-    <path d="M0 120 C300 100 500 160 800 130 S1300 90 1600 120"/><path d="M0 220 C300 200 500 260 800 230 S1300 190 1600 220"/><path d="M0 320 C300 300 500 360 800 330 S1300 290 1600 320"/><path d="M0 420 C300 400 500 460 800 430 S1300 390 1600 420"/><path d="M0 520 C300 500 500 560 800 530 S1300 490 1600 520"/><path d="M0 620 C300 600 500 660 800 630 S1300 590 1600 620"/><path d="M0 720 C300 700 500 760 800 730 S1300 690 1600 720"/><path d="M0 820 C300 800 500 860 800 830 S1300 790 1600 820"/>
-    <path class="hi" d="M0 270 C300 250 500 310 800 280 S1300 240 1600 270"/>
-  </svg>
-  <div class="wrap">
-    <div class="kicker rv">Your own VPN · one IP and root away</div>
-    <h1 class="hero__title rv d1">Your server,<span class="r2">your <span class="grad">exit.</span></span></h1>
-    <div class="hero__grid">
-      <div class="hero__copy rv d2">
-        <p>Megamesh turns the cheapest VPS you can rent into a hardened personal WireGuard VPN with a web admin for your devices. Three open ports, key-only SSH, automatic TLS, weekly upgrades that roll back on their own. Yours, auditable, MIT.</p>
-        <div class="hero__cta">
-          <a class="btn btn--solid" href="/deploy/">Deploy mine <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="btn btn--ghost" href="https://github.com/paulfxyz/megamesh" rel="noopener"><span style="color:var(--warn)">★</span> Star on GitHub <span class="mono" data-gh="stars" style="color:var(--muted)">—</span></a>
-        </div>
-      </div>
-      <div class="stats rv d3" id="stats">
-        <div><div class="k">Open ports · total</div><div class="v">3</div><div class="s">ssh · wireguard · https</div><div class="bar"><i style="--w:3%"></i></div></div>
-        <div><div class="k">RAM needed</div><div class="v ink">1 GB</div><div class="s">~400 MB used after install</div><div class="bar"><i style="--w:40%"></i></div></div>
-        <div><div class="k">Accounts with us</div><div class="v">0</div><div class="s">nothing stored · nothing logged</div><div class="bar"><i style="--w:0%"></i></div></div>
-      </div>
-    </div>
-  </div>
-</header>
-<div class="ticker" aria-hidden="true"><div><span>WireGuard</span><span>wg-easy v15</span><span>Caddy 2</span><span>Let's Encrypt</span><span>firewalld · DROP</span><span>fail2ban</span><span>topgrade</span><span>CentOS Stream 9</span><span>1 vCPU</span><span>MIT</span><span>WireGuard</span><span>wg-easy v15</span><span>Caddy 2</span><span>Let's Encrypt</span><span>firewalld · DROP</span><span>fail2ban</span><span>topgrade</span><span>CentOS Stream 9</span><span>1 vCPU</span><span>MIT</span></div></div>
-
-<section id="why">
-  <div class="wrap">
-    <div class="topright"><div class="kicker" style="margin:0">01 / Why</div><span class="num">subscriber → operator</span></div>
-    <p class="manif" id="manif">Renting a tunnel, you're a <em class="hot">subscriber</em>. Running one, you're the <em class="acc">operator</em>. Commercial VPNs were built for scale, not for you: a shared exit, a privacy policy you take on faith, a box you will never see. Most self-hosting guides stop at “WireGuard is up” and leave the door open. Megamesh is the rest of the job — hardened by default, on a VPS that costs less than the subscription.</p>
-  </div>
-</section>
-
-<section id="code">
-  <div class="wrap">
-    <div class="code">
-      <div class="rv">
-        <div class="kicker">02 / Open source</div>
-        <h2 class="h1">The code is the product.</h2>
-        <p class="lead">One bash file you can read in ten minutes, a prompt for your AI agent, and the configs running on the reference server — published whole, MIT, audited twice by three frontier models with every finding and what was done about it.</p>
-        <ul class="ways" id="ways">
-          <li><span class="n">01</span><div><div class="t">Read the script</div><div class="d">Idempotent, non-interactive, every setting an environment variable. Re-running keeps your choices.</div></div><a class="go" href="https://github.com/paulfxyz/megamesh/blob/main/megamesh.sh" rel="noopener">megamesh.sh <svg viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></svg></a></li>
-          <li><span class="n">02</span><div><div class="t">Hand it to your agent</div><div class="d">PROMPT.md carries the goal, the safety rules and the six traps we hit, so the agent starts at the end.</div></div><a class="go" href="https://github.com/paulfxyz/megamesh/blob/main/PROMPT.md" rel="noopener">PROMPT.md <svg viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></svg></a></li>
-          <li class="hi"><span class="n">03</span><div><div class="t">Or just deploy it</div><div class="d">IP, root password, domain, email. It changes the root password to one you choose, installs, and hands over your admin login.</div></div><a class="circle" href="/deploy/" aria-label="Open the deployer"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
-        </ul>
-      </div>
-      <div class="rv d1">
-        <div class="term" id="term">
-          <div class="term__bar"><i></i><i></i><i></i>
-            <div class="term__tabs" role="tablist"><button role="tab" aria-selected="true" data-tab="script">script</button><button role="tab" aria-selected="false" data-tab="agent">agent</button><button role="tab" aria-selected="false" data-tab="status">status</button></div>
-            <div class="term__right"><span>~/megamesh</span><button type="button" data-copy="curl -fsSLO https://megamesh.sh/megamesh.sh">Copy</button></div>
-          </div>
-          <div class="term__body" id="term-body" aria-live="polite"></div>
-        </div>
-        <div class="gh" id="gh">
-          <div><div class="k">Stars</div><div class="v" data-gh="stars">—</div></div>
-          <div><div class="k">Latest release</div><div class="v" data-gh="release">—</div></div>
-          <div><div class="k">Last activity</div><div class="v" data-gh="pushed">—</div></div>
-          <div><div class="k">Licence</div><div class="v">MIT</div></div>
-        </div>
-        <div class="live" id="gh-live">Live from GitHub · github.com/paulfxyz/megamesh</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="inside">
-  <div class="wrap">
-    <div class="head rv">
-      <div><div class="kicker">03 / What you get</div><h2 class="h1">Three doors.<br>Everything else is a wall.</h2></div>
-      <div class="right"><p class="lead">The public internet reaches exactly three ports. The firewall's default is <code>DROP</code>, not reject: scanners get silence. Inside, two containers and a handful of host settings — all written down, none of them clever.</p></div>
-    </div>
-    <div class="feat rv d1">
-      <div><svg viewBox="0 0 48 48"><path d="M8 40V14h32v26M18 40V26h12v14M24 14V8"/></svg><div class="k">Firewall</div><h3>Three doors, one wall</h3><p>tcp/22, udp/51820, tcp/443 and nothing else. No port 80, no admin port, no Docker ports leaking through. ICMP limited to ping and path-MTU.</p></div>
-      <div><svg viewBox="0 0 48 48"><circle cx="18" cy="24" r="8"/><path d="M26 24h14M34 24v6M39 24v4"/></svg><div class="k">SSH</div><h3>Key-only, then fail2ban</h3><p>Password login stays on until a key is proven to work, then goes away. Three tries, 24 h bans doubling to 30 days. 76,073 attempts became a handful of addresses.</p></div>
-      <div><svg viewBox="0 0 48 48"><path d="M24 6l14 5v12c0 9-6 15-14 19C16 38 10 32 10 23V11l14-5Z"/><path d="M18 24l4 4 8-9"/></svg><div class="k">TLS</div><h3>Automatic certificates</h3><p>Caddy terminates 443 with Let's Encrypt over TLS-ALPN — no port 80 ever opens. HSTS, strict headers, Server header stripped.</p></div>
-      <div><svg viewBox="0 0 48 48"><rect x="8" y="12" width="32" height="24" rx="3"/><path d="M8 20h32M16 28h8"/></svg><div class="k">Admin</div><h3>wg-easy, behind the wall</h3><p>Peers, QR codes, stats, 2FA. The UI port is never published; the admin account is created unattended before 443 is reachable, so nobody can race you to the wizard.</p></div>
-      <div><svg viewBox="0 0 48 48"><path d="M24 8v8M24 32v8M8 24h8M32 24h8"/><circle cx="24" cy="24" r="6"/><path d="M36 12a16 16 0 0 1 0 24"/></svg><div class="k">Upgrades</div><h3>Weekly, health-checked</h3><p>topgrade pulls packages and container images, restarts, verifies the tunnel is up and the admin answers — or rolls back to the images that worked. Pinned by SHA-256.</p></div>
-      <div><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"/><path d="M8 24h32M24 8c5 5 5 27 0 32M24 8c-5 5-5 27 0 32"/></svg><div class="k">VPN-only mode</div><h3>Admin reachable only from inside</h3><p>One command makes the admin page answer only through the tunnel; outsiders get a 302 to any URL you choose. Certificates keep renewing.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="pipeline">
-  <div class="wrap rv" id="pipe-sec">
-    <div class="head">
-      <div><div class="kicker">04 / Under the hood</div><h2 class="h1">From root to tunnel.</h2></div>
-      <div class="right"><p class="lead">No wizard, no questions. The installer runs the same five stages every time and refuses to open a door it cannot prove you can walk through.</p></div>
-    </div>
-    <div class="pipe">
-      <svg viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true">
-        <path class="base" d="M10 45 C130 10 200 80 300 45 S470 10 600 45 S770 80 900 45 S1070 10 1190 45"/>
-        <path class="glow" d="M10 45 C130 10 200 80 300 45 S470 10 600 45 S770 80 900 45 S1070 10 1190 45"/>
-        <circle class="dot on" cx="10" cy="45" r="5"/><circle class="dot" cx="300" cy="45" r="5"/><circle class="dot" cx="600" cy="45" r="5"/><circle class="dot" cx="900" cy="45" r="5"/><circle class="dot" cx="1190" cy="45" r="5"/>
-      </svg>
-      <div class="stages">
-        <div><div class="n">01</div><div class="t">Connect</div><div class="d">Swap, hostname, kernel modules the container will need.</div></div>
-        <div><div class="n">02</div><div class="t">Update</div><div class="d">Full system update, Docker from the signed repo, daily automatic updates on.</div></div>
-        <div><div class="n">03</div><div class="t">Harden</div><div class="d">Firewall first, then sshd, fail2ban, sysctl. Never lock before the firewall is open.</div></div>
-        <div><div class="n">04</div><div class="t">Containers</div><div class="d">wg-easy alone, admin account proven, only then Caddy. Fails closed.</div></div>
-        <div><div class="n">05</div><div class="t">Verify</div><div class="d">Handshake, ports, certificate retry, timers. Then it hands you the credentials.</div></div>
-      </div>
-    </div>
-    <div class="big"><b data-count="76073">0</b><p>failed SSH logins the reference server took in 25 days before Megamesh — with fail2ban “running” and zero jails. After: a handful of banned addresses, and silence.</p></div>
-    <div class="bars">
-      <div class="l">Typical VPS image, untouched<small>ports answering from the internet</small></div><div class="b"><i class="hot" style="--w:100%"></i></div><div class="v">8–12</div>
-      <div class="l">Guide-followed WireGuard box<small>wg + ssh + web + docker leaks</small></div><div class="b"><i style="--w:45%"></i></div><div class="v">5–6</div>
-      <div class="l">Megamesh<small>ssh · wg · https</small></div><div class="b"><i class="acc" style="--w:25%"></i></div><div class="v">3</div>
-    </div>
-  </div>
-</section>
-
-<section id="honest">
-  <div class="wrap">
-    <div class="head rv">
-      <div><div class="kicker">05 / Honest notes</div><h2 class="h1">What this is not.</h2></div>
-      <div class="right"><p class="lead">A personal VPN changes who can see your traffic, not whether anyone can. The repository says exactly what has and has not been exercised.</p></div>
-    </div>
-    <div class="honest rv d1">
-      <div><div class="k">— 01</div><h3>Not a privacy service</h3><p>Your VPS provider sees your traffic leave their network. Megamesh hides you from the café Wi-Fi and your ISP, not from a subpoena.</p></div>
-      <div><div class="k">— 02</div><h3>Not multi-tenant</h3><p>One admin, your devices. wg-easy supports many peers, but the hardening assumes a single trusted operator.</p></div>
-      <div><div class="k">— 03</div><h3>Not finished by the deployer</h3><p>It changes your root password but leaves SSH on a password until someone installs a key, and leaves 2FA and VPN-only mode for you to switch on. Twenty minutes with the <a class="ul" href="https://github.com/paulfxyz/megamesh/blob/main/docs/HARDENING.md" rel="noopener">hardening notes</a> finishes it.</p></div>
-      <div><div class="k">— 04</div><h3>Not tested everywhere</h3><p>CentOS Stream 9 and Ubuntu 24.04 on a 1 vCPU / 1 GB VPS are verified end to end — the second one through the deployer itself. Rocky, Alma and Debian share those code paths but have not been run yet.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="exit">
-  <div class="wrap">
-    <div class="exit">
-      <div class="rv">
-        <div class="kicker">06 / Your exit</div>
-        <h2 class="h1">One address.<br><span class="grad">Yours.</span></h2>
-        <p class="lead">Once your devices are on the tunnel, everything you do leaves from your server's address. That is the point — and a fact others can use: a friend can allow-list you, your own boxes can trust you, a rate limit can make an exception. The author publishes his, and the repository is the source of truth for it.</p>
-      </div>
-      <div class="rv d1">
-        <div class="egress">
-          <div><span>Hostname</span><b>paulfleury.network</b></div>
-          <div><span>IPv4</span><b class="big-ip">151.243.225.214</b></div>
-          <div><span>Reverse DNS</span><b>forward-confirmed</b></div>
-          <div><span>Machine-readable</span><b><a class="ul" href="https://github.com/paulfxyz/megamesh/blob/main/egress.json" rel="noopener">egress.json</a></b></div>
-          <div><span>Verify</span><b style="font-weight:400;color:var(--muted);font-size:var(--t-xs)">dig +short A paulfleury.network · dig +short -x 151.243.225.214 — they must agree</b></div>
-        </div>
-        <p class="muted" style="font-size:var(--t-sm);margin:1rem 0 0">It identifies a server, not a person. Keep authentication in front of whatever you allow-list.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="who">
-  <div class="wrap">
-    <div class="head rv">
-      <div><div class="kicker">07 / Who's behind it</div><h2 class="h1">One operator, published whole.</h2></div>
-      <div class="right"><p class="lead">Megamesh is the single-person version of the boxes <a class="ul" href="https://megastack.sh" rel="noopener">megastack.sh</a>, the author's cybersecurity consultancy, builds for clients — designed and operated with an AI agent over SSH, then torn apart by three other models before going public.</p></div>
-    </div>
-    <div class="about rv d1">
-      <div class="av" aria-hidden="true">PF</div>
-      <div>
-        <strong>Paul Fleury</strong> — French internet entrepreneur in Lisbon, hacking around on the internet since the late nineties.
-        <p>The whole story — the logbook of the first deployment, the audits, the fixes — is in the repository.</p>
-        <div class="links">
-          <a class="btn btn--ghost btn--sm" href="https://www.linkedin.com/in/paulfxyz/" rel="noopener" data-linkedin>LinkedIn</a>
-          <a class="btn btn--ghost btn--sm" href="https://github.com/paulfxyz/megamesh" rel="noopener">GitHub</a>
-          <a class="btn btn--ghost btn--sm" href="https://megastack.sh" rel="noopener">megastack.sh</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <span>megamesh.sh · MIT · Megamesh is a word, megamesh.sh is a command</span>
-    <span><a href="https://github.com/paulfxyz/megamesh" rel="noopener">Source</a> · <a href="https://github.com/paulfxyz/megamesh/blob/main/docs/AUDIT.md" rel="noopener">Audits</a> · <a href="https://github.com/paulfxyz/megamesh/blob/main/egress.json" rel="noopener">egress.json</a> · <a href="mailto:hi@megastack.sh">hi@megastack.sh</a></span>
-  </div>
-</footer>
-
-<div class="dock" id="dock" role="region" aria-label="Quick start">
-  <span class="dock__dot" aria-hidden="true"></span>
-  <code>curl -fsSLO https://megamesh.sh/megamesh.sh</code>
-  <button class="cp" type="button" data-copy="curl -fsSLO https://megamesh.sh/megamesh.sh">Copy</button>
-  <a class="btn btn--solid btn--sm" href="/deploy/">Deploy mine <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+<nav class="nav" id="nav" aria-label="Main" data-i18n-attrs="aria-label:i.101">
+<div class="wrap">
+<a class="brand" href="/" id="brand" aria-label="megamesh.sh home" data-i18n-skip="" data-i18n-attrs="aria-label:i.102">
+<span class="logo"><svg viewBox="0 0 64 64" aria-hidden="true"><path class="m" d="M14 14 V34 C14 44 21 51.5 32 56 C43 51.5 50 44 50 34 V14 M14 14 L32 32 L50 14"></path><circle class="node" cx="32" cy="32" r="3.8"></circle></svg><i class="ring"></i><i class="ring r2"></i></span>
+<span class="word">megamesh<span class="sh">.sh</span></span>
+</a>
+<div class="nav-links" id="links">
+<a href="#why" data-i18n="i.001">Why</a><a href="#code" data-i18n="i.002">The code</a><a href="#ways" data-i18n="i.003">Three ways in</a><a href="#inside" data-i18n="i.004">What you get</a><a href="#honest" data-i18n="i.005">Honest notes</a><a href="#exit" data-i18n="i.006">Your exit</a>
 </div>
-<button class="top" id="top" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-
-<script src="/assets/ui.js?v=1792341489" defer></script>
+<button class="ib" id="lang" type="button" aria-haspopup="dialog" aria-controls="lang-modal" title="Language" data-i18n-attrs="title:i.103"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg><span>EN</span></button>
+<a class="ib sq" href="#code" title="The script" aria-label="Jump to the script" data-i18n-attrs="title:i.104,aria-label:i.105"><svg viewBox="0 0 24 24"><path d="M5 7l5 5-5 5M12 17h7"></path></svg></a>
+<button class="ib sq" id="theme" type="button" aria-label="Toggle dark mode" aria-pressed="false" data-i18n-attrs="aria-label:i.106"><svg class="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"></path></svg><svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg></button>
+<a class="btn btn--solid btn--sm cta-nav" href="/deploy/" data-i18n="i.007"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>Deploy mine</a>
+<button class="ib sq" id="menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="links" data-i18n-attrs="aria-label:i.107"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"></path></svg></button>
+</div>
+</nav>
+<header class="hero">
+<svg class="lines" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">
+<defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#2c56f5"></stop><stop offset="1" stop-color="#0e6a72"></stop></linearGradient></defs>
+<path d="M0 120 C300 100 500 160 800 130 S1300 90 1600 120"></path><path d="M0 220 C300 200 500 260 800 230 S1300 190 1600 220"></path><path d="M0 320 C300 300 500 360 800 330 S1300 290 1600 320"></path><path d="M0 420 C300 400 500 460 800 430 S1300 390 1600 420"></path><path d="M0 520 C300 500 500 560 800 530 S1300 490 1600 520"></path><path d="M0 620 C300 600 500 660 800 630 S1300 590 1600 620"></path><path d="M0 720 C300 700 500 760 800 730 S1300 690 1600 720"></path><path d="M0 820 C300 800 500 860 800 830 S1300 790 1600 820"></path>
+<path class="hi" d="M0 270 C300 250 500 310 800 280 S1300 240 1600 270"></path>
+</svg>
+<div class="wrap">
+<div class="kicker rv" data-i18n="i.008">Your own VPN · one IP and root away</div>
+<h1 class="hero__title rv d1" data-i18n="i.009">Your server,<span class="r2">your <span class="grad">exit.</span></span></h1>
+<div class="hero__grid">
+<div class="hero__copy rv d2">
+<p data-i18n="i.010">Megamesh turns the cheapest VPS you can rent into a hardened personal WireGuard VPN with a web admin for your devices. Three open ports, key-only SSH, automatic TLS, weekly upgrades that roll back on their own. Yours, auditable, MIT.</p>
+<div class="hero__cta">
+<a class="btn btn--solid" href="/deploy/" data-i18n="i.011">Deploy mine <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+<a class="btn btn--ghost" href="https://github.com/paulfxyz/megamesh" rel="noopener" data-i18n-skip=""><span style="color:var(--warn)">★</span> <span data-i18n-unit="" data-i18n="i.012">Star on GitHub</span> <span class="mono" data-gh="stars" style="color:var(--muted)">—</span></a>
+</div>
+</div>
+<div class="stats rv d3" id="stats">
+<div><div class="k" data-i18n="i.013">Open ports · total</div><div class="v">3</div><div class="s">ssh · wireguard · https</div><div class="bar"><i style="--w:3%"></i></div></div>
+<div><div class="k" data-i18n="i.014">RAM needed</div><div class="v ink">1 GB</div><div class="s" data-i18n="i.015">~400 MB used after install</div><div class="bar"><i style="--w:40%"></i></div></div>
+<div><div class="k" data-i18n="i.016">Accounts with us</div><div class="v">0</div><div class="s" data-i18n="i.017">nothing stored · nothing logged</div><div class="bar"><i style="--w:0%"></i></div></div>
+</div>
+</div>
+</div>
+</header>
+<div class="ticker" aria-hidden="true" data-i18n-skip=""><div><span>WireGuard</span><span>wg-easy v15</span><span>Caddy 2</span><span>Let's Encrypt</span><span>firewalld · DROP</span><span>fail2ban</span><span>topgrade</span><span>CentOS Stream 9</span><span>1 vCPU</span><span>MIT</span><span>WireGuard</span><span>wg-easy v15</span><span>Caddy 2</span><span>Let's Encrypt</span><span>firewalld · DROP</span><span>fail2ban</span><span>topgrade</span><span>CentOS Stream 9</span><span>1 vCPU</span><span>MIT</span></div></div>
+<section id="why">
+<div class="wrap">
+<div class="topright"><div class="kicker" style="margin:0" data-i18n="i.018">01 / Why</div><span class="num" data-i18n="i.019">subscriber → operator</span></div>
+<p class="manif" id="manif" data-i18n="i.020">Renting a tunnel, you're a <em class="hot">subscriber</em>. Running one, you're the <em class="acc">operator</em>. Commercial VPNs were built for scale, not for you: a shared exit, a privacy policy you take on faith, a box you will never see. Most self-hosting guides stop at “WireGuard is up” and leave the door open. Megamesh is the rest of the job — hardened by default, on a VPS that costs less than the subscription.</p>
+</div>
+</section>
+<section id="code">
+<div class="wrap">
+<div class="code">
+<div class="rv">
+<div class="kicker" data-i18n="i.021">02 / Open source</div>
+<h2 class="h1" data-i18n="i.022">The code is the product.</h2>
+<p class="lead" data-i18n="i.023">One bash file you can read in ten minutes, a prompt for your AI agent, and the configs running on the reference server — published whole, MIT, audited twice by three frontier models with every finding and what was done about it.</p>
+<ul class="ways" id="ways">
+<li><span class="n">01</span><div><div class="t" data-i18n="i.024">Read the script</div><div class="d" data-i18n="i.025">Idempotent, non-interactive, every setting an environment variable. Re-running keeps your choices.</div></div><a class="go" href="https://github.com/paulfxyz/megamesh/blob/main/megamesh.sh" rel="noopener">megamesh.sh <svg viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"></path></svg></a></li>
+<li><span class="n">02</span><div><div class="t" data-i18n="i.026">Hand it to your agent</div><div class="d" data-i18n="i.027">PROMPT.md carries the goal, the safety rules and the six traps we hit, so the agent starts at the end.</div></div><a class="go" href="https://github.com/paulfxyz/megamesh/blob/main/PROMPT.md" rel="noopener">PROMPT.md <svg viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"></path></svg></a></li>
+<li class="hi"><span class="n">03</span><div><div class="t" data-i18n="i.028">Or just deploy it</div><div class="d" data-i18n="i.029">IP, root password, domain, email. It changes the root password to one you choose, installs, and hands over your admin login.</div></div><a class="circle" href="/deploy/" aria-label="Open the deployer" data-i18n-attrs="aria-label:i.108"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></li>
+</ul>
+</div>
+<div class="rv d1">
+<div class="term" id="term">
+<div class="term__bar"><i></i><i></i><i></i>
+<div class="term__tabs" role="tablist"><button role="tab" aria-selected="true" data-tab="script">script</button><button role="tab" aria-selected="false" data-tab="agent">agent</button><button role="tab" aria-selected="false" data-tab="status">status</button></div>
+<div class="term__right"><span>~/megamesh</span><button type="button" data-copy="curl -fsSLO https://megamesh.sh/megamesh.sh" data-i18n="i.030">Copy</button></div>
+</div>
+<div class="term__body" id="term-body" aria-live="polite"></div>
+</div>
+<div class="gh" id="gh">
+<div><div class="k" data-i18n="i.031">Stars</div><div class="v" data-gh="stars">—</div></div>
+<div><div class="k" data-i18n="i.032">Latest release</div><div class="v" data-gh="release">—</div></div>
+<div><div class="k" data-i18n="i.033">Last activity</div><div class="v" data-gh="pushed">—</div></div>
+<div><div class="k" data-i18n="i.034">Licence</div><div class="v">MIT</div></div>
+</div>
+<div class="live" id="gh-live" data-i18n-skip="">Live from GitHub · github.com/paulfxyz/megamesh</div>
+</div>
+</div>
+</div>
+</section>
+<section id="inside">
+<div class="wrap">
+<div class="head rv">
+<div><div class="kicker" data-i18n="i.035">03 / What you get</div><h2 class="h1" data-i18n="i.036">Three doors.<br/>Everything else is a wall.</h2></div>
+<div class="right"><p class="lead" data-i18n="i.037">The public internet reaches exactly three ports. The firewall's default is <code>DROP</code>, not reject: scanners get silence. Inside, two containers and a handful of host settings — all written down, none of them clever.</p></div>
+</div>
+<div class="feat rv d1">
+<div><svg viewBox="0 0 48 48"><path d="M8 40V14h32v26M18 40V26h12v14M24 14V8"></path></svg><div class="k" data-i18n="i.038">Firewall</div><h3 data-i18n="i.039">Three doors, one wall</h3><p data-i18n="i.040">tcp/22, udp/51820, tcp/443 and nothing else. No port 80, no admin port, no Docker ports leaking through. ICMP limited to ping and path-MTU.</p></div>
+<div><svg viewBox="0 0 48 48"><circle cx="18" cy="24" r="8"></circle><path d="M26 24h14M34 24v6M39 24v4"></path></svg><div class="k">SSH</div><h3 data-i18n="i.041">Key-only, then fail2ban</h3><p data-i18n="i.042">Password login stays on until a key is proven to work, then goes away. Three tries, 24 h bans doubling to 30 days. 76,073 attempts became a handful of addresses.</p></div>
+<div><svg viewBox="0 0 48 48"><path d="M24 6l14 5v12c0 9-6 15-14 19C16 38 10 32 10 23V11l14-5Z"></path><path d="M18 24l4 4 8-9"></path></svg><div class="k">TLS</div><h3 data-i18n="i.043">Automatic certificates</h3><p data-i18n="i.044">Caddy terminates 443 with Let's Encrypt over TLS-ALPN — no port 80 ever opens. HSTS, strict headers, Server header stripped.</p></div>
+<div><svg viewBox="0 0 48 48"><rect x="8" y="12" width="32" height="24" rx="3"></rect><path d="M8 20h32M16 28h8"></path></svg><div class="k" data-i18n="i.045">Admin</div><h3 data-i18n="i.046">wg-easy, behind the wall</h3><p data-i18n="i.047">Peers, QR codes, stats, 2FA. The UI port is never published; the admin account is created unattended before 443 is reachable, so nobody can race you to the wizard.</p></div>
+<div><svg viewBox="0 0 48 48"><path d="M24 8v8M24 32v8M8 24h8M32 24h8"></path><circle cx="24" cy="24" r="6"></circle><path d="M36 12a16 16 0 0 1 0 24"></path></svg><div class="k" data-i18n="i.048">Upgrades</div><h3 data-i18n="i.049">Weekly, health-checked</h3><p data-i18n="i.050">topgrade pulls packages and container images, restarts, verifies the tunnel is up and the admin answers — or rolls back to the images that worked. Pinned by SHA-256.</p></div>
+<div><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"></circle><path d="M8 24h32M24 8c5 5 5 27 0 32M24 8c-5 5-5 27 0 32"></path></svg><div class="k" data-i18n="i.051">VPN-only mode</div><h3 data-i18n="i.052">Admin reachable only from inside</h3><p data-i18n="i.053">One command makes the admin page answer only through the tunnel; outsiders get a 302 to any URL you choose. Certificates keep renewing.</p></div>
+</div>
+</div>
+</section>
+<section id="pipeline">
+<div class="wrap rv" id="pipe-sec">
+<div class="head">
+<div><div class="kicker" data-i18n="i.054">04 / Under the hood</div><h2 class="h1" data-i18n="i.055">From root to tunnel.</h2></div>
+<div class="right"><p class="lead" data-i18n="i.056">No wizard, no questions. The installer runs the same five stages every time and refuses to open a door it cannot prove you can walk through.</p></div>
+</div>
+<div class="pipe">
+<svg viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true">
+<path class="base" d="M10 45 C130 10 200 80 300 45 S470 10 600 45 S770 80 900 45 S1070 10 1190 45"></path>
+<path class="glow" d="M10 45 C130 10 200 80 300 45 S470 10 600 45 S770 80 900 45 S1070 10 1190 45"></path>
+<circle class="dot on" cx="10" cy="45" r="5"></circle><circle class="dot" cx="300" cy="45" r="5"></circle><circle class="dot" cx="600" cy="45" r="5"></circle><circle class="dot" cx="900" cy="45" r="5"></circle><circle class="dot" cx="1190" cy="45" r="5"></circle>
+</svg>
+<div class="stages">
+<div><div class="n">01</div><div class="t" data-i18n="i.057">Connect</div><div class="d" data-i18n="i.058">Swap, hostname, kernel modules the container will need.</div></div>
+<div><div class="n">02</div><div class="t" data-i18n="i.059">Update</div><div class="d" data-i18n="i.060">Full system update, Docker from the signed repo, daily automatic updates on.</div></div>
+<div><div class="n">03</div><div class="t" data-i18n="i.061">Harden</div><div class="d" data-i18n="i.062">Firewall first, then sshd, fail2ban, sysctl. Never lock before the firewall is open.</div></div>
+<div><div class="n">04</div><div class="t" data-i18n="i.063">Containers</div><div class="d" data-i18n="i.064">wg-easy alone, admin account proven, only then Caddy. Fails closed.</div></div>
+<div><div class="n">05</div><div class="t" data-i18n="i.065">Verify</div><div class="d" data-i18n="i.066">Handshake, ports, certificate retry, timers. Then it hands you the credentials.</div></div>
+</div>
+</div>
+<div class="big"><b data-count="76073">0</b><p data-i18n="i.067">failed SSH logins the reference server took in 25 days before Megamesh — with fail2ban “running” and zero jails. After: a handful of banned addresses, and silence.</p></div>
+<div class="bars">
+<div class="l" data-i18n="i.068">Typical VPS image, untouched<small>ports answering from the internet</small></div><div class="b"><i class="hot" style="--w:100%"></i></div><div class="v">8–12</div>
+<div class="l" data-i18n="i.069">Guide-followed WireGuard box<small>wg + ssh + web + docker leaks</small></div><div class="b"><i style="--w:45%"></i></div><div class="v">5–6</div>
+<div class="l" data-i18n="i.070">Megamesh<small>ssh · wg · https</small></div><div class="b"><i class="acc" style="--w:25%"></i></div><div class="v">3</div>
+</div>
+</div>
+</section>
+<section id="honest">
+<div class="wrap">
+<div class="head rv">
+<div><div class="kicker" data-i18n="i.071">05 / Honest notes</div><h2 class="h1" data-i18n="i.072">What this is not.</h2></div>
+<div class="right"><p class="lead" data-i18n="i.073">A personal VPN changes who can see your traffic, not whether anyone can. The repository says exactly what has and has not been exercised.</p></div>
+</div>
+<div class="honest rv d1">
+<div><div class="k">— 01</div><h3 data-i18n="i.074">Not a privacy service</h3><p data-i18n="i.075">Your VPS provider sees your traffic leave their network. Megamesh hides you from the café Wi-Fi and your ISP, not from a subpoena.</p></div>
+<div><div class="k">— 02</div><h3 data-i18n="i.076">Not multi-tenant</h3><p data-i18n="i.077">One admin, your devices. wg-easy supports many peers, but the hardening assumes a single trusted operator.</p></div>
+<div><div class="k">— 03</div><h3 data-i18n="i.078">Not finished by the deployer</h3><p data-i18n="i.079">It changes your root password but leaves SSH on a password until someone installs a key, and leaves 2FA and VPN-only mode for you to switch on. Twenty minutes with the <a class="ul" href="https://github.com/paulfxyz/megamesh/blob/main/docs/HARDENING.md" rel="noopener">hardening notes</a> finishes it.</p></div>
+<div><div class="k">— 04</div><h3 data-i18n="i.080">Not tested everywhere</h3><p data-i18n="i.081">CentOS Stream 9 and Ubuntu 24.04 on a 1 vCPU / 1 GB VPS are verified end to end — the second one through the deployer itself. Rocky, Alma and Debian share those code paths but have not been run yet.</p></div>
+</div>
+</div>
+</section>
+<section id="exit">
+<div class="wrap">
+<div class="exit">
+<div class="rv">
+<div class="kicker" data-i18n="i.082">06 / Your exit</div>
+<h2 class="h1" data-i18n="i.083">One address.<br/><span class="grad">Yours.</span></h2>
+<p class="lead" data-i18n="i.084">Once your devices are on the tunnel, everything you do leaves from your server's address. That is the point — and a fact others can use: a friend can allow-list you, your own boxes can trust you, a rate limit can make an exception. The author publishes his, and the repository is the source of truth for it.</p>
+<p class="lead" style="margin-top:1rem" data-i18n="i.111">Publishing it is also a defence. Calumny, fake news, a “someone broke into our app” accusation — every action on the internet leaves an address in a log. Declare yours in public, with a start date, and any trace that comes from somewhere else is, by your own prior declaration, not you. It does not prove innocence by itself, but it gives you leverage: a public, dated, verifiable statement made before anyone had a reason to doubt it.</p>
+</div>
+<div class="rv d1">
+<div class="egress">
+<div data-i18n="i.085"><span>Hostname</span><b>paulfleury.network</b></div>
+<div data-i18n="i.086"><span>IPv4</span><b class="big-ip">151.243.225.214</b></div>
+<div data-i18n="i.087"><span>Reverse DNS</span><b>forward-confirmed</b></div>
+<div data-i18n="i.112"><span>Official since</span><b>18 Oct 2026 · 17:00 Lisbon</b></div>
+<div><span data-i18n="i.088">Machine-readable</span><b><a class="ul" href="https://github.com/paulfxyz/megamesh/blob/main/egress.json" rel="noopener">egress.json</a></b></div>
+<div data-i18n="i.089"><span>Verify</span><b style="font-weight:400;color:var(--muted);font-size:var(--t-xs)">dig +short A paulfleury.network · dig +short -x 151.243.225.214 — they must agree</b></div>
+</div>
+<p class="muted" style="font-size:var(--t-sm);margin:1rem 0 0" data-i18n="i.090">It identifies a server, not a person. Keep authentication in front of whatever you allow-list — and the address had other tenants before the start date; nothing from before it is the author's.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="who">
+<div class="wrap">
+<div class="head rv">
+<div><div class="kicker" data-i18n="i.091">07 / Who's behind it</div><h2 class="h1" data-i18n="i.092">One operator, published whole.</h2></div>
+<div class="right"><p class="lead" data-i18n="i.093">Megamesh is the single-person version of the boxes <a class="ul" href="https://megastack.sh" rel="noopener">megastack.sh</a>, the author's cybersecurity consultancy, builds for clients — designed and operated with an AI agent over SSH, then torn apart by three other models before going public.</p></div>
+</div>
+<div class="about rv d1">
+<div class="av" aria-hidden="true">PF</div>
+<div>
+<div class="bio" data-i18n="i.094"><strong>Paul Fleury</strong> — French internet entrepreneur in Lisbon, hacking around on the internet since the late nineties.</div>
+<p data-i18n="i.095">The whole story — the logbook of the first deployment, the audits, the fixes — is in the repository.</p>
+<div class="links">
+<a class="btn btn--ghost btn--sm" href="https://www.linkedin.com/in/paulfxyz/" rel="noopener" data-linkedin="">LinkedIn</a>
+<a class="btn btn--ghost btn--sm" href="https://github.com/paulfxyz/megamesh" rel="noopener">GitHub</a>
+<a class="btn btn--ghost btn--sm" href="https://megastack.sh" rel="noopener">megastack.sh</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer>
+<div class="wrap">
+<span data-i18n="i.096">megamesh.sh · MIT · Megamesh is a word, megamesh.sh is a command</span>
+<span><a href="https://github.com/paulfxyz/megamesh" rel="noopener" data-i18n="i.097">Source</a> · <a href="https://github.com/paulfxyz/megamesh/blob/main/docs/AUDIT.md" rel="noopener" data-i18n="i.098">Audits</a> · <a href="https://github.com/paulfxyz/megamesh/blob/main/egress.json" rel="noopener">egress.json</a> · <a href="mailto:hi@megastack.sh">hi@megastack.sh</a></span>
+</div>
+</footer>
+<div class="dock" id="dock" role="region" aria-label="Quick start" data-i18n-attrs="aria-label:i.109">
+<span class="dock__dot" aria-hidden="true"></span>
+<code>curl -fsSLO https://megamesh.sh/megamesh.sh</code>
+<button class="cp" type="button" data-copy="curl -fsSLO https://megamesh.sh/megamesh.sh" data-i18n="i.099">Copy</button>
+<a class="btn btn--solid btn--sm" href="/deploy/" data-i18n="i.100">Deploy mine <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+</div>
+<button class="top" id="top" type="button" aria-label="Back to top" data-i18n-attrs="aria-label:i.110"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"></path></svg></button>
+<script src="/assets/ui.js?v=1792345888" defer=""></script>
 </body>
 </html>

@@ -351,3 +351,15 @@ textarea{min-height:84px;resize:vertical}
 
 #why{padding-bottom:clamp(2rem,4vw,4rem)}
 [hidden]{display:none!important}
+/* right-to-left scripts: text flows right, machine-facing bits stay left-to-right */
+html.rtl code,html.rtl .mono,html.rtl .term,html.rtl .log,html.rtl input,html.rtl textarea,html.rtl .big-ip,html.rtl .egress b,html.rtl .gh b,html.rtl .cred b,html.rtl .stats .n{direction:ltr;unicode-bidi:isolate}
+html.rtl .term,html.rtl .log{text-align:left}
+html.rtl .eyebrow .sq,html.rtl .ways .n{margin-left:.6rem;margin-right:0}
+.lang-grid button.busy{opacity:.6}
+/* scripts without Latin letter-spacing habits: looser display type, no negative tracking */
+html:is([lang=ja],[lang=zh],[lang=yue],[lang=wuu],[lang=nan],[lang=ko],[lang=th],[lang=my],[lang=am],[lang=km]) :is(.hero__title,.h1){letter-spacing:0;line-height:1.08;font-size:calc(var(--t-3xl) * .82)}
+html:is([lang=ja],[lang=zh],[lang=yue],[lang=wuu],[lang=nan],[lang=ko],[lang=th],[lang=my],[lang=am]) .hero__title{font-size:calc(var(--t-hero) * .66);line-break:strict}
+html:is([lang=ar],[lang=ur],[lang=fa],[lang=sd],[lang=pa],[lang=hi],[lang=mr],[lang=bn],[lang=ta],[lang=te],[lang=kn],[lang=ml],[lang=gu],[lang=or],[lang=ne],[lang=bho],[lang=si]) :is(.hero__title,.h1){letter-spacing:0;line-height:1.15}
+html:is([lang=ar],[lang=ur],[lang=fa],[lang=sd],[lang=pa]) .hero__title{font-size:calc(var(--t-hero) * .8)}
+html:not([lang=en]) .manif{letter-spacing:-.01em}
+.dock .cp,.btn,.ib{white-space:nowrap}

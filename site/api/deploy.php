@@ -17,7 +17,7 @@ header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: no-referrer');
 
-const MEGAMESH_RELEASE = '1.5.3';                 // tag of the release the deployer installs
+const MEGAMESH_RELEASE = '1.5.4';                 // tag of the release the deployer installs
 const MEGAMESH_TARBALL = 'https://github.com/paulfxyz/megamesh/archive/refs/tags/v' . MEGAMESH_RELEASE . '.tar.gz';
 const LOGFILE   = '/root/megamesh-install.log';
 const CREDFILE  = '/root/megamesh-admin-credentials';

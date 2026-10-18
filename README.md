@@ -7,7 +7,7 @@
 **Your server, your exit.**
 
 <a href="https://megamesh.sh"><img src="https://img.shields.io/badge/megamesh.sh-site_%2B_deployer-2c56f5?style=for-the-badge" alt="megamesh.sh"></a>
-<img src="https://img.shields.io/badge/version-1.5.3-060a12?style=for-the-badge" alt="version 1.5.3">
+<img src="https://img.shields.io/badge/version-1.5.4-060a12?style=for-the-badge" alt="version 1.5.4">
 <img src="https://img.shields.io/badge/WireGuard-wg--easy_v15-2c56f5?style=for-the-badge&logo=wireguard&logoColor=white" alt="WireGuard · wg-easy v15">
 <img src="https://img.shields.io/badge/firewall-DROP_%C2%B7_3_ports-060a12?style=for-the-badge" alt="firewall DROP, 3 ports">
 <img src="https://img.shields.io/badge/updates-topgrade_weekly_%2B_rollback-0e6a72?style=for-the-badge" alt="topgrade weekly + rollback">
@@ -161,24 +161,28 @@ What a run does: remember the image ID each container runs → `topgrade` (packa
 
 Topgrade is installed from its GitHub release as a static binary, **pinned by version and SHA-256** in `megamesh.sh`, with self-update off; it is updated when the pin is bumped here, not by itself. Its config is `/etc/megamesh/topgrade.toml` ([config/topgrade/topgrade.toml](config/topgrade/topgrade.toml)): only the two steps, non-interactive, `allow_root` for the systemd run. Image tags stay on major versions (`wg-easy:15`, `caddy:2-alpine`), so a weekly pull never jumps a major release. Honest note: the rollback branch has been reviewed and the happy path exercised on the reference server; a real failed upgrade has not yet happened to test it in anger.
 
-## Whitelisting the author
+## paulfleury.network — my official VPN
 
-This repository doubles as the public source of truth for **where I come from on the internet**. When my devices are on this VPN, everything I do exits from one address:
+**`paulfleury.network` is my official, personal VPN exit, and this repository is its public source of truth.** It is the reference server everything above was built and audited on: a 1 vCPU / 1 GB VPS running exactly this code, with the hardening notes applied — key-only SSH, VPN-only admin, weekly health-checked upgrades. When my devices are on that tunnel, everything I do on the internet exits from one address:
 
 | | |
 |---|---|
 | Hostname | `paulfleury.network` |
 | IPv4 | `151.243.225.214` |
 | Reverse DNS | `151.243.225.214` → `paulfleury.network` (forward-confirmed) |
-| Since | 2026-10-18 |
+| Official since | **Sunday 18 October 2026, 17:00 Europe/Lisbon** (16:00 UTC) |
 | Machine-readable | [`egress.json`](egress.json) |
+
+**Why publish it at all.** Beyond convenience, a declared exit address is a defence. Calumny, fake news, a "someone broke into our web app" accusation — every action on the internet leaves an address in a log somewhere. By declaring mine in public, with a start date, in a repository whose history cannot be quietly rewritten, I give myself leverage: any trace that comes from another address is, by my own prior declaration, not me on my VPN. It is not proof of innocence on its own — a declaration cannot be — but it is a public, dated, verifiable statement made before anyone had a reason to doubt it, and that is a much better position than explaining after the fact. Anyone can do the same with their own Megamesh box; the `egress.json` format is there to be copied.
+
+The start date matters. Before Sunday 18 October 2026 at 17:00 Lisbon time, `151.243.225.214` belonged to whoever the hosting provider had leased it to; nothing that address did before that moment has anything to do with me, and I take no responsibility for it. From that moment on, traffic from it is my VPN. The `since` timestamp in `egress.json` is the same claim in machine-readable form. The test boxes used while developing Megamesh (such as `vpn.paulfleury.eu`) are not part of this declaration — only the hostname and address in the table are.
 
 If you run a service and want to allow-list me — SSH on your own boxes, an admin panel, a rate-limit exemption, a geo-fence — that is the address to use. Verify it yourself rather than trusting this page: `dig +short A paulfleury.network` and `dig +short -x 151.243.225.214` must agree. If the address ever changes, the change lands here first, in `egress.json`, in a commit on `main`.
 
 Read it as a convenience signal, never as the only control:
 
 - It identifies my VPN server, not me. Anyone I hand a WireGuard profile to, or anyone who ever got root on that box, exits from the same address (today: nobody but me). Keep authentication in front of whatever you allow-list.
-- Hosting providers reassign addresses. If I let the VPS lapse, the next customer inherits `151.243.225.214` before I can commit anything. Treat the entry as stale if the PTR stops matching or `egress.json` has not been touched in a year.
+- Hosting providers reassign addresses — which is also why the address had a life before me. If I let the VPS lapse, the next customer inherits `151.243.225.214` before I can commit anything. Treat the entry as stale if the PTR stops matching or `egress.json` has not been touched in a year.
 - Only IPv4 traffic *routed through the tunnel* exits here. A device of mine off the VPN is just another address on the café Wi-Fi.
 
 ## The website
@@ -189,14 +193,20 @@ Read it as a convenience signal, never as the only control:
 
 <a href="https://megamesh.sh/deploy/"><img src="docs/deployer.png" width="100%" alt="The deployer at megamesh.sh/deploy — four steps on one page"></a>
 
-Site features: a light/dark switch (dark is the same page at night — navy, not black), a language picker listing the 50 most spoken languages with flags and search (the site reads in English today; the choice is remembered and translations will follow it), a pill navigation that collapses into a menu on phones, a floating dock with the install command and a back-to-top, a reading-progress bar, scroll reveals, and a logo that redraws itself on hover and pings on click. Audited on desktop, tablet and 375 px phones. Everything is static HTML/CSS/JS plus one PHP endpoint, in [`site/`](site/):
+Site features: a light/dark switch (dark is the same page at night — navy, not black), a pill navigation that collapses into a menu on phones, a floating dock with the install command and a back-to-top, a reading-progress bar, scroll reveals, and a logo that redraws itself on hover and pings on click. Audited on desktop, tablet and 375 px phones.
+
+**Fifty languages.** The language picker (flags, search) switches the whole site — both pages, metadata, the deployer's live messages and error texts — into any of the 50 most spoken languages, right-to-left where the script demands it (Arabic, Urdu, Persian, Sindhi, Punjabi), with display type retuned for CJK and Indic scripts. English is the reference and lives in the HTML; every other language is a JSON file in [`site/assets/i18n/`](site/assets/i18n/) applied client-side and remembered on the device. The translations are machine-made and say so in the picker: generated by Gemini 3.6 Flash and then reviewed entry by entry by an independent model (GPT-5 mini) against the English source, both through OpenRouter, with deterministic checks that markup, placeholders, numbers, URLs and file paths survived untouched — anything that failed stayed in English rather than ship broken. Terminal content, commands and the installer's own log stay in English on purpose. Corrections from native speakers are the most welcome pull request there is: edit the JSON, keep the keys.
+
+The pipeline is two scripts in [`site/tools/`](site/tools/): `i18n_extract.py` tags every user-facing string in the HTML with a `data-i18n` key (keys are stable across edits; new elements get new keys) and harvests the `t('key', 'English')` fallbacks from the JavaScript into `en.json`; `i18n_translate.py` translates only what is missing or changed, per language, validates, and optionally runs the review pass (`--review`). Everything is static HTML/CSS/JS plus one PHP endpoint, in [`site/`](site/):
 
 ```
 site/index.html          ← the landing page
 site/deploy/             ← the deployer (index.html + deploy.js, no framework)
 site/api/deploy.php      ← the stateless endpoint: check · passwd · start · status · handover · forget
 site/api/lib/            ← autoload.php; phpseclib 4 + constant_time_encoding are vendored at deploy time, not committed
-site/assets/             ← style.css (tokens, both themes), ui.js (theme, languages, terminal, GitHub stats, reveals), og.png
+site/assets/             ← style.css (tokens, both themes, RTL/CJK tuning), ui.js (theme, i18n, languages, terminal, GitHub stats, reveals), og.png
+site/assets/i18n/        ← en.json (master, generated) + 49 reviewed machine translations
+site/tools/              ← i18n_extract.py, i18n_translate.py (OpenRouter)
 site/megamesh.sh         ← the installer, served as text/plain at https://megamesh.sh/megamesh.sh
 site/.htaccess           ← content types, dotfile denial, security headers; api/lib/ is unreachable from the web
 ```
@@ -246,11 +256,11 @@ docs/
 
 ## Status, naming, roadmap
 
-v1.5.3 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
+v1.5.4 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
 
 - **Naming**: "Megamesh" as a word, in prose; `megamesh` or `megamesh.sh` in lower case when talking about the code, the command or the site.
 - **Logo**: a single M whose two legs curve into the point of a shield, with one node where the strokes meet — [`docs/logo.svg`](docs/logo.svg) white on its blue tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`. Palette: mist `#f2f4f6`, ink `#060a12`, blue `#2c56f5`, teal `#0e6a72`; Geist for text, Geist Mono wherever the page talks to machines.
-- **Planned**: translations behind the language picker, a Debian 12 and a Rocky 9 run, SSH-via-VPN with a confirm-or-rollback window.
+- **Planned**: native-speaker review of the translations, a Debian 12 and a Rocky 9 run, SSH-via-VPN with a confirm-or-rollback window.
 - **Not planned**: OpenVPN, multi-user auth, turning this into a product.
 
 ## The story

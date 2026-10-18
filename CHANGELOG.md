@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.4 — 2026-10-18
+
+- **megamesh.sh in 50 languages.** The language picker now switches both pages, metadata and the deployer's runtime messages; RTL for Arabic, Urdu, Persian, Sindhi, Punjabi; display type retuned for CJK and Indic scripts. English stays in the HTML as the reference; other languages are JSON files applied client-side. Generated with Gemini 3.6 Flash, reviewed per entry by GPT-5 mini against the source (both via OpenRouter), with deterministic checks on markup, placeholders, numbers, URLs and paths. Tooling in `site/tools/`.
+- **paulfleury.network declared the official VPN exit**, with a precise start — Sunday 18 October 2026, 17:00 Europe/Lisbon — in the README and in `egress.json` (`since`, `since_note`, `status`, `rationale`). Nothing the address did before that moment is the owner's. The README and the site now also explain the point of publishing an exit address at all: a public, dated, verifiable declaration is leverage against calumny, fake news and false intrusion claims.
+- Site copy: a paragraph on that rationale in "Your exit", an "Official since" row in the egress card; `<title>` fixed to the current tagline.
+
 ## 1.5.3 — 2026-10-18
 
 - **Re-run with a new domain or port fixes wg-easy's stored endpoint.** wg-easy v15 keeps the host/port that client configs point at in its database (set once by `INIT_HOST`/`INIT_PORT`); a re-run with a different `MEGAMESH_DOMAIN` used to rewrite the Caddyfile and hostname but leave client configs on the old name. The installer now compares and updates it in place (brief wg-easy restart), and says so. Found by moving the Ubuntu test box from one domain to `vpn.paulfleury.eu`; verified by generating a client afterwards.
