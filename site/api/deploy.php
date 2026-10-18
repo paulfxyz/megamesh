@@ -17,7 +17,7 @@ header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: no-referrer');
 
-const MEGAMESH_RELEASE = '1.5.0';                 // tag of the release the deployer installs
+const MEGAMESH_RELEASE = '1.5.1';                 // tag of the release the deployer installs
 const MEGAMESH_TARBALL = 'https://github.com/paulfxyz/megamesh/archive/refs/tags/v' . MEGAMESH_RELEASE . '.tar.gz';
 const LOGFILE   = '/root/megamesh-install.log';
 const CREDFILE  = '/root/megamesh-admin-credentials';
@@ -74,7 +74,7 @@ set_time_limit(110);
 $ssh = new SSH2($ip, $port, 12);
 $ssh->setTimeout(90);
 try {
-    if (!$ssh->login('root', $pw)) fail('SSH login as root failed — check the IP, port and root password. (Key-only servers cannot use the Operator; use the script instead.)', 401);
+    if (!$ssh->login('root', $pw)) fail('SSH login as root failed — check the IP, port and root password. (Key-only servers cannot use the deployer; use the script instead.)', 401);
 } catch (\Throwable $e) {
     fail('Could not reach ' . $ip . ':' . $port . ' over SSH — is the server up and is port ' . $port . ' open?', 502);
 }

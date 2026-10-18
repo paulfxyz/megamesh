@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.1 — 2026-10-18
+
+- **megamesh.sh redesigned again.** The Construct (1.5.0) lasted an evening. The site is now light, typographic and modern: mist grey `#f2f4f6`, ink `#060a12`, electric blue `#2c56f5` fading to teal; Geist + Geist Mono; pill navigation, floating dock, scroll-brightening manifesto, a three-tab terminal that types the three ways in, live GitHub stars/release, a count-up and a stage-by-stage pipeline drawing. No illustrations. Light/dark switch and the 50-language picker kept; engravings and Matrix references removed.
+- **Door 03 is "the deployer" again** (was "the Operator"). Same four steps — server · check · install · hand over — same optional root-password change, reskinned.
+- **Logo recoloured**: white M-shield on a blue tile (`docs/logo.svg`, `docs/favicon.svg`), bare mark in `currentColor`. README, badges and screenshots updated; `docs/pills.webp`, `docs/morpheus.webp`, `docs/choice.png` removed.
+- Mobile fixes: the port-count bars and pipeline stages now lay out correctly under 560 px; social preview image regenerated.
+
 ## 1.5.0 — 2026-10-18
 
 - **megamesh.sh redesigned — "the Construct".** Own identity instead of the megastack.sh look: bone white, ink, one ultraviolet; Instrument Serif + Instrument Sans + Geist Mono; faint grid. Eight graphite engravings in the calliope.agency style (pills in hands, the bald man in the coat, two chairs and a TV, the wall with three doors and the agents, white rabbit, spoon, phone booth, operator's tape deck). Matrix references throughout; no green, no red.

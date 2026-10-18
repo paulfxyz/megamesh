@@ -86,3 +86,7 @@ The first site borrowed megastack.sh's black-and-red. It was replaced the same d
 
 Door 03 users arrive with a root password that has been in an email. The Operator now takes an optional new one, applies it with `chpasswd` as its own `passwd` action before anything else, and uses it for every call after — so the next SSH login is the proof. It still will not disable password login without a key: the rule from the first audit (never lock a door you cannot prove you can open) applies to the web form too.
 
+
+## 28. The Construct is undone (2026-10-18, night)
+
+The engravings and the Matrix framing did not survive the owner's first look at them on a phone: too much costume, not enough product. Rebuilt the same night in the opposite direction — light, typographic, modern, blue — with the content carrying the page instead of pictures. Door 03 went back to being called the deployer. Lesson kept from the detour: the light/dark switch, the language picker, and the root-password step were all right; only the costume was wrong. Released as 1.5.1.

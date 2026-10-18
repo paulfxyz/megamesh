@@ -1,33 +1,138 @@
-/* megamesh.sh — shared UI: theme, language picker, menu, reveals, hero effects. No tracking, no network except flag images. */
+/* megamesh.sh — shared UI. No tracking; network only for flag images and the public GitHub repo stats. */
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
   const store = { get: (k) => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.documentElement;
 
   // ── theme ────────────────────────────────────────────────────────────────
-  const root = document.documentElement;
   const themeBtn = $('#theme');
   const applyTheme = (t) => {
-    if (t === 'dark') root.setAttribute('data-theme', 'dark'); else root.removeAttribute('data-theme');
-    if (themeBtn) { themeBtn.setAttribute('aria-pressed', String(t === 'dark')); themeBtn.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'); }
-    const m = $('meta[name="theme-color"]'); if (m) m.content = t === 'dark' ? '#141418' : '#F3F1EA';
+    root.setAttribute('data-theme', t);
+    themeBtn && themeBtn.setAttribute('aria-pressed', String(t === 'dark'));
+    const m = $('meta[name="theme-color"]'); if (m) m.content = t === 'dark' ? '#05070b' : '#f2f4f6';
   };
-  applyTheme(store.get('mm-theme') || 'light');
+  applyTheme(store.get('mm-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
   themeBtn && themeBtn.addEventListener('click', () => { const t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; store.set('mm-theme', t); applyTheme(t); });
 
-  // ── mobile menu ──────────────────────────────────────────────────────────
-  const menu = $('#menu'), links = $('#links');
+  // ── nav: scrolled state, menu, progress, dock, top ───────────────────────
+  const nav = $('#nav'), menu = $('#menu'), links = $('#links'), prog = $('#prog'), dock = $('#dock'), top = $('#top');
   if (menu && links) {
     menu.addEventListener('click', () => { const o = links.classList.toggle('open'); menu.setAttribute('aria-expanded', String(o)); });
     links.addEventListener('click', (e) => { if (e.target.tagName === 'A') { links.classList.remove('open'); menu.setAttribute('aria-expanded', 'false'); } });
+    document.addEventListener('click', (e) => { if (!links.contains(e.target) && !menu.contains(e.target)) { links.classList.remove('open'); menu.setAttribute('aria-expanded', 'false'); } });
+  }
+  const onScroll = () => {
+    const y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
+    nav && nav.classList.toggle('scrolled', y > 8);
+    if (prog) prog.style.transform = `scaleX(${h > 0 ? y / h : 0})`;
+    dock && dock.classList.toggle('on', y > innerHeight * 0.7 && y < h - 200);
+    top && top.classList.toggle('on', y > innerHeight);
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  top && top.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
+
+  // ── copy buttons ─────────────────────────────────────────────────────────
+  document.addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-copy]'); if (!b) return;
+    const t = b.textContent;
+    try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = 'Copied'; b.classList.add('did'); } catch { b.textContent = 'Select it'; }
+    setTimeout(() => { b.textContent = t; b.classList.remove('did'); }, 1500);
+  });
+
+  // ── logo ping ────────────────────────────────────────────────────────────
+  const brand = $('#brand');
+  brand && brand.addEventListener('click', (e) => {
+    brand.classList.remove('ping'); void brand.offsetWidth; brand.classList.add('ping');
+    if (location.pathname === '/' || location.pathname === '/index.html') { e.preventDefault(); scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); }
+  });
+
+  // ── reveals ──────────────────────────────────────────────────────────────
+  const io = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+  document.querySelectorAll('.rv').forEach((el) => io.observe(el));
+
+  // ── manifesto: words brighten with scroll ────────────────────────────────
+  const manif = $('#manif');
+  if (manif) {
+    const walk = (node) => {
+      [...node.childNodes].forEach((n) => {
+        if (n.nodeType === 3) { const frag = document.createDocumentFragment(); n.data.split(/(\s+)/).forEach((p) => { if (!p) return; if (/^\s+$/.test(p)) frag.appendChild(document.createTextNode(p)); else { const s = document.createElement('span'); s.className = 'w' + (node.tagName === 'EM' ? ' ' + node.className : ''); s.textContent = p; frag.appendChild(s); } }); n.replaceWith(frag); }
+        else if (n.nodeType === 1) walk(n);
+      });
+    };
+    walk(manif);
+    const words = [...manif.querySelectorAll('.w')];
+    const upd = () => {
+      const r = manif.getBoundingClientRect(); const start = innerHeight * 0.85, end = innerHeight * 0.25;
+      const p = Math.min(1, Math.max(0, (start - r.top) / (r.height + start - end)));
+      const n = Math.round(p * words.length * 1.15);
+      words.forEach((w, i) => w.classList.toggle('on', i < n || reduced));
+    };
+    addEventListener('scroll', upd, { passive: true }); addEventListener('resize', upd); upd();
   }
 
-  // ── logo: ping on click, draw on hover (CSS) ─────────────────────────────
-  const brand = $('#brand');
-  if (brand) brand.addEventListener('click', (e) => {
-    brand.classList.remove('ping'); void brand.offsetWidth; brand.classList.add('ping');
-    if (location.pathname === '/' || location.pathname === '/index.html') { e.preventDefault(); window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); }
+  // ── count-up ─────────────────────────────────────────────────────────────
+  document.querySelectorAll('[data-count]').forEach((el) => {
+    const end = +el.dataset.count; const fmt = (n) => n.toLocaleString('en-US');
+    if (reduced) { el.textContent = fmt(end); return; }
+    const o = new IntersectionObserver((es) => { if (!es[0].isIntersecting) return; o.disconnect(); const t0 = performance.now(), d = 1800;
+      const step = (t) => { const p = Math.min(1, (t - t0) / d); el.textContent = fmt(Math.round(end * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); }, { threshold: .4 });
+    o.observe(el);
   });
+
+  // ── terminal with tabs + typing ──────────────────────────────────────────
+  const term = $('#term-body');
+  if (term) {
+    const esc = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    const SCRIPTS = {
+      script: [
+        ['c', '# One file. Read it first.'], ['p', '$ ', 'curl -fsSLO https://megamesh.sh/megamesh.sh'], ['p', '$ ', 'less megamesh.sh'],
+        ['p', '$ ', 'MEGAMESH_DOMAIN=vpn.example.com MEGAMESH_EMAIL=you@example.com bash megamesh.sh'],
+        ['o', '▶ megamesh 1.5.1 on CentOS Stream 9 (1 vCPU, 1 GB)'], ['ok', '✔ swap active · ✔ system updated · ✔ docker from signed repo'],
+        ['ok', '✔ firewalld: public DROP, 22/tcp 51820/udp 443/tcp'], ['ok', '✔ sshd hardened · ✔ fail2ban sshd jail · ✔ sysctl'],
+        ['ok', '✔ wg-easy up, admin account created before 443 opened'], ['ok', '✔ caddy up — waiting for DNS to issue the certificate'],
+        ['o', '  credentials: /root/megamesh-admin-credentials'], ['o', '  next: A record vpn.example.com → 203.0.113.10, then https://vpn.example.com/'],
+      ],
+      agent: [
+        ['c', '# Paste PROMPT.md into any agent with SSH'], ['p', '> ', 'Here is the server: 203.0.113.10, root, CentOS Stream 9, domain vpn.example.com.'],
+        ['o', 'Agent: Changing the root password first. Reading state before touching anything…'], ['o', 'Agent: Swapfile exists but is inactive — enabling before dnf update (OOM trap #1).'],
+        ['o', 'Agent: daemon.json has "iptables": false — Docker would publish nothing (trap #2).'], ['o', 'Agent: Opening the firewall before restarting sshd. Key login verified; disabling passwords.'],
+        ['ok', 'Agent: ✔ 3 ports public · ✔ handshake OK · ✔ certificate issued. Here is your QR code.'],
+      ],
+      status: [
+        ['p', '$ ', 'megamesh-status'], ['o', 'tunnel    wg0 up · 1 peer · last handshake 14 s ago'], ['o', 'firewall  public DROP · 22/tcp 51820/udp 443/tcp · icmp allow-list'],
+        ['o', 'ssh       key-only · fail2ban: 7 banned · 0 failed today'], ['o', 'tls       vpn.example.com · expires in 89 days · auto-renew'],
+        ['o', 'upgrades  megamesh-upgrade.timer → Mon 04:30 · last run ok · rollback armed'], ['ok', 'mode      VPN-only (outsiders → 302 https://example.com)'],
+      ],
+    };
+    let run = 0;
+    const play = async (key) => {
+      const id = ++run; term.innerHTML = '';
+      for (const [cls, a, b] of SCRIPTS[key]) {
+        if (id !== run) return;
+        const line = document.createElement('div');
+        if (cls === 'p') { line.innerHTML = `<span class="p">${esc(a)}</span><b></b>`; term.appendChild(line); const bEl = line.querySelector('b');
+          if (reduced) bEl.textContent = b; else { for (let i = 0; i <= b.length; i++) { if (id !== run) return; bEl.textContent = b.slice(0, i); await new Promise((r) => setTimeout(r, 14)); } } }
+        else { line.innerHTML = `<span class="${cls}">${esc(a)}</span>`; term.appendChild(line); if (!reduced) await new Promise((r) => setTimeout(r, 160)); }
+      }
+      const c = document.createElement('span'); c.className = 'cur'; term.appendChild(c);
+    };
+    document.querySelectorAll('.term__tabs button').forEach((b) => b.addEventListener('click', () => { document.querySelectorAll('.term__tabs button').forEach((x) => x.setAttribute('aria-selected', 'false')); b.setAttribute('aria-selected', 'true'); play(b.dataset.tab); }));
+    const o = new IntersectionObserver((es) => { if (es[0].isIntersecting) { o.disconnect(); play('script'); } }, { threshold: .3 }); o.observe(term);
+  }
+
+  // ── GitHub stats (public API, cached 10 min) ─────────────────────────────
+  const ghEls = document.querySelectorAll('[data-gh]');
+  if (ghEls.length) {
+    const set = (k, v) => ghEls.forEach((el) => { if (el.dataset.gh === k) el.textContent = v; });
+    const render = (d) => { set('stars', String(d.stars)); set('release', d.release || '—'); set('pushed', d.pushed || '—'); const l = $('#gh-live'); if (l && d.at) l.textContent = 'Live from GitHub · ' + new Date(d.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' · github.com/paulfxyz/megamesh'; };
+    const cached = (() => { try { return JSON.parse(sessionStorage.getItem('mm-gh') || 'null'); } catch { return null; } })();
+    if (cached && Date.now() - cached.at < 600000) render(cached);
+    else Promise.all([fetch('https://api.github.com/repos/paulfxyz/megamesh').then((r) => r.ok ? r.json() : null), fetch('https://api.github.com/repos/paulfxyz/megamesh/releases/latest').then((r) => r.ok ? r.json() : null)])
+      .then(([repo, rel]) => { if (!repo) return; const days = Math.round((Date.now() - new Date(repo.pushed_at)) / 864e5);
+        const d = { stars: repo.stargazers_count, release: rel ? rel.tag_name.replace(/^v/, '') : '', pushed: days === 0 ? 'today' : days === 1 ? 'yesterday' : days + ' days ago', at: Date.now() };
+        try { sessionStorage.setItem('mm-gh', JSON.stringify(d)); } catch {} render(d); }).catch(() => {});
+  }
 
   // ── languages (50 most spoken; the site is English for now) ──────────────
   const LANGS = [
@@ -48,7 +153,7 @@
     modal.className = 'modal'; modal.id = 'lang-modal'; modal.hidden = true;
     modal.setAttribute('role', 'dialog'); modal.setAttribute('aria-modal', 'true'); modal.setAttribute('aria-labelledby', 'lang-title');
     modal.innerHTML = `<div class="bd" data-close></div><div class="pane">
-      <div class="hd"><h2 id="lang-title">Choose your language</h2><button class="ibtn x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="hd"><h2 id="lang-title">Choose your language</h2><button class="ib sq" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       <div class="search"><input type="search" id="lang-q" placeholder="Search 50 languages…" autocomplete="off" aria-label="Search languages"></div>
       <p class="note">The site reads in English for now. Your choice is remembered on this device; translations will follow it.</p>
       <ul class="lang-grid" id="lang-grid"></ul></div>`;
@@ -56,7 +161,7 @@
     const grid = $('#lang-grid', modal), q = $('#lang-q', modal);
     let current = store.get('mm-lang') || 'en';
     const flag = (c) => `https://flagcdn.com/h24/${c}.png`;
-    const setBtn = () => { const l = LANGS.find((x) => x[0] === current) || LANGS[0]; langBtn.innerHTML = `<img alt="" src="${flag(l[3])}" width="18" height="13"><span>${l[0].toUpperCase().slice(0, 3)}</span>`; };
+    const setBtn = () => { const l = LANGS.find((x) => x[0] === current) || LANGS[0]; langBtn.querySelector('span').textContent = l[0].toUpperCase().slice(0, 3); };
     const render = (f = '') => {
       const t = f.trim().toLowerCase();
       const rows = LANGS.filter((l) => !t || l.join(' ').toLowerCase().includes(t));
@@ -66,40 +171,9 @@
     const open = () => { lastFocus = document.activeElement; render(''); q.value = ''; modal.hidden = false; document.body.classList.add('modal-open'); setTimeout(() => q.focus(), 30); };
     const close = () => { modal.hidden = true; document.body.classList.remove('modal-open'); lastFocus && lastFocus.focus(); };
     langBtn.addEventListener('click', open);
-    modal.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) close(); const b = e.target.closest('button[data-l]'); if (b) { current = b.dataset.l; store.set('mm-lang', current); setBtn(); render(q.value); setTimeout(close, 160); } });
+    modal.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) return close(); const b = e.target.closest('button[data-l]'); if (b) { current = b.dataset.l; store.set('mm-lang', current); setBtn(); render(q.value); setTimeout(close, 160); } });
     q.addEventListener('input', () => render(q.value));
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) close(); });
     setBtn();
   }
-
-  // ── reveals: sections + engravings "materialise" ─────────────────────────
-  const io = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-  document.querySelectorAll('.reveal, .art').forEach((el) => io.observe(el));
-
-  // ── hero typewriter ──────────────────────────────────────────────────────
-  const type = $('#type');
-  if (type) {
-    const line = type.getAttribute('aria-label') || '';
-    const cur = type.querySelector('.cur');
-    if (reduced) type.insertBefore(document.createTextNode(line), cur);
-    else { let i = 0; const node = document.createTextNode(''); type.insertBefore(node, cur); const tick = () => { node.data = line.slice(0, ++i); if (i < line.length) setTimeout(tick, line[i - 1] === '.' ? 320 : 28 + Math.random() * 40); }; setTimeout(tick, 500); }
-  }
-
-  // ── hero hands: gentle parallax to the pointer ───────────────────────────
-  const hands = $('#hands img');
-  if (hands && !reduced && matchMedia('(pointer:fine)').matches) {
-    document.addEventListener('mousemove', (e) => { const x = (e.clientX / innerWidth - .5) * 10, y = (e.clientY / innerHeight - .5) * 6; hands.style.transform = `translate(${x}px,${y}px)`; }, { passive: true });
-  }
-
-  // ── pointer glow on cards ────────────────────────────────────────────────
-  document.querySelectorAll('.pill').forEach((c) => c.addEventListener('pointermove', (e) => { const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px'); }));
-
-  // ── count-up ─────────────────────────────────────────────────────────────
-  document.querySelectorAll('[data-count]').forEach((el) => {
-    const end = +el.dataset.count; const fmt = (n) => n.toLocaleString('en-US');
-    if (reduced) { el.textContent = fmt(end); return; }
-    const o = new IntersectionObserver((es) => { if (!es[0].isIntersecting) return; o.disconnect(); const t0 = performance.now(); const d = 1800;
-      const step = (t) => { const p = Math.min(1, (t - t0) / d); el.textContent = fmt(Math.round(end * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); }, { threshold: .5 });
-    o.observe(el);
-  });
 })();

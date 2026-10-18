@@ -61,7 +61,7 @@ PREV_SSH_PORT=""; PREV_WG_PORT=""
 if [[ -f /etc/megamesh.conf ]]; then
   PREV_SSH_PORT=$(awk -F= '$1=="MEGAMESH_SSH_PORT"{print $2}' /etc/megamesh.conf); PREV_WG_PORT=$(awk -F= '$1=="MEGAMESH_WG_PORT"{print $2}' /etc/megamesh.conf)
 fi
-MEGAMESH_VERSION="1.5.0"
+MEGAMESH_VERSION="1.5.1"
 SELF_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 if [[ ! -f "${SELF_DIR}/scripts/status.sh" ]]; then
   # standalone download: fetch the matching release so helpers and configs are available

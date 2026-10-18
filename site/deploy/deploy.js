@@ -17,7 +17,7 @@
 
   const api = async (action, extra = {}) => {
     const res = await fetch('/api/deploy.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, cache: 'no-store', body: JSON.stringify({ action, ...creds, ...extra }) });
-    let data; try { data = await res.json(); } catch { throw new Error('The Operator returned something unexpected (HTTP ' + res.status + ').'); }
+    let data; try { data = await res.json(); } catch { throw new Error('The deployer returned something unexpected (HTTP ' + res.status + ').'); }
     if (!res.ok || !data.ok) throw new Error(data && data.error ? data.error : 'Request failed (HTTP ' + res.status + ').');
     return data;
   };
@@ -78,7 +78,7 @@
       ].map(([k, v]) => `<div><b>${esc(k)}</b>${esc(v)}</div>`).join('');
       const note = $('check-note'); const start = $('start');
       if (!r.supported) { note.hidden = false; note.innerHTML = '<b>Unsupported system.</b> The installer knows CentOS Stream / Rocky / Alma 9 and Debian / Ubuntu on x86_64. Reinstall the VPS with CentOS Stream 9 from your provider\'s panel and try again.'; start.dataset.blocked = '1'; }
-      else if (r.running) { note.hidden = false; note.innerHTML = '<b>An install is already running</b> on this server. Loading will attach to it rather than start another.'; delete start.dataset.blocked; }
+      else if (r.running) { note.hidden = false; note.innerHTML = '<b>An install is already running</b> on this server. Installing will attach to it rather than start another.'; delete start.dataset.blocked; }
       else if (!r.verified) { note.hidden = false; note.innerHTML = '<b>Best-effort system.</b> Only CentOS Stream 9 has been verified end to end; this one takes a code path that has not been run yet. It will probably work — if it fails, the log will say where.'; delete start.dataset.blocked; }
       else if (r.mem_mb < 900) { note.hidden = false; note.innerHTML = '<b>Small box.</b> Under 1 GB visible RAM; the installer adds swap before updating, which is exactly the case it was built for.'; delete start.dataset.blocked; }
       else { note.hidden = true; delete start.dataset.blocked; }
@@ -115,7 +115,7 @@
       if (r.done) {
         clearInterval(pollTimer); pollTimer = null; clearInterval(elapsedTimer);
         if (r.exit === 0) { setPhase(5); await handover(); }
-        else { $('spin').style.display = 'none'; $('loading').textContent = 'Stopped'; $('run-title').textContent = 'The install stopped with an error.'; $('run-hint').textContent = 'The last lines above say where. Fix the cause (or reinstall the VPS) and run the Operator again — the installer is idempotent.'; }
+        else { $('spin').style.display = 'none'; $('loading').textContent = 'Stopped'; $('run-title').textContent = 'The install stopped with an error.'; $('run-hint').textContent = 'The last lines above say where. Fix the cause (or reinstall the VPS) and run the deployer again — the installer is idempotent.'; }
       }
     } catch (ex) {
       failures++;
@@ -138,11 +138,11 @@
       await api('start');
       startedAt = Date.now(); tickElapsed(); elapsedTimer = setInterval(tickElapsed, 1000);
       step(3); setPhase(0);
-      renderLog(['▶ Operator connected. ' + (newpw ? 'Root password changed. ' : '') + 'Installer started on your server — downloading the release and updating packages…']);
+      renderLog(['▶ Connected. ' + (newpw ? 'Root password changed. ' : '') + 'Installer started on your server — downloading the release and updating packages…']);
       startPolling();
     } catch (ex) {
       $('check-err').textContent = ex.message + (creds.pw === newpw && newpw ? ' (Note: the root password HAS been changed to the new one you chose.)' : '');
-      b.disabled = false; b.textContent = 'Load the program →';
+      b.disabled = false; b.textContent = 'Install Megamesh →';
     }
   });
 
