@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.1.0 — 2026-10-18
+
+Response to a three-model audit of 1.0.0 (Claude Opus 5.5, GPT-6.1 Sol Pro, Gemini 4 Argon — see `docs/AUDIT.md`), plus the VPN-only mode.
+
+### Fixed
+- **SSH lock-out on key-less hosts**: `PermitRootLogin prohibit-password` was written unconditionally; now follows the same decision as the password directives. `PROXY_LOCK_SSH=yes` without a key refuses to run.
+- Firewall is configured **before** sshd restarts, so a custom `PROXY_SSH_PORT` is open when the service moves.
+- Non-default `PROXY_WG_PORT` now maps `${PORT}:${PORT}` (wg-easy listens on the configured port).
+- `daemon.json` is merged (JSON parser), always backed up, validated; no longer clobbered.
+- Firewall commands fail loudly on anything but "already there"; default-route interface is moved into `public` if needed.
+- Pre-existing unformatted `/swapfile` is `mkswap`'d instead of aborting; `grep -qwF` on `/etc/hosts`; `semanage -a || -m`; Ubuntu `ssh.socket` handled.
+- Docs: phase-2 recipes that ignored the container network namespace removed; filenames, end state, Rocky/Alma wording, `down -v` warning corrected.
+
+### Changed
+- wg-easy runs with `NET_ADMIN` only; `SYS_MODULE` and the `/lib/modules` mount are gone (host loads the modules).
+- Docker `userland-proxy` off (no `docker-proxy` processes; hairpin traffic keeps its real source).
+- Debian/Ubuntu branch installs Docker from the signed apt repository instead of `curl | sh`.
+- HSTS without `includeSubDomains`; `accept_ra` sysctl dropped; ICMP allow-list trimmed to what is needed.
+- `PROMPT.md`: owner supplies their own public key, second session before lock, confirmation before SSH/firewall changes, real Caddyfile.
+
+### Added
+- **Unattended admin account** (`PROXY_UNATTENDED=1` default): created via wg-easy `INIT_*` on first start, before 443 is reachable; credentials in `/root/proxy-admin-credentials`; `INIT_*` scrubbed and container recreated afterwards.
+- **`scripts/lockdown.sh` → `proxy-lockdown`**: VPN-only admin UI with redirect for outsiders; `render` to preview and validate, preconditions (peers exist, userland-proxy off), in-place Caddyfile write, reload, tunnel-side check.
+- `/etc/proxy.conf` written by the installer; `proxy-status` and `proxy-lockdown` installed by the installer.
+- `docs/AUDIT.md` and the three raw reports under `docs/audit/`; Hostkey PTR instructions in `docs/DNS.md`.
+
 ## 1.0.0 — 2026-10-18
 
 First release, distilled from the reference deployment on `paulfleury.network` (CentOS Stream 9, Hostkey 1 vCPU / 1 GB).

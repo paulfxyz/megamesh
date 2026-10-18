@@ -42,6 +42,14 @@ Namecheap Advanced DNS for `paulfleury.network`, changed from Perplexity Compute
 2. Removed `CNAME www → parkingpage.namecheap.com.`
 3. Added `A @ → 151.243.225.214`, TTL Automatic.
 
-Result: `dig A paulfleury.network @1.1.1.1` → `151.243.225.214` after ~3 minutes; Caddy logged `certificate obtained successfully` right after; `https://paulfleury.network/` → `302 /setup/1`.
+Result: `dig A paulfleury.network @1.1.1.1` → `151.243.225.214` after ~3 minutes; Caddy logged `certificate obtained successfully` right after. The owner completed the wizard the same hour; the UI now answers `302 /login`.
 
-PTR for `151.243.225.214` is still to be set by the owner in the Hostkey panel.
+### Setting the PTR at Hostkey
+
+Hostkey exposes reverse DNS per IP in the client area ([invapi.hostkey.com](https://invapi.hostkey.com/)):
+
+1. *My servers* → open server **69416** → the IP addresses block.
+2. Next to `151.243.225.214` use *Edit / rDNS (PTR)* and enter `paulfleury.network` (trailing dot optional).
+3. Save; propagation is typically minutes to an hour. Verify with `dig -x 151.243.225.214 +short` → `paulfleury.network.`
+
+If the field is missing or greyed out, open a ticket from the same panel with "set PTR for 151.243.225.214 to paulfleury.network" — Hostkey support does it by hand for some IP ranges. Only the owner of the IP block (the hosting provider) can publish PTR records; nothing at Namecheap can do it.

@@ -22,7 +22,7 @@ Out of memory on a small VPS. `dmesg | grep -i oom`. Add swap, then retry: `fall
 
 ### Thousands of SSH failures although fail2ban is "active"
 
-`fail2ban-client status` → *Number of jail: 0*. The service runs, the jail does not exist. Drop `config/fail2ban/sshd.local` into `/etc/fail2ban/jail.d/` and restart fail2ban.
+`fail2ban-client status` → *Number of jail: 0*. The service runs, the jail does not exist. Drop `config/fail2ban/proxy-sshd.local` into `/etc/fail2ban/jail.d/` and restart fail2ban.
 
 ### Caddy: *will retry … HTTP 504* or *no such host*
 
@@ -38,7 +38,15 @@ Certificate not obtained yet (see Caddy above), or you reached the box via the r
 
 ### `/setup` is gone, I never created an account
 
-Someone else got there first, or you did and forgot. Reset the UI (**this deletes all clients**): `docker compose -f /opt/proxy/compose.yml down -v && docker compose -f /opt/proxy/compose.yml up -d`. Lesson: create the account right after DNS resolves, or keep 443 closed until you are ready.
+Someone else got there first, or you did and forgot. If you did not create it, treat the box as compromised: check `docker exec wg-easy wg show` for peers you do not know, then reset. Reset = remove **only** the wg-easy volume so Caddy keeps its certificate and ACME account: `cd /opt/proxy && docker compose stop wg-easy && docker compose rm -f wg-easy && docker volume rm proxy_etc_wireguard && docker compose up -d` (`down -v` would also delete Caddy's state). With `install.sh` ≥ 1.1.0 this cannot happen on a fresh install: the admin account is created unattended before 443 is reachable.
+
+### I changed the Caddyfile and Caddy says "config is unchanged"
+
+The Caddyfile is a single-file bind mount. `sed -i`, `mv` and most editors write a new inode; the container keeps the old one. Write in place (`cp newfile Caddyfile`, or `cat > Caddyfile`), or `docker compose restart caddy`. `proxy-lockdown` does this correctly.
+
+### `proxy-lockdown enable` refuses: userland-proxy
+
+VPN-only mode needs Docker's `"userland-proxy": false` so tunnel traffic reaches Caddy as `10.42.42.42`. Re-run `install.sh` (it merges the setting into `daemon.json`), or add it by hand, `systemctl restart docker`, `docker compose up -d --force-recreate`.
 
 ### Connected to the VPN but no internet
 

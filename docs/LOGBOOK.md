@@ -36,18 +36,24 @@ The whole session was driven by [Perplexity Computer](https://www.perplexity.ai/
 15. **Certificate.** Caddy logged one `HTTP 504` fetching a nonce from Let's Encrypt (their side), then `certificate obtained successfully`. `https://paulfleury.network/` → `302 /setup/1`.
 
 16. **Installer validation.** `install.sh` (this repository) was run over the live deployment with `PROXY_SKIP_UPDATE=1 PROXY_DIR=/opt/wireguard`. First attempt died silently at `firewall-cmd --set-log-denied=off`, which exits 2 when the value is already set — fixed with `|| true`. Second run completed end-to-end; containers reported `Running`, not recreated. The hand-made drop-ins from steps 2–7 were then removed in favour of the installer's files (`00-proxy-hardening.conf`, `proxy-sshd.local`, `99-proxy-hardening.conf`, `proxy.conf`).
-17. **Note.** The reference server keeps the stack in `/opt/wireguard` (its Compose project name, and therefore its volume names, derive from the directory). A fresh install uses `/opt/proxy`.
+17. **Note.** The reference server keeps the stack in `/opt/wireguard` (its Compose project name, and therefore its volume names, derive from the directory). A fresh install uses `/opt/proxy`; `/etc/proxy.conf` tells the helper commands where to look.
+18. **Admin account and first device.** The owner completed the wizard himself (wg-easy 15.4.0), created a peer, connected from his laptop and confirmed traffic through the tunnel, then disconnected. From this point the UI answers `302 /login`.
+19. **Three-model audit** of the repository at v1.0.0 (Claude Opus 5.5, GPT-6.1 Sol Pro, Gemini 4 Argon via OpenRouter; reports in [docs/audit/](audit/)). Grades C / D / B+. Converging findings: an SSH lock-out when no key is present (`PermitRootLogin prohibit-password` written unconditionally), SSH port moved before the firewall opened it, phase-2 recipes that ignored the container network namespace, `SYS_MODULE` not needed, `curl | sh` on Debian, `daemon.json` clobbered, stale docs. All fixed in 1.1.0 — see [AUDIT.md](AUDIT.md).
+20. **Live tests for 1.1.0.** Dropped `SYS_MODULE` and the `/lib/modules` mount: `wg0` up, same keys, peer intact. Set Docker `"userland-proxy": false` and recreated the stack: tunnel-origin requests now reach Caddy as `10.42.42.42` (were `10.42.42.1`), public requests keep their real IP. Re-ran the rewritten `install.sh` over the live server: idempotent, admin check reports "login page", helpers installed. `proxy-lockdown render vpn-only https://paulfleury.com` validates; **not enabled** — the owner will say when.
 
 ## End state
 
 ```
-public zone: target DROP · services: ssh · ports: 51820/udp 443/tcp
-icmp allow: echo-request echo-reply destination-unreachable time-exceeded fragmentation-needed packet-too-big
-containers:  wg-easy (healthy)   caddy (up)
-wg0:         listening :51820, 0 peers (admin account not yet created)
+public zone: target DROP · ports: 22/tcp 51820/udp 443/tcp · services: (none)
+icmp allow:  echo-request destination-unreachable time-exceeded packet-too-big
+containers:  wg-easy (healthy, NET_ADMIN only)   caddy (up)
+docker:      userland-proxy off · live-restore · log rotation · no-new-privileges
+wg0:         listening :51820, 1 peer (owner's laptop)
+admin UI:    https://paulfleury.network/ → 302 /login · Let's Encrypt until 2027-01-16
 sshd:        passwordauthentication no · permitrootlogin without-password · maxauthtries 3
 fail2ban:    sshd jail active
 updates:     dnf-automatic security, daily
+vpn-only:    rendered + validated, not enabled
 ```
 
 ## Things that would have been faster to know
@@ -61,6 +67,6 @@ updates:     dnf-automatic security, daily
 
 ## Still open
 
-- PTR record (owner, Hostkey panel).
-- Admin account creation at `/setup/1` (owner, in browser).
-- Phase 2 (VPN-only admin UI / SSH) — see [HARDENING.md](HARDENING.md), once a device is connected.
+- PTR record (owner, Hostkey panel — see [DNS.md](DNS.md)).
+- Two-factor authentication on the admin account (owner, in the UI).
+- `proxy-lockdown enable https://paulfleury.com` when the owner says so.
