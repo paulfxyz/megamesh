@@ -3,23 +3,11 @@
 "lang": "uk",
 "name": "Ukrainian",
 "dir": "ltr",
-"source_hash": "1c5582d85d0d2b42",
+"source_hash": "779ab76156e4ec48",
 "model": "google/gemini-3.6-flash",
 "reviewed_by": "openai/gpt-5-mini",
 "generated": "2026-10-18",
-"notes": [
-"i.061: review fix rejected (empty)",
-"i.062: review fix rejected (empty)",
-"i.064: review fix rejected (empty)",
-"i.068: review fix rejected (empty)",
-"i.076: review fix rejected (empty)",
-"i.078: review fix rejected (empty)",
-"i.094: review fix rejected (empty)",
-"i.100: review fix rejected (empty)",
-"i.102: review fix rejected (empty)",
-"i.106: review fix rejected (empty)",
-"m.d.title: review fix rejected (empty)"
-],
+"notes": [],
 "src": {
 "m.i.title": "a72866c5",
 "m.i.description": "7adf39e7",
@@ -122,9 +110,22 @@
 "i.093": "b00f3b03",
 "i.094": "5ca99c4f",
 "i.095": "0d63d23c",
-"i.096": "c96b59db",
+"i.113": "b3fc0827",
+"i.114": "8e7ec027",
+"i.115": "f6f4da8d",
 "i.097": "6da13add",
 "i.098": "a80e3858",
+"i.116": "164b3d48",
+"i.117": "8fa41d59",
+"i.118": "49736168",
+"i.119": "c6bdade3",
+"i.120": "ab15eb3d",
+"i.121": "69921bde",
+"i.122": "33a579ff",
+"i.123": "b6647248",
+"i.124": "42026996",
+"i.125": "bd7b4f00",
+"i.096": "c96b59db",
 "i.099": "af74f7c5",
 "i.100": "cf1be22d",
 "i.101": "62bce942",
@@ -186,8 +187,11 @@
 "d.045": "c313a62a",
 "d.046": "cc1b3a4b",
 "d.047": "3d613e16",
+"d.062": "b3fc0827",
+"d.063": "f6f4da8d",
 "d.048": "6da13add",
 "d.049": "70f8bb9a",
+"d.064": "42026996",
 "d.050": "62bce942",
 "d.051": "da26fe0c",
 "d.052": "89b86ab0",
@@ -277,46 +281,6 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
-},
-"audit": {
-"remaining": [
-[
-"english",
-[
-"i.070"
-],
-"identical to source"
-],
-[
-"english",
-[
-"i.086"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.059"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.060"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.061"
-],
-"identical to source"
-]
-],
-"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — Ваш сервер, ваш вихід.",
@@ -420,9 +384,22 @@
 "i.093": "Megamesh — це персональна версія серверів, які <a class=\"ul\" href=\"https://megastack.sh\" rel=\"noopener\">megastack.sh</a>, консалтингова компанія автора з кібербезпеки, створює для клієнтів — спроєктована та керована за допомогою AI-агента через SSH, а потім протестована трьома іншими моделями перед публікацією.",
 "i.094": "<strong>Paul Fleury</strong> — французький інтернет-підприємець у Лісабоні, займається розробкою в інтернеті з кінця дев'яностих.",
 "i.095": "Уся історія — журнал першого розгортання, аудити, виправлення — є в репозиторії.",
-"i.096": "megamesh.sh · MIT · Megamesh — це слово, megamesh.sh — це команда",
+"i.113": "Ваш сервер — ваш вихід. Один скрипт, три відкриті порти, ми нічого не зберігаємо.",
+"i.114": "Проєкт <a href=\"https://megastack.sh\" rel=\"noopener\">megastack.sh</a> · <a href=\"mailto:hi@megastack.sh\">hi@megastack.sh</a>",
+"i.115": "Проєкт",
 "i.097": "Вихідний код",
 "i.098": "Аудити",
+"i.116": "Журнал змін",
+"i.117": "Релізи",
+"i.118": "Ліцензія MIT",
+"i.119": "Способи встановлення",
+"i.120": "AI-агент",
+"i.121": "Веб-розгортувач",
+"i.122": "Довіра",
+"i.123": "Офіційний вихід <small data-i18n-skip=\"\">paulfleury.network</small>",
+"i.124": "Політика безпеки",
+"i.125": "Повідомити про проблему",
+"i.096": "megamesh.sh · MIT · Megamesh — це слово, megamesh.sh — це команда",
 "i.099": "Копіювати",
 "i.100": "Розгорнути мій <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
 "i.101": "Головна",
@@ -484,8 +461,11 @@
 "d.045": "<b>Попросіть знайомого техніка завершити налаштування безпеки</b> — двадцять хвилин із <a class=\"ul\" href=\"https://github.com/paulfxyz/megamesh/blob/main/docs/HARDENING.md\" rel=\"noopener\">нотатками щодо жорсткого захисту</a>: встановіть SSH-ключ та вимкніть паролі, за бажанням зробіть сторінку адміністрування доступною лише через VPN. Усе інше (firewall, fail2ban, автоматичні оновлення, щотижнева перевірка стану) вже працює.",
 "d.046": "<b>Облікові дані на сервері.</b> Копія логіна адміністратора знаходиться в <code>/root/megamesh-admin-credentials</code> на вашому VPS, доступна для читання лише root. Як тільки ви збережете все в менеджері паролів, видаліть її:",
 "d.047": "Я зберіг їх — видалити копію на сервері",
+"d.062": "Ваш сервер — ваш вихід. Один скрипт, три відкриті порти, ми нічого не зберігаємо.",
+"d.063": "Проєкт",
 "d.048": "Вихідний код",
 "d.049": "Головна",
+"d.064": "Політика безпеки",
 "d.050": "Головна",
 "d.051": "Головна megamesh.sh",
 "d.052": "Мова",

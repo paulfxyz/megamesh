@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.6 — 2026-10-18
+
+- **A real footer.** Brand block with the animated mark and the tagline, three link columns (Project, Ways in, Trust — the official exit, `egress.json`, the security policy, issues), status line with the official-exit date. The deployer page gets the compact version. Sixteen new strings translated and reviewed in all 49 languages; the translation tool now reviews only the strings generated in a run, so accepted translations are never reopened.
+- **The mark, final form.** No wave, tilt or breathing anywhere, and nothing moves sideways: hover is one big zoom-in explosion (2.3× overshoot, flash, burst of blue sparks, then it settles at 1.3× with sparkles around it); click is a hard shrink to 0.3× and a 3× pop with a double firework and a shockwave ring. Same behaviour in the navigation and in the footer. Canvas particles, CSS for the mark, off under `prefers-reduced-motion`.
+- **SECURITY.md**: how to report, what is in scope, what to expect.
+- Site: HTML is served `no-cache` so the host's proxy cache stops holding stale pages after a deploy (CSS/JS stay versioned and cacheable).
+
 ## 1.5.5 — 2026-10-18
 
 - **Translation audit.** New `site/tools/i18n_audit.py`: flags stray letters from a neighbouring script, inconsistent translations of the same English term across the two pages, lost product names and leftover English; `--fix` retranslates only the flagged entries. First run found 617 issues across 49 languages — mostly nav/phase labels translated two ways, a handful of single-character script glitches (a Sinhala letter in Burmese, Bengali letters in Malayalam and Odia, Hangul in Gujarati), Punjabi split between two scripts — and left zero. Punjabi now ships in Gurmukhi (LTR, 🇮🇳) after the model proved unable to hold Shahmukhi consistently.

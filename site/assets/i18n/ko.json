@@ -3,7 +3,7 @@
 "lang": "ko",
 "name": "Korean",
 "dir": "ltr",
-"source_hash": "1c5582d85d0d2b42",
+"source_hash": "779ab76156e4ec48",
 "model": "google/gemini-3.6-flash",
 "reviewed_by": "openai/gpt-5-mini",
 "generated": "2026-10-18",
@@ -110,9 +110,22 @@
 "i.093": "b00f3b03",
 "i.094": "5ca99c4f",
 "i.095": "0d63d23c",
-"i.096": "c96b59db",
+"i.113": "b3fc0827",
+"i.114": "8e7ec027",
+"i.115": "f6f4da8d",
 "i.097": "6da13add",
 "i.098": "a80e3858",
+"i.116": "164b3d48",
+"i.117": "8fa41d59",
+"i.118": "49736168",
+"i.119": "c6bdade3",
+"i.120": "ab15eb3d",
+"i.121": "69921bde",
+"i.122": "33a579ff",
+"i.123": "b6647248",
+"i.124": "42026996",
+"i.125": "bd7b4f00",
+"i.096": "c96b59db",
 "i.099": "af74f7c5",
 "i.100": "cf1be22d",
 "i.101": "62bce942",
@@ -174,8 +187,11 @@
 "d.045": "c313a62a",
 "d.046": "cc1b3a4b",
 "d.047": "3d613e16",
+"d.062": "b3fc0827",
+"d.063": "f6f4da8d",
 "d.048": "6da13add",
 "d.049": "70f8bb9a",
+"d.064": "42026996",
 "d.050": "62bce942",
 "d.051": "da26fe0c",
 "d.052": "89b86ab0",
@@ -265,46 +281,6 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
-},
-"audit": {
-"remaining": [
-[
-"english",
-[
-"i.070"
-],
-"identical to source"
-],
-[
-"english",
-[
-"i.086"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.059"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.060"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.061"
-],
-"identical to source"
-]
-],
-"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — 당신의 서버, 당신의 출구.",
@@ -408,9 +384,22 @@
 "i.093": "Megamesh는 제작자의 사이버 보안 컨설팅 회사인 <a class=\"ul\" href=\"https://megastack.sh\" rel=\"noopener\">megastack.sh</a>가 고객을 위해 구축하는 서버 환경의 개인용 버전입니다. SSH를 통해 AI 에이전트와 함께 설계 및 운영되었으며, 공개 전 3개의 다른 모델을 통해 검증을 거쳤습니다.",
 "i.094": "<strong>Paul Fleury</strong> — 리스본에서 활동 중인 프랑스 출신 인터넷 연쇄 창업가로, 90년대 후반부터 인터넷 생태계에서 활동해 왔습니다.",
 "i.095": "첫 배포 기록, 보안 감사 결과, 수정 사항을 포함한 전체 과정은 저장소에서 확인하실 수 있습니다.",
-"i.096": "megamesh.sh · MIT · Megamesh는 단어이고, megamesh.sh는 명령어입니다",
+"i.113": "당신의 서버, 당신의 출구. 스크립트 하나, 열린 포트 3개, 저희에게는 아무것도 저장되지 않습니다.",
+"i.114": "<a href=\"https://megastack.sh\" rel=\"noopener\">megastack.sh</a> 프로젝트 · <a href=\"mailto:hi@megastack.sh\">hi@megastack.sh</a>",
+"i.115": "프로젝트",
 "i.097": "소스 코드",
 "i.098": "보안 감사",
+"i.116": "변경 이력",
+"i.117": "릴리스",
+"i.118": "MIT 라이선스",
+"i.119": "설치 방법",
+"i.120": "AI 에이전트",
+"i.121": "웹 배포기",
+"i.122": "신뢰",
+"i.123": "공식 출구 노드 <small data-i18n-skip=\"\">paulfleury.network</small>",
+"i.124": "보안 정책",
+"i.125": "이슈 제보하기",
+"i.096": "megamesh.sh · MIT · Megamesh는 단어이고, megamesh.sh는 명령어입니다",
 "i.099": "복사",
 "i.100": "내 VPN 배포하기 <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
 "i.101": "메인",
@@ -472,8 +461,11 @@
 "d.045": "<b>기술 전문가에게 보안 강화를 마무리해 달라고 요청하세요.</b> <a class=\"ul\" href=\"https://github.com/paulfxyz/megamesh/blob/main/docs/HARDENING.md\" rel=\"noopener\">보안 강화 안내서</a>를 참고하여 20분 정도 작업 진행: SSH 키를 설치하고 비밀번호 로그인을 끄며, 선택적으로 관리자 페이지를 VPN 전용으로 설정합니다. 그 외의 항목(방화벽, fail2ban, 자동 업데이트, 주간 헬스체크 업그레이드)은 이미 작동 중입니다.",
 "d.046": "<b>서버에 저장된 자격 증명.</b> 관리자 로그인 정보의 복사본이 VPS의 <code>/root/megamesh-admin-credentials</code> 경로에 저장되어 있으며, root 계정으로만 읽을 수 있습니다. 비밀번호 관리자에 모든 정보를 저장한 후 이 파일을 삭제하세요:",
 "d.047": "저장했습니다 — 서버의 복사본 삭제",
+"d.062": "당신의 서버, 당신의 출구. 스크립트 하나, 열린 포트 3개, 저희에게는 아무것도 저장되지 않습니다.",
+"d.063": "프로젝트",
 "d.048": "소스 코드",
 "d.049": "홈",
+"d.064": "보안 정책",
 "d.050": "메인",
 "d.051": "megamesh.sh 홈",
 "d.052": "언어",

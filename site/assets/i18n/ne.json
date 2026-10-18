@@ -3,24 +3,11 @@
 "lang": "ne",
 "name": "Nepali",
 "dir": "ltr",
-"source_hash": "1c5582d85d0d2b42",
+"source_hash": "779ab76156e4ec48",
 "model": "google/gemini-3.6-flash",
 "reviewed_by": "openai/gpt-5-mini",
 "generated": "2026-10-18",
-"notes": [
-"i.061: review fix rejected (empty)",
-"i.066: review fix rejected (empty)",
-"i.077: review fix rejected (empty)",
-"i.079: review fix rejected (empty)",
-"i.081: review fix rejected (empty)",
-"i.094: review fix rejected (empty)",
-"i.097: review fix rejected (empty)",
-"i.100: review fix rejected (empty)",
-"j.d.note_finished: review fix rejected (untranslated)",
-"j.d.note_running: review fix rejected (untranslated)",
-"j.d.note_besteffort: review fix rejected (untranslated)",
-"j.d.note_small: review fix rejected (untranslated)"
-],
+"notes": [],
 "src": {
 "m.i.title": "a72866c5",
 "m.i.description": "7adf39e7",
@@ -123,9 +110,22 @@
 "i.093": "b00f3b03",
 "i.094": "5ca99c4f",
 "i.095": "0d63d23c",
-"i.096": "c96b59db",
+"i.113": "b3fc0827",
+"i.114": "8e7ec027",
+"i.115": "f6f4da8d",
 "i.097": "6da13add",
 "i.098": "a80e3858",
+"i.116": "164b3d48",
+"i.117": "8fa41d59",
+"i.118": "49736168",
+"i.119": "c6bdade3",
+"i.120": "ab15eb3d",
+"i.121": "69921bde",
+"i.122": "33a579ff",
+"i.123": "b6647248",
+"i.124": "42026996",
+"i.125": "bd7b4f00",
+"i.096": "c96b59db",
 "i.099": "af74f7c5",
 "i.100": "cf1be22d",
 "i.101": "62bce942",
@@ -187,8 +187,11 @@
 "d.045": "c313a62a",
 "d.046": "cc1b3a4b",
 "d.047": "3d613e16",
+"d.062": "b3fc0827",
+"d.063": "f6f4da8d",
 "d.048": "6da13add",
 "d.049": "70f8bb9a",
+"d.064": "42026996",
 "d.050": "62bce942",
 "d.051": "da26fe0c",
 "d.052": "89b86ab0",
@@ -278,46 +281,6 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
-},
-"audit": {
-"remaining": [
-[
-"brand",
-[
-"i.070"
-],
-"\"Megamesh\" missing"
-],
-[
-"english",
-[
-"i.086"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.059"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.060"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.061"
-],
-"identical to source"
-]
-],
-"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — तपाईंको सर्भर, तपाईंको एक्जिट।",
@@ -421,9 +384,22 @@
 "i.093": "Megamesh लेखकको साइबर सुरक्षा परामर्श सेवा <a class=\"ul\" href=\"https://megastack.sh\" rel=\"noopener\">megastack.sh</a> ले ग्राहकहरूका लागि निर्माण गर्ने बक्सहरूको एकल-व्यक्ति संस्करण हो — SSH मा AI एजेन्टसँग डिजाइन र सञ्चालन गरिएको, त्यसपछि सार्वजनिक हुनुअघि अन्य तीन मोडलहरूद्वारा परीक्षण गरिएको।",
 "i.094": "<strong>Paul Fleury</strong> — लिस्बनमा रहेका फ्रान्सेली इन्टरनेट उद्यमी, नब्बेको दशकको अन्त्यदेखि इन्टरनेटमा ह्याकिङ गर्दै।",
 "i.095": "पूरा कथा — पहिलो डिप्लोयमेन्टको लगबुक, अडिटहरू, फिक्सहरू — रिपोजिटरीमा छ।",
-"i.096": "megamesh.sh · MIT · Megamesh एउटा शब्द हो, megamesh.sh एउटा कमान्ड हो",
+"i.113": "तपाईंको सर्भर, तपाईंको निकास। एउटा स्क्रिप्ट, तीन खुला पोर्टहरू, हामीसँग केही पनि भण्डारण हुँदैन।",
+"i.114": "<a href=\"https://megastack.sh\" rel=\"noopener\">megastack.sh</a> को आयोजना · <a href=\"mailto:hi@megastack.sh\">hi@megastack.sh</a>",
+"i.115": "परियोजना",
 "i.097": "स्रोत",
 "i.098": "अडिटहरू",
+"i.116": "परिवर्तनहरू",
+"i.117": "रिलिजहरू",
+"i.118": "MIT लाइसेंस",
+"i.119": "प्रवेशका तरिकाहरू",
+"i.120": "AI एजेन्ट",
+"i.121": "वेब डिप्लोयर",
+"i.122": "विश्वास",
+"i.123": "आधिकारिक निकास <small data-i18n-skip=\"\">paulfleury.network</small>",
+"i.124": "सुरक्षा नीति",
+"i.125": "समस्या रिपोर्ट गर्नुहोस्",
+"i.096": "megamesh.sh · MIT · Megamesh एउटा शब्द हो, megamesh.sh एउटा कमान्ड हो",
 "i.099": "कपी गर्नुहोस्",
 "i.100": "मेरो डिप्लोय गर्नुहोस् <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
 "i.101": "मुख्य",
@@ -485,8 +461,11 @@
 "d.045": "<b>प्राविधिक साथीलाई सुरक्षा सुदृढीकरण (hardening) पूरा गर्न लगाउनुहोस्</b> — <a class=\"ul\" href=\"https://github.com/paulfxyz/megamesh/blob/main/docs/HARDENING.md\" rel=\"noopener\">हार्डनिङ नोट्स</a> प्रयोग गरी बीस मिनेट: SSH key स्थापना गर्नुहोस् र पासवर्डहरू बन्द गर्नुहोस्, ऐच्छिक रूपमा admin पृष्ठलाई VPN-मात्र बनाउनुहोस्। बाँकी सबै कुरा (firewall, fail2ban, स्वचालित अपडेटहरू, साप्ताहिक स्वास्थ्य-जाँच गरिएका अपग्रेडहरू) पहिले नै चलिरहेका छन्।",
 "d.046": "<b>सर्भरमा प्रमाणहरू।</b> admin लगइनको एक प्रतिलिपि तपाईंको VPS को <code>/root/megamesh-admin-credentials</code> मा बस्छ, जुन root ले मात्र पढ्न सक्छ। तपाईंले सबै कुरा पासवर्ड प्रबन्धकमा सुरक्षित गरिसकेपछि, यसलाई हटाउनुहोस्:",
 "d.047": "मैले तिनीहरूलाई सुरक्षित गरेँ — सर्भरमा रहेको प्रतिलिपि हटाउनुहोस्",
+"d.062": "तपाईंको सर्भर, तपाईंको निकास। एउटा स्क्रिप्ट, तीन खुला पोर्टहरू, हामीसँग केही पनि भण्डारण हुँदैन।",
+"d.063": "परियोजना",
 "d.048": "स्रोत",
 "d.049": "गृह",
+"d.064": "सुरक्षा नीति",
 "d.050": "मुख्य",
 "d.051": "megamesh.sh गृह",
 "d.052": "भाषा",

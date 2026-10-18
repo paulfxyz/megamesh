@@ -86,59 +86,60 @@
   });
 
   // ── logo ping ────────────────────────────────────────────────────────────
-  const brand = $('#brand');
-  // split the wordmark into letters for the staggered hover
-  const word = brand && brand.querySelector('.word');
-  if (word) { const first = word.firstChild; if (first && first.nodeType === 3) { const frag = document.createDocumentFragment(); [...first.textContent].forEach((c, i) => { const sp = document.createElement('span'); sp.className = 'ch'; sp.style.setProperty('--i', i); sp.textContent = c; frag.appendChild(sp); }); first.replaceWith(frag); } }
-  brand && brand.addEventListener('animationend', (e) => { if (e.animationName === 'lg-pop') brand.classList.add('drawn'); if (e.animationName === 'lg-bang') brand.classList.remove('ping'); });
-  brand && setTimeout(() => brand.classList.add('drawn'), 2000);
-  // particles: a soft sparkle stream while hovering, a firework burst on click
-  const fx = brand && brand.querySelector('canvas.fx');
-  const px = (() => {
-    if (!fx || reduced) return { hover() {}, leave() {}, burst() {} };
-    const S = 260, C = S / 2, dpr = Math.min(2, devicePixelRatio || 1);
-    fx.width = S * dpr; fx.height = S * dpr;
-    const ctx = fx.getContext('2d'); ctx.scale(dpr, dpr);
-    let ps = [], raf = 0, hovering = false, last = 0;
-    const cols = () => { const cs = getComputedStyle(brand); return [cs.getPropertyValue('--accent').trim() || '#2c56f5', cs.getPropertyValue('--accent2').trim() || '#0e6a72', '#7aa2ff', '#b9d2ff']; };
-    const R = Math.random;
-    const spawn = (n, mode) => {
-      const c = cols();
-      for (let i = 0; i < n; i++) {
-        const a = R() * Math.PI * 2, burst = mode === 'burst';
-        const sp = burst ? 2.4 + R() * 4.6 : .3 + R() * .7, r0 = burst ? 6 : 17 + R() * 8;
-        ps.push({ x: C + Math.cos(a) * r0, y: C + Math.sin(a) * r0, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - (burst ? .4 : .15),
-          life: 1, decay: burst ? .016 + R() * .018 : .011 + R() * .01, size: burst ? 1.6 + R() * 3 : 1.2 + R() * 2,
-          col: c[Math.floor(R() * c.length)], shape: burst ? (R() < .45 ? 'streak' : R() < .5 ? 'sq' : 'dot') : (R() < .25 ? 'star' : 'dot'),
-          rot: R() * 6.3, spin: (R() - .5) * .35, drag: burst ? .93 : .985, g: burst ? .06 : .004, tw: !burst, ph: R() * 6.3 });
-      }
-    };
-    const star = (x, y, r) => { ctx.beginPath(); for (let k = 0; k < 8; k++) { const rr = k % 2 ? r * .38 : r, t = k * Math.PI / 4; ctx.lineTo(x + Math.cos(t) * rr, y + Math.sin(t) * rr); } ctx.closePath(); ctx.fill(); };
-    const tick = (t) => {
-      ctx.clearRect(0, 0, S, S);
-      if (hovering && t - last > 50) { spawn(3, 'hover'); last = t; }
-      ps = ps.filter(p => p.life > 0);
-      for (const p of ps) {
-        p.x += p.vx; p.y += p.vy; p.vx *= p.drag; p.vy = p.vy * p.drag + p.g; p.life -= p.decay; p.rot += p.spin;
-        const al = p.tw ? p.life * (.7 + .3 * Math.sin(t / 70 + p.ph)) : Math.min(1, p.life * 1.4);
-        const sz = p.size * (p.tw ? 1 : .35 + .65 * p.life);
-        ctx.globalAlpha = Math.max(0, al); ctx.fillStyle = ctx.strokeStyle = p.col;
-        if (p.shape === 'streak') { ctx.lineWidth = sz; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 2.2, p.y - p.vy * 2.2); ctx.stroke(); }
-        else if (p.shape === 'sq') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.fillRect(-sz, -sz, sz * 2, sz * 2); ctx.restore(); }
-        else if (p.shape === 'star') star(p.x, p.y, sz * 1.9);
-        else { ctx.beginPath(); ctx.arc(p.x, p.y, sz, 0, 6.3); ctx.fill(); }
-      }
-      ctx.globalAlpha = 1;
-      raf = (ps.length || hovering) ? requestAnimationFrame(tick) : 0;
-    };
-    const go = () => { if (!raf) raf = requestAnimationFrame(tick); };
-    return { hover() { hovering = true; spawn(22, 'burst'); spawn(8, 'hover'); go(); }, leave() { hovering = false; }, burst() { spawn(56, 'burst'); go(); } };
-  })();
-  brand && brand.addEventListener('pointerenter', px.hover);
-  brand && brand.addEventListener('pointerleave', px.leave);
-  brand && brand.addEventListener('click', (e) => {
-    brand.classList.remove('ping'); void brand.offsetWidth; brand.classList.add('ping'); px.burst(); px.burst();
-    if (location.pathname === '/' || location.pathname === '/index.html') { e.preventDefault(); scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); }
+  document.querySelectorAll('.brand').forEach((brand) => {
+    // split the wordmark into letters (kept as spans for styling hooks)
+    const word = brand.querySelector('.word');
+    if (word) { const first = word.firstChild; if (first && first.nodeType === 3) { const frag = document.createDocumentFragment(); [...first.textContent].forEach((c, i) => { const sp = document.createElement('span'); sp.className = 'ch'; sp.style.setProperty('--i', i); sp.textContent = c; frag.appendChild(sp); }); first.replaceWith(frag); } }
+    brand.addEventListener('animationend', (e) => { if (e.animationName === 'lg-pop') brand.classList.add('drawn'); if (e.animationName === 'lg-bang') brand.classList.remove('ping'); });
+    setTimeout(() => brand.classList.add('drawn'), 2000);
+    // particles: a punchy burst + sparkle stream on hover, a double firework on click
+    const fx = brand.querySelector('canvas.fx');
+    const px = (() => {
+      if (!fx || reduced) return { hover() {}, leave() {}, burst() {} };
+      const S = 340, C = S / 2, dpr = Math.min(2, devicePixelRatio || 1);
+      fx.width = S * dpr; fx.height = S * dpr;
+      const ctx = fx.getContext('2d'); ctx.scale(dpr, dpr);
+      let ps = [], raf = 0, hovering = false, last = 0;
+      const cols = () => { const cs = getComputedStyle(brand); return [cs.getPropertyValue('--accent').trim() || '#2c56f5', cs.getPropertyValue('--accent2').trim() || '#0e6a72', '#7aa2ff', '#b9d2ff']; };
+      const R = Math.random;
+      const spawn = (n, mode, k = 1) => {
+        const c = cols();
+        for (let i = 0; i < n; i++) {
+          const a = R() * Math.PI * 2, burst = mode === 'burst';
+          const sp = (burst ? 2.6 + R() * 5.4 : .3 + R() * .7) * k, r0 = burst ? 6 : 20 + R() * 10;
+          ps.push({ x: C + Math.cos(a) * r0, y: C + Math.sin(a) * r0, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - (burst ? .4 : .15),
+            life: 1, decay: burst ? .015 + R() * .018 : .011 + R() * .01, size: (burst ? 1.8 + R() * 3.4 : 1.2 + R() * 2) * k,
+            col: c[Math.floor(R() * c.length)], shape: burst ? (R() < .45 ? 'streak' : R() < .5 ? 'sq' : 'dot') : (R() < .25 ? 'star' : 'dot'),
+            rot: R() * 6.3, spin: (R() - .5) * .35, drag: burst ? .93 : .985, g: burst ? .06 : .004, tw: !burst, ph: R() * 6.3 });
+        }
+      };
+      const star = (x, y, r) => { ctx.beginPath(); for (let k = 0; k < 8; k++) { const rr = k % 2 ? r * .38 : r, t = k * Math.PI / 4; ctx.lineTo(x + Math.cos(t) * rr, y + Math.sin(t) * rr); } ctx.closePath(); ctx.fill(); };
+      const tick = (t) => {
+        ctx.clearRect(0, 0, S, S);
+        if (hovering && t - last > 50) { spawn(3, 'hover'); last = t; }
+        ps = ps.filter(p => p.life > 0);
+        for (const p of ps) {
+          p.x += p.vx; p.y += p.vy; p.vx *= p.drag; p.vy = p.vy * p.drag + p.g; p.life -= p.decay; p.rot += p.spin;
+          const al = p.tw ? p.life * (.7 + .3 * Math.sin(t / 70 + p.ph)) : Math.min(1, p.life * 1.4);
+          const sz = p.size * (p.tw ? 1 : .35 + .65 * p.life);
+          ctx.globalAlpha = Math.max(0, al); ctx.fillStyle = ctx.strokeStyle = p.col;
+          if (p.shape === 'streak') { ctx.lineWidth = sz; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 2.2, p.y - p.vy * 2.2); ctx.stroke(); }
+          else if (p.shape === 'sq') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.fillRect(-sz, -sz, sz * 2, sz * 2); ctx.restore(); }
+          else if (p.shape === 'star') star(p.x, p.y, sz * 1.9);
+          else { ctx.beginPath(); ctx.arc(p.x, p.y, sz, 0, 6.3); ctx.fill(); }
+        }
+        ctx.globalAlpha = 1;
+        raf = (ps.length || hovering) ? requestAnimationFrame(tick) : 0;
+      };
+      const go = () => { if (!raf) raf = requestAnimationFrame(tick); };
+      return { hover() { hovering = true; spawn(40, 'burst', .8); spawn(10, 'hover'); go(); }, leave() { hovering = false; }, burst() { spawn(70, 'burst', 1.15); spawn(50, 'burst', .7); go(); } };
+    })();
+    brand.addEventListener('pointerenter', px.hover);
+    brand.addEventListener('pointerleave', px.leave);
+    brand.addEventListener('click', (e) => {
+      brand.classList.remove('ping'); void brand.offsetWidth; brand.classList.add('ping'); px.burst();
+      if (location.pathname === '/' || location.pathname === '/index.html') { e.preventDefault(); scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); }
+    });
   });
 
   // ── reveals ──────────────────────────────────────────────────────────────
@@ -189,7 +190,7 @@
       script: [
         ['c', '# One file. Read it first.'], ['p', '$ ', 'curl -fsSLO https://megamesh.sh/megamesh.sh'], ['p', '$ ', 'less megamesh.sh'],
         ['p', '$ ', 'MEGAMESH_DOMAIN=vpn.example.com MEGAMESH_EMAIL=you@example.com bash megamesh.sh'],
-        ['o', '▶ megamesh 1.5.5 on CentOS Stream 9 (1 vCPU, 1 GB)'], ['ok', '✔ swap active · ✔ system updated · ✔ docker from signed repo'],
+        ['o', '▶ megamesh 1.5.6 on CentOS Stream 9 (1 vCPU, 1 GB)'], ['ok', '✔ swap active · ✔ system updated · ✔ docker from signed repo'],
         ['ok', '✔ firewalld: public DROP, 22/tcp 51820/udp 443/tcp'], ['ok', '✔ sshd hardened · ✔ fail2ban sshd jail · ✔ sysctl'],
         ['ok', '✔ wg-easy up, admin account created before 443 opened'], ['ok', '✔ caddy up — waiting for DNS to issue the certificate'],
         ['o', '  credentials: /root/megamesh-admin-credentials'], ['o', '  next: A record vpn.example.com → 203.0.113.10, then https://vpn.example.com/'],

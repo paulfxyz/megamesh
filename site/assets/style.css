@@ -42,16 +42,14 @@ code,kbd,pre{font-family:var(--f-mono)}
 .brand .logo svg{width:100%;height:100%;overflow:visible}
 .brand .ring{position:absolute;inset:-6px;border:1.5px solid var(--accent);border-radius:50%;opacity:0;pointer-events:none}
 .brand.ping .ring{animation:ring .9s var(--ease)}.brand.ping .ring.r2{animation-delay:.15s}
-@keyframes ring{0%{opacity:.9;transform:scale(.5)}100%{opacity:0;transform:scale(3.4)}}
-.brand .fx{position:absolute;left:50%;top:50%;width:260px;height:260px;margin:-130px 0 0 -130px;pointer-events:none;z-index:2}
+@keyframes ring{0%{opacity:.9;transform:scale(.5)}100%{opacity:0;transform:scale(4.6)}}
+.brand{--fx:340px}.brand .fx{position:absolute;left:50%;top:50%;width:var(--fx);height:var(--fx);margin:calc(var(--fx) / -2) 0 0 calc(var(--fx) / -2);pointer-events:none;z-index:2}
+.brand .logo{z-index:3}
 /* wordmark: Bricolage Grotesque 800; pops as one block on hover, the .sh leans in; click pops harder */
 .brand .word{font-family:'Bricolage Grotesque',Geist,sans-serif;font-weight:800;letter-spacing:-.035em;font-size:1.5rem;display:inline-flex;align-items:baseline;font-variation-settings:'opsz' 40,'wdth' 100;transition:font-variation-settings .5s var(--ease)}
 .brand .word .ch{display:inline-block}
-.brand .word{transition:transform .45s cubic-bezier(.22,1.6,.36,1),font-variation-settings .5s var(--ease)}
-.brand:hover .word{transform:scale(1.05)}
-.brand:hover .word{font-variation-settings:'opsz' 40,'wdth' 92}
-.brand .sh{color:var(--faint);font-weight:700;font-size:.74em;font-style:italic;display:inline-block;margin-left:.06em;transform-origin:left bottom;transition:transform .5s var(--ease),color .4s}
-.brand:hover .sh{transform:skewX(-6deg) translateX(3px);color:var(--accent)}
+.brand .sh{color:var(--faint);font-weight:700;font-size:.74em;font-style:italic;display:inline-block;margin-left:.06em;transition:color .3s}
+.brand:hover .sh{color:var(--accent)}
 @keyframes squash{0%{transform:scale(1)}30%{transform:scale(1.08,.9)}60%{transform:scale(.96,1.05)}100%{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){.brand .sh,.brand .word,.brand .logo svg{transition:none}.brand.ping .word{animation:none}}
 .ib{--h:44px;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;height:var(--h);min-width:var(--h);padding:0 .9rem;border-radius:999px;border:1px solid var(--line);background:color-mix(in oklab,var(--surface) 70%,transparent);color:var(--ink);font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.06em;cursor:pointer;transition:border-color .25s,background .25s,transform .2s}
@@ -251,9 +249,27 @@ section{padding-block:var(--sec)}
 .about .links{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
 @media (max-width:640px){.about{grid-template-columns:minmax(0,1fr)}}
 
-footer{border-top:1px solid var(--line);padding:2.6rem 0 7rem}
-footer .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.06em;color:var(--faint)}
-footer a:hover{color:var(--ink)}
+footer{border-top:1px solid var(--line);padding:clamp(3rem,6vw,5rem) 0 7rem;position:relative;overflow:hidden}
+footer::before{content:"";position:absolute;inset:auto -10% -40% -10%;height:60%;background:radial-gradient(ellipse at 50% 100%,color-mix(in oklab,var(--accent) 14%,transparent),transparent 65%);pointer-events:none}
+.foot__top{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:2.5rem 2rem;position:relative}
+.foot__brand .brand{font-size:2rem;margin:0 0 1.1rem;display:inline-flex}
+.brand--lg{--fx:560px}.brand--lg .logo{width:56px;height:56px}.brand--lg .word{font-size:2.3rem}
+.foot__tag{font-size:var(--t-base);color:var(--muted);max-width:30ch;margin:0 0 1.2rem;line-height:1.5}
+.foot__by{font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.06em;color:var(--faint);margin:0}
+.foot__by a{color:var(--ink);border-bottom:1px solid var(--line)}.foot__by a:hover{border-color:var(--accent);color:var(--accent)}
+.foot__col h4{font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:500;margin:.4rem 0 1rem}
+.foot__col ul{list-style:none;margin:0;padding:0;display:grid;gap:.55rem}
+.foot__col a{color:var(--ink);font-size:var(--t-sm);display:inline-block;transition:color .25s}
+.foot__col a:hover{color:var(--accent)}
+.foot__col a small{display:block;font-family:var(--f-mono);font-size:.68em;color:var(--faint);letter-spacing:.06em;margin-top:.15rem}
+.foot__bottom{margin-top:clamp(2.4rem,5vw,3.6rem);padding-top:1.4rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.06em;color:var(--faint);position:relative}
+.foot__bottom a:hover{color:var(--ink)}
+.foot__status{display:inline-flex;align-items:center;gap:.5rem}
+.foot__status i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 color-mix(in oklab,var(--accent) 45%,transparent);animation:fs-pulse 2.4s ease-out infinite}
+@keyframes fs-pulse{0%{box-shadow:0 0 0 0 color-mix(in oklab,var(--accent) 45%,transparent)}100%{box-shadow:0 0 0 9px transparent}}
+@media (max-width:900px){.foot__top{grid-template-columns:1fr 1fr}.foot__brand{grid-column:1 / -1}}
+@media (max-width:520px){.foot__top{grid-template-columns:1fr 1fr;gap:2rem 1.2rem}.foot__col:last-child{grid-column:1 / -1}.foot__brand .brand{font-size:1.6rem}.brand--lg .logo{width:44px;height:44px}.brand--lg .word{font-size:1.8rem;display:inline-flex}}
+@media (prefers-reduced-motion:reduce){.foot__status i{animation:none}}
 
 /* dock + top */
 .dock{position:fixed;z-index:130;left:50%;bottom:clamp(.8rem,2vw,1.4rem);translate:-50% 0;display:flex;align-items:center;gap:.6rem;padding:.4rem .4rem .4rem 1rem;border-radius:999px;background:color-mix(in oklab,var(--surface) 80%,transparent);border:1px solid var(--line2);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);box-shadow:var(--shadow);transform:translateY(160%);transition:transform .7s var(--ease);max-width:calc(100vw - 1.6rem)}
@@ -399,18 +415,18 @@ html:not([lang=en]) .manif{letter-spacing:-.01em}
 .brand:hover .logo .mL,.brand:hover .logo .mR,.brand:hover .logo .mV,.brand.ping .logo .m{stroke-dashoffset:0!important}
 .brand:hover .logo .m{animation:lg-shimmer .75s ease-out both}
 .brand:hover .logo .node{animation:lg-node .75s cubic-bezier(.22,1.6,.36,1) both}
-@keyframes lg-zoomin{0%{transform:scale(1)}40%{transform:scale(1.75)}70%{transform:scale(1.08)}100%{transform:scale(1.2)}}
+@keyframes lg-zoomin{0%{transform:scale(1)}38%{transform:scale(2.3)}68%{transform:scale(1.12)}100%{transform:scale(1.3)}}
 @keyframes lg-shimmer{0%{stroke:var(--accent)}40%{stroke:#9ec5ff;filter:drop-shadow(0 0 5px #7aa2ff)}100%{stroke:var(--accent);filter:none}}
-@keyframes lg-node{0%{transform:scale(1)}40%{transform:scale(2.4)}100%{transform:scale(1.3)}}
+@keyframes lg-node{0%{transform:scale(1)}38%{transform:scale(3)}100%{transform:scale(1.4)}}
 /* click: hard shrink, then a big pop with a firework burst (canvas) and a shockwave ring; the word pops with it */
 .brand.ping .logo svg{animation:lg-bang .9s cubic-bezier(.22,1.5,.36,1) both}
 .brand.ping .logo .m{animation:lg-flash .9s ease-out both}
 .brand.ping .logo .node{animation:lg-bangN .9s cubic-bezier(.22,1.5,.36,1) both}
-.brand.ping .word{animation:lg-wpop .9s cubic-bezier(.22,1.5,.36,1) both}
+.brand.ping .word{animation:lg-wflash .9s ease-out both}
 .brand.ping .sh{animation:lg-flashT .9s ease-out both}
-@keyframes lg-bang{0%{transform:scale(1.2)}14%{transform:scale(.4)}40%{transform:scale(2.3)}62%{transform:scale(.95)}80%{transform:scale(1.3)}100%{transform:scale(1.2)}}
+@keyframes lg-bang{0%{transform:scale(1.3)}14%{transform:scale(.3)}40%{transform:scale(3)}62%{transform:scale(1)}80%{transform:scale(1.5)}100%{transform:scale(1.3)}}
 @keyframes lg-bangN{0%{transform:scale(1)}14%{transform:scale(2.6)}40%{transform:scale(.3)}70%{transform:scale(1.4)}100%{transform:scale(1)}}
-@keyframes lg-flash{0%{stroke:var(--accent)}14%{stroke:var(--accent2)}40%{stroke:#9ec5ff;filter:drop-shadow(0 0 6px #7aa2ff)}100%{stroke:var(--accent);filter:none}}
+@keyframes lg-flash{0%{stroke:var(--accent)}14%{stroke:var(--accent2)}40%{stroke:#b9d2ff;filter:drop-shadow(0 0 10px #7aa2ff)}100%{stroke:var(--accent);filter:none}}
 @keyframes lg-flashT{0%,100%{color:var(--faint)}30%,60%{color:var(--accent)}}
-@keyframes lg-wpop{0%,100%{transform:scale(1.05)}14%{transform:scale(.92)}40%{transform:scale(1.14)}62%{transform:scale(1.02)}}
+@keyframes lg-wflash{0%,100%{color:inherit}30%{color:var(--accent)}}
 @media (prefers-reduced-motion:reduce){.brand .logo *,.brand:hover .logo svg,.brand.ping .logo svg,.brand.ping .word,.brand.ping .sh,.brand.ping .ring{animation:none!important;stroke-dashoffset:0!important;opacity:1}.brand .fx{display:none}}

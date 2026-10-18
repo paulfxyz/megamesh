@@ -7,7 +7,7 @@ Run inside the credential proxy:  pplx credentials run <handle> -- python3 tools
 - Inline markup is kept; <svg>…</svg> blocks are swapped for ⟦svgN⟧ tokens before sending and restored after.
 - Deterministic checks: same keys, same tags (names and count), same {placeholders}, same ⟦tokens⟧, same URLs, same digits-sequences.
 - Failed keys are retried alone (up to 2×) with the validator's complaint; a key that still fails keeps English and is reported.
-- --review runs an independent model over each finished file and applies only the corrections that pass the same checks.
+- --review runs an independent model over the strings generated in this run (whole file with --force) and applies only the corrections that pass the same checks.
 - Results are cached in assets/i18n/<code>.json with a _meta.source_hash; a language is skipped when its hash matches (use --force).
 """
 import json, os, re, ssl, sys, hashlib, time, pathlib, unicodedata
@@ -152,8 +152,9 @@ def translate(code, master, force=False, review=False):
             if k in bad:
                 result[k] = master[k]; report.append(f'{k}: kept English ({bad[k]})')
         print(f'{code}: {len(todo)} strings in {time.time() - t0:.0f}s, {len(bad)} kept English')
-    if review:
-        rev = review_file(code, name, variant, master, result)
+    if review and (todo or force):
+        # review only what was (re)generated this run: accepted strings are never reopened
+        rev = review_file(code, name, variant, master, result, keys=set(todo) if not force else None)
         report += rev
     meta = {'lang': code, 'name': name, 'dir': 'rtl' if code in RTL else 'ltr', 'source_hash': src_hash, 'model': GEN_MODEL,
             'reviewed_by': REV_MODEL if review else (existing or {}).get('_meta', {}).get('reviewed_by'), 'generated': time.strftime('%Y-%m-%d'),
@@ -167,8 +168,8 @@ def translate(code, master, force=False, review=False):
 REVIEW = """You are an independent reviewer of a machine translation into {lang} ({variant}) of the Megamesh website (an open-source personal WireGuard VPN installer). You get a JSON object whose values are {"en": source, "tr": translation}. Check every entry for: wrong meaning, omissions, untranslated passages that a native reader would expect translated, wrong technical term, awkward or unnatural phrasing, grammar, inconsistent terminology across entries, and UI labels that are too long. Ignore: product names, English technical acronyms, markup, URLs and numbers (those must stay as they are).
 Return a JSON object containing ONLY the keys that need a change, each mapped to the full corrected translation (same markup, placeholders, numbers and URLs as the source). If nothing needs to change, return {}. Do not add commentary."""
 
-def review_file(code, name, variant, master, result):
-    pairs = {k: {'en': master[k], 'tr': result[k]} for k in master if k in result}
+def review_file(code, name, variant, master, result, keys=None):
+    pairs = {k: {'en': master[k], 'tr': result[k]} for k in master if k in result and (keys is None or k in keys)}
     prot_master, toks = protect(master)
     prot_pairs = {k: {'en': prot_master[k], 'tr': SVG.sub(lambda m: next((t for t, s in toks.items() if s == m.group(0)), m.group(0)), v['tr'])} for k, v in pairs.items()}
     fixes = {}

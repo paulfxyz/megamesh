@@ -3,20 +3,11 @@
 "lang": "fa",
 "name": "Persian",
 "dir": "rtl",
-"source_hash": "1c5582d85d0d2b42",
+"source_hash": "779ab76156e4ec48",
 "model": "google/gemini-3.6-flash",
 "reviewed_by": "openai/gpt-5-mini",
 "generated": "2026-10-18",
-"notes": [
-"i.067: review fix rejected (empty)",
-"i.069: review fix rejected (empty)",
-"i.071: review fix rejected (empty)",
-"i.087: review fix rejected (empty)",
-"i.093: review fix rejected (empty)",
-"i.094: review fix rejected (empty)",
-"i.097: review fix rejected (empty)",
-"i.100: review fix rejected (empty)"
-],
+"notes": [],
 "src": {
 "m.i.title": "a72866c5",
 "m.i.description": "7adf39e7",
@@ -119,9 +110,22 @@
 "i.093": "b00f3b03",
 "i.094": "5ca99c4f",
 "i.095": "0d63d23c",
-"i.096": "c96b59db",
+"i.113": "b3fc0827",
+"i.114": "8e7ec027",
+"i.115": "f6f4da8d",
 "i.097": "6da13add",
 "i.098": "a80e3858",
+"i.116": "164b3d48",
+"i.117": "8fa41d59",
+"i.118": "49736168",
+"i.119": "c6bdade3",
+"i.120": "ab15eb3d",
+"i.121": "69921bde",
+"i.122": "33a579ff",
+"i.123": "b6647248",
+"i.124": "42026996",
+"i.125": "bd7b4f00",
+"i.096": "c96b59db",
 "i.099": "af74f7c5",
 "i.100": "cf1be22d",
 "i.101": "62bce942",
@@ -183,8 +187,11 @@
 "d.045": "c313a62a",
 "d.046": "cc1b3a4b",
 "d.047": "3d613e16",
+"d.062": "b3fc0827",
+"d.063": "f6f4da8d",
 "d.048": "6da13add",
 "d.049": "70f8bb9a",
+"d.064": "42026996",
 "d.050": "62bce942",
 "d.051": "da26fe0c",
 "d.052": "89b86ab0",
@@ -274,46 +281,6 @@
 "j.d.h_ssh": "83922678",
 "j.d.h_read_failed": "22bedcc8",
 "j.d.forgot": "51397432"
-},
-"audit": {
-"remaining": [
-[
-"english",
-[
-"i.070"
-],
-"identical to source"
-],
-[
-"english",
-[
-"i.086"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.059"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.060"
-],
-"identical to source"
-],
-[
-"english",
-[
-"d.061"
-],
-"identical to source"
-]
-],
-"date": "2026-10-18"
 }
 },
 "m.i.title": "megamesh.sh — سرور شما، خروجی شما.",
@@ -417,9 +384,22 @@
 "i.093": "ابزار Megamesh نسخه تک‌نفره از سرورهایی است که <a class=\"ul\" href=\"https://megastack.sh\" rel=\"noopener\">megastack.sh</a> (شرکت مشاوره امنیت سایبری سازنده) برای مشتریان می‌سازد — با یک عامل AI روی SSH طراحی و اجرا شده، و سپس قبل از عمومی شدن توسط سه مدل دیگر بررسی و شکافته شده است.",
 "i.094": "<strong>Paul Fleury</strong> — کارآفرین اینترنتی فرانسوی در لیسبون، که از اواخر دهه نود در حال فعالیت و هک در اینترنت است.",
 "i.095": "کل داستان — دفترچه ثبت اولین استقرار، ممیزی‌ها، اصلاحات — در مخزن موجود است.",
-"i.096": "megamesh.sh · MIT · Megamesh یک کلمه است، megamesh.sh یک دستور است",
+"i.113": "سرور شما، خروجی شما. یک اسکریپت، سه پورت باز، هیچ‌چیزی نزد ما ذخیره نمی‌شود.",
+"i.114": "پروژه‌ای از <a href=\"https://megastack.sh\" rel=\"noopener\">megastack.sh</a> · <a href=\"mailto:hi@megastack.sh\">hi@megastack.sh</a>",
+"i.115": "پروژه",
 "i.097": "سورس کد",
 "i.098": "ممیزی‌ها",
+"i.116": "تغییرات",
+"i.117": "نسخه‌ها",
+"i.118": "مجوز MIT",
+"i.119": "راه‌های ورود",
+"i.120": "عامل هوش مصنوعی",
+"i.121": "استقراردهندهٔ وب",
+"i.122": "اعتماد",
+"i.123": "خروجی رسمی <small data-i18n-skip=\"\">paulfleury.network</small>",
+"i.124": "سیاست امنیتی",
+"i.125": "گزارش مشکل",
+"i.096": "megamesh.sh · MIT · Megamesh یک کلمه است، megamesh.sh یک دستور است",
 "i.099": "کپی",
 "i.100": "استقرار سرور من <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"></path></svg>",
 "i.101": "اصلی",
@@ -481,8 +461,11 @@
 "d.045": "<b>از یک دوست متخصص بخواهید ایمن‌سازی را تمام کند</b> — بیست دقیقه با <a class=\"ul\" href=\"https://github.com/paulfxyz/megamesh/blob/main/docs/HARDENING.md\" rel=\"noopener\">نکات ایمن‌سازی</a>: یک کلید SSH نصب کنید و رمزهای عبور را خاموش کنید، اختیاری صفحه مدیریت را فقط مخصوص VPN کنید. باقی موارد (فایروال، fail2ban، به‌روزرسانی‌های خودکار، ارتقاهای هفتگی بررسی‌شده) در حال اجرا هستند.",
 "d.046": "<b>اعتبارنامه‌ها روی سرور.</b> یک کپی از ورود مدیر در مسیر <code>/root/megamesh-admin-credentials</code> روی VPS شما قرار دارد که فقط برای root قابل خواندن است. وقتی همه چیز را در مدیر رمز عبور ذخیره کردید، آن را حذف کنید:",
 "d.047": "ذخیره کردم — کپی روی سرور را حذف کن",
+"d.062": "سرور شما، خروجی شما. یک اسکریپت، سه پورت باز، هیچ‌چیزی نزد ما ذخیره نمی‌شود.",
+"d.063": "پروژه",
 "d.048": "سورس کد",
 "d.049": "خانه",
+"d.064": "سیاست امنیتی",
 "d.050": "اصلی",
 "d.051": "خانه megamesh.sh",
 "d.052": "زبان",

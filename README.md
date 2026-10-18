@@ -7,7 +7,7 @@
 **Your server, your exit.**
 
 <a href="https://megamesh.sh"><img src="https://img.shields.io/badge/megamesh.sh-site_%2B_deployer-2c56f5?style=for-the-badge" alt="megamesh.sh"></a>
-<img src="https://img.shields.io/badge/version-1.5.5-060a12?style=for-the-badge" alt="version 1.5.5">
+<img src="https://img.shields.io/badge/version-1.5.6-060a12?style=for-the-badge" alt="version 1.5.6">
 <img src="https://img.shields.io/badge/WireGuard-wg--easy_v15-2c56f5?style=for-the-badge&logo=wireguard&logoColor=white" alt="WireGuard · wg-easy v15">
 <img src="https://img.shields.io/badge/firewall-DROP_%C2%B7_3_ports-060a12?style=for-the-badge" alt="firewall DROP, 3 ports">
 <img src="https://img.shields.io/badge/updates-topgrade_weekly_%2B_rollback-0e6a72?style=for-the-badge" alt="topgrade weekly + rollback">
@@ -221,6 +221,7 @@ How the deployer works: the browser posts the fields to `deploy.php`; `check` op
 megamesh.sh                   ← the installer: idempotent, non-interactive, env-var driven (install.sh is a shim)
 PROMPT.md                     ← the agent prompt, with the known traps and the credential rules
 egress.json                   ← the author's public egress address, machine-readable
+SECURITY.md                   ← how to report a vulnerability, scope, what to expect
 scripts/status.sh             ← one-screen health check (installed as megamesh-status)
 scripts/lockdown.sh           ← VPN-only mode switch (installed as megamesh-lockdown)
 scripts/upgrade.sh            ← topgrade wrapper: health check, rollback, reboot (installed as megamesh-upgrade)
@@ -258,10 +259,10 @@ docs/
 
 ## Status, naming, roadmap
 
-v1.5.5 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
+v1.5.6 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
 
 - **Naming**: "Megamesh" as a word, in prose; `megamesh` or `megamesh.sh` in lower case when talking about the code, the command or the site.
-- **Logo**: a single M whose two legs curve into the point of a shield, with one node where the strokes meet — [`docs/logo.svg`](docs/logo.svg) white on its blue tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`. Wordmark: **Bricolage Grotesque 800**, `megamesh` with a smaller italic `.sh`. The mark draws itself in on load. Hover is one big zoom-in explosion: the shield overshoots to 1.75× with a flash and a burst of blue sparks, then settles slightly larger with a stream of sparkles around it; the word pops as one block and the `.sh` goes blue. Click is the bigger move: a hard shrink, then a 2.3× pop with a double firework burst of streaks, squares and dots and a shockwave ring. No wave, no tilt, no breathing — size and particles only. CSS for the mark, a tiny canvas for the particles, all of it off under `prefers-reduced-motion`.
+- **Logo**: a single M whose two legs curve into the point of a shield, with one node where the strokes meet — [`docs/logo.svg`](docs/logo.svg) white on its blue tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`. Wordmark: **Bricolage Grotesque 800**, `megamesh` with a smaller italic `.sh`. The mark draws itself in on load. Hover is one big zoom-in explosion: the shield overshoots to 2.3× with a flash and a burst of blue sparks, then settles larger with a stream of sparkles around it; the `.sh` goes blue. Click is the bigger move: a hard shrink, then a 3× pop with a double firework burst of streaks, squares and dots and a shockwave ring. No wave, no tilt, no breathing, nothing moves sideways — size and particles only, in the navigation and in the footer alike. CSS for the mark, a tiny canvas for the particles, all of it off under `prefers-reduced-motion`.
 - **Planned**: native-speaker review of the translations, a Debian 12 and a Rocky 9 run, SSH-via-VPN with a confirm-or-rollback window.
 - **Not planned**: OpenVPN, multi-user auth, turning this into a product.
 
