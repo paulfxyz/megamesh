@@ -1,1 +1,5 @@
+# nothing in here is served directly; deploy.php requires it from PHP
 Require all denied
+<FilesMatch ".*">
+  Require all denied
+</FilesMatch>

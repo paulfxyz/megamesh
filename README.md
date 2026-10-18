@@ -1,29 +1,45 @@
 <div align="center">
 
-<img src="docs/logo.svg" width="128" height="128" alt="Megamesh logo: a red M shaped like a shield">
+<img src="docs/logo.svg" width="112" height="112" alt="Megamesh logo: a red M shaped like a shield">
 
 # Megamesh
 
 **Your own WireGuard VPN, hardened by default, on the cheapest VPS you can find.**
 
-![Version](https://img.shields.io/badge/version-1.4.0-e3120b?style=for-the-badge)
-[![Website](https://img.shields.io/badge/megamesh.sh-site_%2B_deployer-E5000A?style=for-the-badge)](https://megamesh.sh)
-![WireGuard](https://img.shields.io/badge/WireGuard-wg--easy_v15-88171A?style=for-the-badge&logo=wireguard&logoColor=white)
-![Caddy](https://img.shields.io/badge/TLS-Caddy_2_%2B_Let%27s_Encrypt-1f88c0?style=for-the-badge)
-![Firewall](https://img.shields.io/badge/default_policy-DROP-critical?style=for-the-badge)
-![Updates](https://img.shields.io/badge/updates-topgrade_weekly_%2B_rollback-2d5f8b?style=for-the-badge)
-![Tested on](https://img.shields.io/badge/tested_on-CentOS_Stream_9_·_1_vCPU_·_1_GB-23382f?style=for-the-badge)
-![Audited](https://img.shields.io/badge/audited_by-3_frontier_models-5b4b8a?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-286348?style=for-the-badge)
+<a href="https://megamesh.sh"><img src="https://img.shields.io/badge/megamesh.sh-site_%2B_deployer-E5000A?style=for-the-badge" alt="megamesh.sh"></a>
+<img src="https://img.shields.io/badge/version-1.4.0-0a0a0a?style=for-the-badge" alt="version 1.4.0">
+<img src="https://img.shields.io/badge/WireGuard-wg--easy_v15-88171A?style=for-the-badge&logo=wireguard&logoColor=white" alt="WireGuard · wg-easy v15">
+<img src="https://img.shields.io/badge/firewall-DROP_%C2%B7_3_ports-critical?style=for-the-badge" alt="firewall DROP, 3 ports">
+<img src="https://img.shields.io/badge/updates-topgrade_weekly_%2B_rollback-2d5f8b?style=for-the-badge" alt="topgrade weekly + rollback">
+<img src="https://img.shields.io/badge/audited_by-3_frontier_models-5b4b8a?style=for-the-badge" alt="audited by 3 frontier models">
+<img src="https://img.shields.io/badge/license-MIT-286348?style=for-the-badge" alt="MIT">
 
 <img src="docs/hero.svg" width="100%" alt="Megamesh: the public internet sees three doors — SSH, WireGuard and HTTPS — everything else is dropped. Behind them, a WireGuard tunnel, wg-easy and Caddy on a 1 GB VPS.">
 
 <p>One VPS, one domain, one admin. WireGuard for the tunnel, a web UI with QR codes for your devices, a certificate that renews itself, a firewall with exactly three doors, and weekly upgrades that roll back if they break anything.</p>
-<p><strong>Three ways in</strong>, all starting from the same two facts — an IP and a root password:<br>
-a <a href="#01--script-if-you-run-servers">script</a> if you run servers · a <a href="#02--prompt-if-you-have-an-ai-agent">prompt</a> if you have an AI agent · a <a href="https://megamesh.sh/deploy/">web deployer</a> if you just want a VPN.</p>
 
+</div>
+
+<table>
+<tr>
+<th width="33%" align="left"><sub>DOOR 01 · YOU RUN SERVERS</sub><br><a href="#01--script-if-you-run-servers">The script</a></th>
+<th width="33%" align="left"><sub>DOOR 02 · YOU HAVE AN AI AGENT</sub><br><a href="#02--prompt-if-you-have-an-ai-agent">The prompt</a></th>
+<th width="33%" align="left"><sub>DOOR 03 · YOU JUST WANT A VPN</sub><br><a href="https://megamesh.sh/deploy/">The deployer</a></th>
+</tr>
+<tr valign="top">
+<td>One idempotent bash file, every setting an environment variable, nothing interactive. Read it, then run it as root on a fresh VPS.<br><br><code>curl -fsSLO https://megamesh.sh/megamesh.sh</code></td>
+<td>Paste <a href="PROMPT.md"><code>PROMPT.md</code></a> into any agent that can run shell commands over SSH. It carries the rules, the order of operations and the six traps we hit, so the agent starts at the end.</td>
+<td>A form at <a href="https://megamesh.sh/deploy/">megamesh.sh/deploy</a>: IP, root password, domain, email. It installs the same thing, hands you the admin login and one DNS record, then forgets you.</td>
+</tr>
+<tr valign="top">
+<td><sub><b>You bring</b> SSH, a domain, ten minutes<br><b>Hardening</b> full — key-only SSH once a key exists, every option yours</sub></td>
+<td><sub><b>You bring</b> the server details, a browser tab for DNS<br><b>Hardening</b> full — the prompt enforces it and verifies by reading state</sub></td>
+<td><sub><b>You bring</b> four fields and patience for one coffee<br><b>Hardening</b> nice, not finished — SSH keeps its password until a techie friend adds a key</sub></td>
+</tr>
+</table>
+
+<div align="center">
 <p><a href="https://megamesh.sh">megamesh.sh</a> · <a href="#what-you-get">What you get</a> · <a href="#vpn-only-mode">VPN-only mode</a> · <a href="#keeping-it-updated">Updates</a> · <a href="#whitelisting-the-author">Whitelist me</a> · <a href="#the-website">The website</a> · <a href="docs/HARDENING.md">Hardening</a> · <a href="docs/AUDIT.md">Audit</a> · <a href="docs/DNS.md">DNS</a> · <a href="docs/TROUBLESHOOTING.md">Troubleshooting</a> · <a href="docs/LOGBOOK.md">Logbook</a></p>
-
 </div>
 
 ## The idea
@@ -36,11 +52,7 @@ It is written down three times — as a script that does it, as a prompt that te
 
 ## Three ways in
 
-| | Who | You bring | What happens | Hardening |
-|---|---|---|---|---|
-| **01** | You run servers | SSH, a domain, ten minutes | You read `megamesh.sh`, run it as root with two env vars | Full: key-only SSH when a key is present, every option under your control |
-| **02** | You have an AI agent | `PROMPT.md`, the server details, a browser tab for DNS | The agent does what the script does, step by step, verifying as it goes, and explains what it did | Full: the prompt carries the rules and the traps |
-| **03** | You just want a VPN | IP, root password, domain, email — into a form at [megamesh.sh/deploy](https://megamesh.sh/deploy/) | The deployer logs in over SSH, runs `megamesh.sh` with defaults, hands you the admin credentials and one DNS record | Nice, not finished: SSH keeps its password so a techie friend can install a key and lock it later |
+All three start from the same two facts — an IP and a root password — and end on the same box. The difference is how much you want to touch.
 
 ### 01 — Script, if you run servers
 
@@ -77,6 +89,8 @@ Open [`PROMPT.md`](PROMPT.md), fill in the server block (IP, root password, OS, 
 The reference deployment was done exactly this way, by [Perplexity Computer](https://www.perplexity.ai/computer) over SSH, with the owner supplying only the server details and a logged-in browser tab for the DNS change. The full account is in [docs/LOGBOOK.md](docs/LOGBOOK.md).
 
 ### 03 — Deployer, if you just want a VPN
+
+<a href="https://megamesh.sh/deploy/"><img src="docs/deployer.png" width="100%" alt="The deployer at megamesh.sh/deploy: four steps — server, check, install, hand over"></a>
 
 Open [megamesh.sh/deploy](https://megamesh.sh/deploy/). Four steps on one page:
 
@@ -168,6 +182,8 @@ Read it as a convenience signal, never as the only control:
 
 ## The website
 
+<a href="https://megamesh.sh"><img src="docs/site.png" width="100%" alt="megamesh.sh — Your server. Your tunnel. Your exit."></a>
+
 [megamesh.sh](https://megamesh.sh) is the project's front door: what it is, the three ways in, what is inside the box, the honest limits, and the deployer. It borrows the design language of [megastack.sh](https://megastack.sh) — black, one red, monospace where it talks to machines — because Megamesh is the kind of box that consultancy builds for clients, published.
 
 The site is static HTML plus one PHP endpoint, and it lives in [`site/`](site/) so it can be read, forked or self-hosted:
@@ -215,6 +231,7 @@ docs/
   LOGBOOK.md                  ← the reference deployment, hour by hour
   logo.svg · logo-mark.svg    ← the shield M, with and without the tile
   hero.svg                    ← the three-doors diagram above
+  site.png · deployer.png     ← screenshots of megamesh.sh and the deployer
 ```
 
 ## What this is not
