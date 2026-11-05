@@ -1,7 +1,7 @@
 {
   "owner": "Paul Fleury",
   "purpose": "Public egress address of the owner's official personal WireGuard VPN (the Megamesh reference server). Traffic from this address since the 'since' timestamp is the owner.",
-  "rationale": "A public, dated, verifiable declaration of the owner's exit address. Any log trace from another address is, by this prior declaration, not the owner on their VPN. It is leverage against calumny, fake news and false intrusion claims — not proof of innocence by itself.",
+  "rationale": "A public, dated, verifiable declaration of the owner's exit address. Any log trace from another address is, by this prior declaration, not the owner on their VPN. It is leverage against calumny, fake news and false intrusion claims, and against fake logs: the hosts, ISPs and datacenters in between keep independent connection records that can show, through legal channels and within retention periods, that this address never connected to a given machine on a given date. Not proof of innocence by itself.",
   "hostname": "paulfleury.network",
   "ipv4": [
     "151.243.225.214"

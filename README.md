@@ -7,7 +7,7 @@
 **Your server, your exit.**
 
 <a href="https://megamesh.sh"><img src="https://img.shields.io/badge/megamesh.sh-site_%2B_deployer-2c56f5?style=for-the-badge" alt="megamesh.sh"></a>
-<img src="https://img.shields.io/badge/version-1.5.8-060a12?style=for-the-badge" alt="version 1.5.8">
+<img src="https://img.shields.io/badge/version-1.5.9-060a12?style=for-the-badge" alt="version 1.5.9">
 <img src="https://img.shields.io/badge/WireGuard-wg--easy_v15-2c56f5?style=for-the-badge&logo=wireguard&logoColor=white" alt="WireGuard · wg-easy v15">
 <img src="https://img.shields.io/badge/firewall-DROP_%C2%B7_3_ports-060a12?style=for-the-badge" alt="firewall DROP, 3 ports">
 <img src="https://img.shields.io/badge/updates-topgrade_weekly_%2B_rollback-0e6a72?style=for-the-badge" alt="topgrade weekly + rollback">
@@ -173,7 +173,9 @@ Topgrade is installed from its GitHub release as a static binary, **pinned by ve
 | Official since | **Sunday 18 October 2026, 17:00 Europe/Lisbon** (16:00 UTC) |
 | Machine-readable | [`egress.json`](egress.json) |
 
-**Why publish it at all.** Beyond convenience, a declared exit address is a defence. Calumny, fake news, a "someone broke into our web app" accusation — every action on the internet leaves an address in a log somewhere. By declaring mine in public, with a start date, in a repository whose history cannot be quietly rewritten, I give myself leverage: any trace that comes from another address is, by my own prior declaration, not me on my VPN. It is not proof of innocence on its own — a declaration cannot be — but it is a public, dated, verifiable statement made before anyone had a reason to doubt it, and that is a much better position than explaining after the fact. Anyone can do the same with their own Megamesh box; the `egress.json` format is there to be copied.
+**Why publish it at all.** Beyond convenience, a declared exit address is a defence. Calumny, fake news, a "someone broke into our web app" accusation — every action on the internet leaves an address in a log somewhere. By declaring mine in public, with a start date, in a repository whose history cannot be quietly rewritten, I give myself leverage: any trace that comes from another address is, by my own prior declaration, not me on my VPN. It is not proof of innocence on its own — a declaration cannot be — but it is a public, dated, verifiable statement made before anyone had a reason to doubt it, and that is a much better position than explaining after the fact. **It also defeats fake logs.** A log can be forged, but the network keeps its own: my host, my ISP and the datacenters and carriers in between each hold independent connection records. If someone produces a log that puts my address in an attack, an upload or a post, those operators can be asked, through the proper legal channel and within their retention period, whether my address ever connected to that machine on that date. So everything I do through my own public address, I do openly and safely: a fabricated entry would have to agree with the records of every host, datacenter and ISP involved at the same moment, and it cannot. Retention is finite and none of this replaces a lawyer, which is why the dated declaration matters.
+
+Anyone can do the same with their own Megamesh box; the `egress.json` format is there to be copied.
 
 The start date matters. Before Sunday 18 October 2026 at 17:00 Lisbon time, `151.243.225.214` belonged to whoever the hosting provider had leased it to; nothing that address did before that moment has anything to do with me, and I take no responsibility for it. From that moment on, traffic from it is my VPN. The `since` timestamp in `egress.json` is the same claim in machine-readable form. The test boxes used while developing Megamesh (such as `vpn.paulfleury.eu`) are not part of this declaration — only the hostname and address in the table are.
 
@@ -259,7 +261,7 @@ docs/
 
 ## Status, naming, roadmap
 
-v1.5.8 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
+v1.5.9 is the state of the reference server on 2026-10-18 after two audit rounds, the topgrade integration, the launch of [megamesh.sh](https://megamesh.sh) and its redesign ([CHANGELOG.md](CHANGELOG.md)). The project was called `proxy` for its first day; it is now **Megamesh**, a nod to [megastack.sh](https://megastack.sh), the author's cybersecurity consultancy.
 
 - **Naming**: "Megamesh" as a word, in prose; `megamesh` or `megamesh.sh` in lower case when talking about the code, the command or the site.
 - **Logo**: a single M whose two legs curve into the point of a shield, with one node where the strokes meet — [`docs/logo.svg`](docs/logo.svg) white on its blue tile, [`docs/logo-mark.svg`](docs/logo-mark.svg) bare, in `currentColor`. Wordmark: **Bricolage Grotesque 800**, `megamesh` with a smaller italic `.sh`. The mark draws itself in on load. Hover is one big zoom-in explosion: the shield overshoots to 2.3× with a flash and a burst of blue sparks, then settles larger with a stream of sparkles around it; the `.sh` goes blue. Click is the bigger move: a hard shrink, then a 3× pop with a double firework burst of streaks, squares and dots and a shockwave ring. No wave, no tilt, no breathing, nothing moves sideways — size and particles only, in the navigation and in the footer alike. CSS for the mark, a tiny canvas for the particles, all of it off under `prefers-reduced-motion`.

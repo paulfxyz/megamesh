@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.9 — 2026-11-05
+
+- **The egress narrative gains its second half: fake logs.** A log can be forged, but hosts, ISPs, datacenters and carriers keep independent connection records; through the proper legal channel and within retention periods they can show that a declared address never connected to a given machine on a given date. So a fabricated entry has to agree with thousands of independent records, and it cannot. Added to the README, `egress.json` (`rationale`) and the website's "Your exit" section, translated and reviewed in all 49 languages.
+
 ## 1.5.8 — 2026-10-19
 
 - **Debian 12 verified end to end** on the same blank VPS, reinstalled: five minutes from `apt upgrade` to a healthy wg-easy behind Caddy with a Let's Encrypt certificate, admin login checked in a browser, clean verification (the new health wait produced no false warnings). Four distributions are now verified: CentOS Stream 9, Rocky 9.5, Ubuntu 24.04, Debian 12.
