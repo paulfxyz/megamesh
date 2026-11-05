@@ -190,7 +190,7 @@
       script: [
         ['c', '# One file. Read it first.'], ['p', '$ ', 'curl -fsSLO https://megamesh.sh/megamesh.sh'], ['p', '$ ', 'less megamesh.sh'],
         ['p', '$ ', 'MEGAMESH_DOMAIN=vpn.example.com MEGAMESH_EMAIL=you@example.com bash megamesh.sh'],
-        ['o', '▶ megamesh 1.5.9 on CentOS Stream 9 (1 vCPU, 1 GB)'], ['ok', '✔ swap active · ✔ system updated · ✔ docker from signed repo'],
+        ['o', '▶ megamesh 1.5.10 on CentOS Stream 9 (1 vCPU, 1 GB)'], ['ok', '✔ swap active · ✔ system updated · ✔ docker from signed repo'],
         ['ok', '✔ firewalld: public DROP, 22/tcp 51820/udp 443/tcp'], ['ok', '✔ sshd hardened · ✔ fail2ban sshd jail · ✔ sysctl'],
         ['ok', '✔ wg-easy up, admin account created before 443 opened'], ['ok', '✔ caddy up — waiting for DNS to issue the certificate'],
         ['o', '  credentials: /root/megamesh-admin-credentials'], ['o', '  next: A record vpn.example.com → 203.0.113.10, then https://vpn.example.com/'],
@@ -252,6 +252,16 @@
     ['uk','Українська','Ukrainian','ua'],['ig','Igbo','Igbo','ng'],['ml','മലയാളം','Malayalam','in'],['ms','Bahasa Melayu','Malay','my'],['nl','Nederlands','Dutch','nl'],
     ['ne','नेपाली','Nepali','np'],['si','සිංහල','Sinhala','lk'],['sd','سنڌي','Sindhi','pk'],['uz','Oʻzbekcha','Uzbek','uz'],['ro','Română','Romanian','ro'],
   ];
+  // why-publish modal
+  (() => {
+    const m = $('#why-modal'), btn = $('#why-open'); if (!m || !btn) return;
+    let last = null;
+    const open = () => { last = document.activeElement; m.hidden = false; document.body.classList.add('modal-open'); const c = m.querySelector('.ib'); c && c.focus(); };
+    const close = () => { m.hidden = true; document.body.classList.remove('modal-open'); last && last.focus(); };
+    btn.addEventListener('click', open);
+    m.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) close(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !m.hidden) close(); });
+  })();
   const langBtn = $('#lang');
   if (langBtn) {
     const modal = document.createElement('div');

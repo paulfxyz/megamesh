@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.10 — 2026-11-05
+
+- **"Your exit" is short again.** The two long paragraphs about calumny and fake logs are now one short paragraph with a "Why it protects you" button that opens a modal with the full reasoning (same text as before, plus a pointer to `egress.json`). Escape, the backdrop and the close button dismiss it; it scrolls on small screens. Five new strings translated and reviewed in all 49 languages.
+
 ## 1.5.9 — 2026-11-05
 
 - **The egress narrative gains its second half: fake logs.** A log can be forged, but hosts, ISPs, datacenters and carriers keep independent connection records; through the proper legal channel and within retention periods they can show that a declared address never connected to a given machine on a given date. So a fabricated entry has to agree with thousands of independent records, and it cannot. Added to the README, `egress.json` (`rationale`) and the website's "Your exit" section, translated and reviewed in all 49 languages.

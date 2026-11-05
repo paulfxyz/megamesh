@@ -311,6 +311,13 @@ footer::before{content:"";position:absolute;inset:auto -10% -40% -10%;height:60%
 .lang-grid .nm small{color:var(--faint);font-size:.7rem;font-family:var(--f-mono)}
 .lang-grid .empty{grid-column:1/-1;color:var(--faint);font-size:var(--t-sm);padding:1rem .6rem}
 body.modal-open{overflow:hidden}
+.modal .pane--read{width:min(640px,100%)}
+.modal .read{padding:.4rem 1.5rem 1.6rem;overflow:auto;border-top:1px solid var(--line)}
+.modal .read p{font-size:var(--t-base);line-height:1.65;color:var(--muted);margin:1.1rem 0 0;max-width:none}
+.modal .read p:first-child{margin-top:1rem}
+.modal .read .note{padding:0;margin-top:1.4rem;color:var(--faint)}
+.modal .read .note a{color:var(--ink);border-bottom:1px solid var(--line)}
+.exit-more{margin:1.4rem 0 0}
 
 /* deploy app */
 .app{max-width:860px;margin:0 auto;padding:clamp(2rem,5vw,4rem) var(--pad) 8rem;position:relative}
