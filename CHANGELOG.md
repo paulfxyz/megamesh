@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.0 — 2026-11-12
+
+- **View demo.** A button on the deployer page and in the landing page's "Three ways in" opens a full-screen, scripted deployment on a fake server (`203.0.113.10`, a made-up root password, `vpn.example.com`): the four inputs typed in, the server check and its plan, the real installer log as a time-lapse with a side checklist that ticks off what ends up on the server, and the hand-over screen with the DNS step. Nothing is sent anywhere. Clickable steps, pause, restart, 1×/2×/4×, Escape to close, focus kept inside, `/deploy/?demo` as a deep link, a step-by-step view under reduced motion, a stacked layout on phones. UI text translated and reviewed in all 49 languages; the log stays in English like every terminal on the site.
+
 ## 1.5.10 — 2026-11-05
 
 - **"Your exit" is short again.** The two long paragraphs about calumny and fake logs are now one short paragraph with a "Why it protects you" button that opens a modal with the full reasoning (same text as before, plus a pointer to `egress.json`). Escape, the backdrop and the close button dismiss it; it scrolls on small screens. Five new strings translated and reviewed in all 49 languages.

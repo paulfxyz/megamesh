@@ -118,7 +118,7 @@ JS_RE = re.compile(r"""(?:(?:\bt|MM\.t)\(|\[)\s*'(j\.[a-z0-9_.]*)'\s*,\s*'((?:[^
 def js_strings() -> dict:
     """Every t('key', 'English fallback') / MM.t(...) in the two scripts. The fallback is the English master."""
     out = {}
-    for f in (ROOT / 'assets' / 'ui.js', ROOT / 'deploy' / 'deploy.js'):
+    for f in (ROOT / 'assets' / 'ui.js', ROOT / 'deploy' / 'deploy.js', ROOT / 'assets' / 'demo.js'):
         for k, v in JS_RE.findall(f.read_text(encoding='utf-8')):
             v = v.replace("\\'", "'")
             if k in out and out[k] != v:

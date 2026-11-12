@@ -112,3 +112,8 @@ The Rocky 9 run was supposed to be boring: same `el` code path as CentOS Stream,
 ## 33. Debian, five minutes (2026-10-19, later)
 
 After Rocky's half hour, Debian 12 felt like cheating: a fresh image with little to upgrade, so the whole run — swap, packages, Docker, firewall, SSH, fail2ban, containers, certificate — took about five minutes on the same 1 vCPU box. The verification step, now patient enough to wait for wg-easy's health check, printed two green ticks instead of two yellow warnings, which is exactly the fix from the night before paying off. Four distributions verified; the installer stops calling Debian "best-effort". The next run is not mine: a fresh CentOS, and the web deployer driven by its owner from the form to the hand-over.
+
+## 34. A deployment you can watch before you trust it (2026-11-12)
+
+The deployer asks a stranger for a root password, which is the hardest thing a web page can ask for, and the page's only argument was a paragraph saying it was safe. A demo is a better argument: the same four inputs, the same plan, the same log, played on an address that cannot belong to anyone (203.0.113.0/24 is reserved for documentation) and a password that is obviously made up. It sits next to the form so the person hesitating over the real thing can watch what will happen first, and it uses the installer's own log lines from the Rocky run so there is no gap between the demo and the product. The checklist on the side answers the question the log cannot: what is actually different on my server afterwards.
+
