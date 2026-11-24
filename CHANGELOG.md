@@ -1,5 +1,9 @@
 # Changelog
 
+## Site update — 2026-11-24
+
+- **Tested systems, stated consistently.** The landing page and the deployer now say what the README and the installer already said: CentOS Stream 9, Ubuntu 24.04, Rocky Linux 9.5 and Debian 12 are all verified end to end (Rocky and Debian on 2026-10-19). Only AlmaLinux 9 remains untested. The deployer's server check now treats Rocky 9 and Debian 12 as verified instead of best-effort, matching `megamesh.sh`. Four strings updated and reviewed in all 49 languages. No change to the installer or the release.
+
 ## 1.6.0 — 2026-11-12
 
 - **View demo.** A button on the deployer page and in the landing page's "Three ways in" opens a full-screen, scripted deployment on a fake server (`203.0.113.10`, a made-up root password, `vpn.example.com`): the four inputs typed in, the server check and its plan, the real installer log as a time-lapse with a side checklist that ticks off what ends up on the server, and the hand-over screen with the DNS step. Nothing is sent anywhere. Clickable steps, pause, restart, 1×/2×/4×, Escape to close, focus kept inside, `/deploy/?demo` as a deep link, a step-by-step view under reduced motion, a stacked layout on phones. UI text translated and reviewed in all 49 languages; the log stays in English like every terminal on the site.

@@ -89,7 +89,8 @@ switch ($action) {
         if (($kv['UID'] ?? '') !== '0') fail('Logged in, but not as root.');
         $id = $kv['ID'] ?? ''; $like = $kv['LIKE'] ?? '';
         $supported = in_array($id, ['centos', 'rocky', 'almalinux', 'rhel', 'debian', 'ubuntu'], true) || preg_match('/rhel|fedora|debian/', $like);
-        $verified = ($id === 'centos' && str_contains($kv['PRETTY'] ?? '', '9')) || ($id === 'ubuntu' && str_starts_with($kv['VERSION_ID'] ?? '', '24.04'));
+        $verified = ($id === 'centos' && str_contains($kv['PRETTY'] ?? '', '9')) || ($id === 'ubuntu' && str_starts_with($kv['VERSION_ID'] ?? '', '24.04'))
+                 || ($id === 'rocky' && str_starts_with($kv['VERSION_ID'] ?? '', '9')) || ($id === 'debian' && ($kv['VERSION_ID'] ?? '') === '12');
         if (($kv['ARCH'] ?? '') !== 'x86_64') $supported = false;
         out(['ok' => true, 'os' => $kv['PRETTY'] ?: 'unknown', 'arch' => $kv['ARCH'] ?? '?', 'mem_mb' => (int)($kv['MEM'] ?? 0), 'cpus' => (int)($kv['CPU'] ?? 0),
              'docker' => ($kv['DOCKER'] ?? '0') === '1', 'installed' => ($kv['INSTALLED'] ?? '0') === '1', 'running' => ($kv['RUNNING'] ?? '0') === '1',
